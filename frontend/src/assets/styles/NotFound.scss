@@ -1,0 +1,31 @@
+@import '../../App.scss';
+
+.not-found-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 60px;
+    p{
+        font-size: 18px;
+    }
+    span{
+        font-size: 45px;
+        padding: 20px;
+    }
+    div{
+        display: flex;
+        align-items: center;
+        height: 90px;
+        button{
+            border: 1px #FFCB65 solid;
+            font-size: 18px;
+            background-color: #FFCB65;
+            padding: 10px 30px;
+            border-radius: 5px;
+            &:hover{
+                border: 2px #FFCB65 solid;
+            }
+        }
+    }
+}

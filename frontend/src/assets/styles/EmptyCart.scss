@@ -1,0 +1,33 @@
+@import '../../App.scss';
+
+.empty-cart-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 50vh;
+    h2{
+        font-size: 40px;
+        font-weight: 500;
+        margin-bottom: 30px;
+    }
+    button{
+        background-color: $btn;
+        transition: all 0.3s;
+        padding: 8px 50px;
+        font-size: 20px;
+        border: $btn 1px solid;
+        border-radius: 5px;
+        margin-bottom: 30px;
+        &:hover{
+            background-color: darken($btn, 10%);
+        }
+    }
+    h3{
+        font-size: 30px;
+    }
+    div{
+        font-size: 25px;
+        font-weight: 200;
+    }
+}

@@ -1,0 +1,14 @@
+@import '../../App.scss';
+
+.pages-container{
+    width: 50%;
+    margin: 0 auto;
+    h2{
+        font-size: 60px;
+        margin: 32px 0;
+    }
+    .content{
+        font-size: 20px;
+        margin-top: 32px;
+    }
+}

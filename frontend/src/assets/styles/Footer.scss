@@ -1,0 +1,46 @@
+@import '../../App.scss';
+
+.footer {
+    display: block;
+    background-color: $layout;
+    color: #fff;
+    padding: 20px 20px;
+    margin-top: 48px;
+    h3 {
+    font-size: 20px;
+    }
+
+    p {
+    font-size: 16px;
+    }
+
+    ul {
+    list-style: none;
+    padding: 0;
+    }
+
+    li {
+    margin-bottom: 10px;
+    }
+
+    a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+
+    &:hover {
+        text-decoration: underline;
+    }
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+    .container {
+        text-align: center;
+    }
+
+    .col-md-6 {
+        margin-bottom: 20px;
+    }
+    }
+}

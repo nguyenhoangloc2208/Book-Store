@@ -1,0 +1,97 @@
+@import '../../App.scss';
+
+.login-container{
+    div{
+        display: flex;
+        width: 40%;
+        margin: 0 auto;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        h1{
+            font-size: 60px;
+        }
+        .validation{
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: row;
+            ul{
+                margin-left: 5%;
+                h4{
+                    font-size: 25px;
+                    color:#3f3f3f;
+                    font-weight: 550;
+                    i{
+                        color:red;
+                        margin-right: 10px;
+                    }
+                }
+                li{
+                    margin-left: 50px;
+                    h5{
+                        font-size: 20px;
+                        color: #3f3f3f;
+                        font-weight: 450;
+                    }
+                }
+            }
+        }
+        .input-container{
+            width: 100%;
+            position: relative;
+            input{
+                width: 80%;
+                margin: 15px auto;
+                padding: 10px 20px;
+                font-size: 20px;
+                color: #000;
+                border: 1px #ccc solid;
+            }
+            .passwordValidation, .emailValidation{
+                border: 1px red solid !important;
+                border-radius: 3px;
+                box-shadow: 0 5px 10px rgba($color: pink, $alpha: 1);
+            }
+            .login-warning{
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                width: 80%;
+                i{
+                    margin-right: 5px;
+                    color:red;
+                }
+            }
+        }
+        .forgot-password{
+            width: 80%;
+            font-size:18px;
+            font-weight: 400;
+            &:hover{
+                text-decoration: underline 2px;
+            }
+        }
+        button{
+            padding: 10px 35px;
+            border-radius: 5px;
+            font-size: 20px;
+            margin-top: 30px;
+            background-color: $btn;
+            border: $btn 1px solid;
+            transition: all 0.3s;
+            &:hover{
+                background-color: darken($btn, 10%);
+            }
+        }
+        .register{
+            font-size: 18px;
+            font-weight: 400;
+            margin-top: 10px;
+            margin-bottom: 40px;
+            &:hover{
+                text-decoration: underline 2px;
+            }
+        }
+    }
+}

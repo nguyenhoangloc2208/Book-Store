@@ -1,0 +1,55 @@
+@import '../../App.scss';
+
+.no-scroll{
+    overflow: hidden!important;
+}
+
+.navbar-container{
+    margin-top: 10px;
+    padding: 5px 14%;
+    div{
+        div:nth-child(2){
+            display: flex;
+            align-items: center;
+            padding: 0;
+            .menu-list{
+                display: inline-flex;
+                flex-wrap: wrap;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                li{
+
+                    a{
+                        color: #000;
+                        text-decoration: none;
+                        font-size: 18px;
+                        font-weight: 400;
+                        padding: 10px;
+                        display: flex;
+                        align-items: center;
+                        &:hover{
+                            text-decoration: underline;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+
+        }
+        div:nth-child(3){
+            display: flex;
+            justify-content:space-between;
+            padding-left:25px;
+            align-items: center;
+            i{
+                padding-left: 15px;
+                font-size: 20px;
+                &:hover{
+                    cursor: pointer;
+                    margin-bottom:2px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,44 @@
+@import '../../App.scss';
+
+.register-container{
+    div{
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 40%;
+        h1{
+            font-size: 60px;
+        }
+        .input-container{
+            width: 100%;
+            position: relative;
+            input{
+                width: 80%;
+                margin: 15px auto;
+                padding: 10px 20px;
+                font-size: 20px;
+                color: #000;
+                border: 1px #ccc solid;
+            }
+            .passwordValidation, .emailValidation{
+                border: 1px red solid !important;
+                box-shadow: 0 5px 10px rgba($color: pink, $alpha: 1);
+            }
+        }
+        button{
+            padding: 10px 35px;
+            border-radius: 5px;
+            font-size: 20px;
+            margin-top: 30px;
+            background-color: $btn;
+            border: $btn 1px solid;
+            transition: all 0.3s;
+            margin-bottom: 40px;
+            &:hover{
+                background-color: darken($btn, 10%);
+            }
+        }
+    }
+}

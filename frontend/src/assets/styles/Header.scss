@@ -1,0 +1,25 @@
+@import '../../App.scss';
+
+.header-container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    align-items: center;
+    background-color: #F0BF5F;
+    padding: 10px;
+    div:nth-child(2){
+        margin-left: 10px;
+        .arrow-right-long{
+            transition: all 0.3s ease-out;
+        }
+    }
+    &:hover{
+        background-color: darken($layout, 10%);
+        cursor: pointer;
+        div:nth-child(2){
+            .arrow-right-long{
+                transform: translateX(4px);
+            }
+        }
+    }
+}
