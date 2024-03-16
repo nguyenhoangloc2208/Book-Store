@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from .utilities import *
 from os.path import basename, splitext
 
@@ -51,6 +51,8 @@ class Product(models.Model):
     name = models.CharField(max_length=255, blank=False, unique=True, db_index=True)
     description = models.TextField(blank=False)
     price = models.FloatField(validators=[MinValueValidator(0)], )
+    discount_percentage = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(100)], blank=True, null=True)
+    final_price = models.FloatField(default=0)
     count_in_stock = models.IntegerField(validators=[MinValueValidator(0)])
     image = models.ManyToManyField('ProductImage', blank=True, related_name='product_image')
     available = models.BooleanField()
@@ -60,8 +62,12 @@ class Product(models.Model):
     
     def save(self, *args, **kwargs):
         self.slug = custom_slugify(self.name)
+        if self.discount_percentage is not None:
+            self.final_price = self.price * (1 - (self.discount_percentage / 100))
+        else:
+            self.final_price = self.price
         super().save(*args, **kwargs)
-    
+        
     class Meta:
         ordering = ("-created_at",)
 

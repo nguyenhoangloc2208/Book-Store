@@ -22,7 +22,7 @@ const CategoryDetail = () =>{
             </div>
             <div className="product-card-container">
                 {products && products.length > 0 && products.map((item, index)=>(
-                    <ProductCard item={item} index={index} key={index}/>
+                    <ProductCard item={item} index={index} key={index} isBtn={true}/>
                 ))}
             </div>
         </section>

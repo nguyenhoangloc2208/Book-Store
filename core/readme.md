@@ -1,0 +1,7 @@
+- pip install -r requirements.txt
+- python3 manage.py migrate
+- python3 manage.py createsuperuser
+- python3 manage.py runserver
+- Create another terminal then run: - stripe login - stripe listen --forward-to 127.0.0.1:8000/api/user/payments/stripe/webhook/
+- Create another terminal then run: - sudo service redis-server start # linux (ubuntu/wsl2) - celery -A core worker -l info
+- http://127.0.0.1:8000/admin to access admin site

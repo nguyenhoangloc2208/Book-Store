@@ -21,9 +21,11 @@ class ProductReadSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(slug_field='name', queryset=Author.objects.all(), allow_null=True)
     image = ProductImageReadSerializer(many=True)
     
+    id = serializers.IntegerField(source='pk')
+    
     class Meta:
         model = Product
-        fields = ['name', 'description', 'category', 'author', 'price', 'count_in_stock', 'available', 'image', 'slug']
+        fields = "__all__"
         
 class ProductWriteSerializer(serializers.ModelSerializer):
     category = ProductCategoryReadSerializer()
