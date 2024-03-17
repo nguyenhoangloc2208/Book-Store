@@ -12,8 +12,8 @@ instance.interceptors.request.use(
     (config) => {
     const token = TokenService.getLocalAccessToken();
     if (token) {
-        // config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
-        config.headers["access"] = token;
+        config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
+        // config.headers["access"] = token;
     }
     return config;
     },
@@ -25,12 +25,12 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
     async (res) => {
         console.log('check response axios:', res);
-        return res.data ? res.data : {statusCode: res.status};
+        return res.data ?? {statusCode: res.status};
     },
     async (err) => {
     const originalConfig = err.config;
 
-    if (originalConfig.url !== "/api/login/" && err.response) {
+    if (originalConfig && originalConfig.url !== "/api/user/login/" && err.response) {
         // Access Token was expired
         if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
@@ -40,7 +40,7 @@ instance.interceptors.response.use(
             refresh: TokenService.getLocalRefreshToken(),
             });
 
-            const { access } = rs.data;
+            const { access } = rs.access;
             TokenService.updateLocalAccessToken(access);
 
             return instance(originalConfig);

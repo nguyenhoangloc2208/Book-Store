@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import '../../assets/styles/Login.scss';
-import { Link } from "react-router-dom";
-import useEmailValidation from "../../hooks/useEmailValidation";
+import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
+import { useDispatch } from "react-redux";
+import { setIsLogin } from "../../store/slice/AuthSlice";
 
 const Login = () =>{
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [emailValidation, setEmailValidation] = useState(true);
     const [passwordValidation, setPasswordValidation] = useState(true);
-    const [isValidEmail, validateEmail] = useEmailValidation();
     const [isEmailNull, setEmailNull] = useState(false);
     const [isPasswordNull, setPasswordNull] = useState(false);
+    const [isValidEmail, setIsValid] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const isValid = pattern.test(email);
+        setIsValid(isValid);
+    }, [email]);
 
     const handleSignIn = async () =>{
         if(email==='' && password===''){
@@ -26,9 +35,14 @@ const Login = () =>{
         }else{
             setEmailNull(false);
             setPasswordNull(false);
-            validateEmail(email);
             if (isValidEmail){
-                AuthService.login(email, password);
+                try{
+                    AuthService.login(email, password);
+                    dispatch(setIsLogin(true));
+                    navigate('/');
+                }catch(err){
+                    console.error(err);
+                }
             }else {
                 setEmailValidation(false);
                 setPasswordValidation(false);

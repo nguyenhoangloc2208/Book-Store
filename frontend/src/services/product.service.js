@@ -10,7 +10,7 @@ const productsList = () => {
     })
 }
 
-const categoryList = async () => {
+const categoryList = () => {
     return api.get(`/api/products/categories`)
     .then((response)=>{
         return response.results;

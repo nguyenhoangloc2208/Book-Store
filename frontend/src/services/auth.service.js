@@ -1,6 +1,7 @@
 import api from "./api";
 import TokenService from "./token.service";
 
+
 const register = (username, email, password) => {
   return api.post("/auth/signup/", {
     username,
@@ -11,13 +12,13 @@ const register = (username, email, password) => {
 
 const login = (email, password) => {
   return api
-    .post("/api/login/", {
+    .post("/api/user/login/", {
       email: email,
       password: password
     })
     .then((response) => {
-      if (response.data.access) {
-        TokenService.setUser(response.data);
+      if (response.access) {
+        TokenService.setUser(response);
       }
 
       return response.data;
@@ -29,6 +30,21 @@ const logout = () => {
   return api.post("/dj-rest-auth/logout/")
 };
 
+const verifyToken = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user && user.access) {
+    const token = user.access;
+    return api.post("/dj-rest-auth/token/verify/",{
+      "token": token
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    });
+  } else {
+    return ("false");
+  }
+}
 const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user"));
 };
@@ -38,6 +54,7 @@ const AuthService = {
   login,
   logout,
   getCurrentUser,
+  verifyToken,
 };
 
 export default AuthService;

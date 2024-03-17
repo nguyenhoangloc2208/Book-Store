@@ -48,10 +48,16 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         return OrderReadSerializer
 
+    # def get_queryset(self):
+    #     res = super().get_queryset()
+    #     user = self.request.user
+    #     return res.filter(buyer=user)
+    
     def get_queryset(self):
-        res = super().get_queryset()
-        user = self.request.user
-        return res.filter(buyer=user)
+        if self.request.user.is_authenticated:
+            return self.queryset.filter(buyer=self.request.user)
+        else:
+            return Order.objects.none()
 
     def get_permissions(self):
         if self.action in ("update", "partial_update", "destroy"):

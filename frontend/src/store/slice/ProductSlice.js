@@ -3,6 +3,7 @@ import {createSelector, createSlice} from '@reduxjs/toolkit';
 const initialState ={
     books: [],
     categories: [],
+    authors: [],
     error: null,
 };
 
@@ -15,11 +16,14 @@ const productSlice = createSlice({
         },
         setProductsFromRedux: (state, action) =>{
             state.books = action.payload;
-        }
+        },
+        setAuthorsFromRedux: (state, action) =>{
+            state.authors = action.payload;
+        },
     },
 })
 
-export const {setCategoriesFromRedux, setProductsFromRedux} = productSlice.actions;
+export const {setCategoriesFromRedux, setProductsFromRedux, setAuthorsFromRedux} = productSlice.actions;
 export default productSlice.reducer;
 
 //Selector

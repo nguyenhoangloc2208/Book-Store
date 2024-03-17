@@ -8,6 +8,8 @@ import Pages from "../pages/Pages/Pages";
 import Collections from "../pages/Collections/Collections";
 import CategoryDetail from "../pages/Collections/CategoryDetail";
 import ProductDetail from "../pages/Collections/ProductDetail";
+import Profile from "../pages/Profile/Profile";
+// import Payment from "../components/Payment";
 
 
 const AppRouter = () =>{
@@ -20,8 +22,10 @@ const AppRouter = () =>{
                 <Route path='/products/:slug' element={<ProductDetail />} />
                 <Route path='/account/login' element={<Login />} />
                 <Route path='/account/register' element={<Register />} />
+                <Route path='/account/profile' element={<Profile/>}/>
                 <Route path='/pages/:url' element={<Pages/>}/>
                 <Route path='/cart' element={<Cart/>}/>
+                {/* <Route path='/account/payment/paypal' element={<Payment/>}/> */}
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </>

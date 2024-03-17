@@ -1,28 +1,10 @@
 import React, { useEffect, useState } from "react";
 import '../../assets/styles/Collections.scss';
 import CollectionsCard from "../../components/ui/CollectionsCard";
-import { useDispatch } from "react-redux";
-import { setCategoriesFromRedux, setProductsFromRedux } from "../../store/slice/ProductSlice";
-import ProductService from "../../services/product.service";
+import { useSelector } from "react-redux";
 
 const Collections = () =>{
-    const [categories, setCategories] = useState([]);
-    const dispatch = useDispatch();
-
-    useEffect (() => {
-        const fetchData = async () =>{
-            const res = await ProductService.categoryList();
-            setCategories(res);
-            dispatch(setCategoriesFromRedux(res));
-        }
-        const fetchProduct = async () =>{
-            const res = await ProductService.productsList();
-            dispatch(setProductsFromRedux(res));
-        }
-        fetchData();
-        fetchProduct();
-    }, [dispatch]);
-
+    const categories = useSelector(state => state.products.categories);
 
     return(
         <section className="collections-container">

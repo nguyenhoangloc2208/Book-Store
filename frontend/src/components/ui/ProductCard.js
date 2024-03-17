@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import '../../assets/styles/ProductCard.scss';
 import { useNavigate } from "react-router-dom";
+import CartService from "../../services/cart.service";
 
 const ProductCard = ({item, index, isBtn}) =>{
     const navigate = useNavigate();
@@ -10,7 +11,18 @@ const ProductCard = ({item, index, isBtn}) =>{
     }
 
     const handleAddtocart = () =>{
-        alert('Chưa có giỏ hàng');
+        try{
+            CartService.CartCreate(item.id, 1)
+            alert('Tạo cart thành công');
+        } catch{
+            try{
+                const rs = CartService.CartList();
+                console.log(rs);
+            }catch{
+                alert('Tạo cart hoặc thêm item thất bại')
+            }
+
+        }
     }
 
     return(

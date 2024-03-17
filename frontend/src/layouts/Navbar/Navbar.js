@@ -3,11 +3,13 @@ import '../../assets/styles/Navbar.scss';
 import logo from '../../assets/images/logo.webp';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "../../components/ui/SearchBar";
+import { useSelector } from "react-redux";
 
 const Navbar = () =>{
     const navigate = useNavigate();
     const location = useLocation();
     const [isShowSearchBar, setIsShowSearchBar] = useState(false);
+    const isLogin = useSelector(state => state.auth.isLogin);
 
     const handleShowSearchBar = () =>{
         if (isShowSearchBar === false){
@@ -17,8 +19,12 @@ const Navbar = () =>{
         }
     }
 
-    const handleAccountLogin = () =>{
-        navigate("/account/login");
+    const handleAccount = () =>{
+        if(isLogin){
+            navigate("/account/profile");
+        }else{
+            navigate("/account/login");
+        }
     }
 
     const handleCart = () =>{
@@ -48,9 +54,15 @@ const Navbar = () =>{
                     </ul>
                 </div>
                 <div className="col-md-2">
-                    <i onClick={() => handleShowSearchBar()} class="fa-solid fa-magnifying-glass"></i>
-                    <i onClick={() => handleAccountLogin()} class="fa-regular fa-user"></i>
-                    <i onClick={() => handleCart()} class="fa-solid fa-bag-shopping"></i>
+                    <i onClick={() => handleShowSearchBar()} className="fa-solid fa-magnifying-glass"></i>
+                    <div className="dropdown">
+                        <i onClick={() => handleAccount()} className="fa-regular fa-user user"></i>
+                        <div className="dropdown-content">
+                            <Link to='./account/profile'>Profile</Link>
+                            <Link to='./account/logout'>Logout</Link>
+                        </div>
+                    </div>
+                    <i onClick={() => handleCart()} className="fa-solid fa-bag-shopping"></i>
                 </div>
             </div>
         </div>

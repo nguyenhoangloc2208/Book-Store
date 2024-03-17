@@ -29,10 +29,17 @@ class PaymentViewSet(ModelViewSet):
     serializer_class = PaymentSerializer
     permission_classes = [IsPaymentByUser]
 
+    # def get_queryset(self):
+    #     res = super().get_queryset()
+    #     user = self.request.user
+    #     return res.filter(order__buyer=user)
     def get_queryset(self):
-        res = super().get_queryset()
-        user = self.request.user
-        return res.filter(order__buyer=user)
+        queryset = super().get_queryset()
+        if self.request.user.is_authenticated:
+            return queryset.filter(order__buyer=self.request.user)
+        else:
+            return Payment.objects.none()  # Trả về queryset rỗng nếu người dùng không được xác thực
+
 
     def get_permissions(self):
         if self.action in ("update", "partial_update", "destroy"):

@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'orders',
     'payment',
     'import_export',
+    
+    #payment
+    'paypal.standard.ipn',
 ]
 
 REST_FRAMEWORK = {
@@ -211,3 +214,8 @@ STRIPE_WEBHOOK_SECRET = 'whsec_055694a377e3617438e3c91c1146850411b8bda341c4e2cd3
 
 PAYMENT_SUCCESS_URL = 'http://localhost:3000/checkout/success/'
 PAYMENT_CANCEL_URL = 'http://localhost:3000/checkout/failed/'
+
+PAYPAL_RECEIVER_EMAIL = 'sb-itf8e30048587@personal.example.com'
+PAYPAL_TEST = True
+PAYPAL_CLIENT_ID = 'AZnHMZthBRZSkFK03p6XrOBrMxCUVUUuDlJbjJ-TShQ2SeXkQrW7BhfONP6aSIH3OgK1KwGj0vNNEE2n'
+PAYPAL_SECRET_ID = 'ECkf6qoABxs0XyzDFlKBGoVgoilOmrYPRj_AeVis3nL-TwfdVziA_qXqeTLrB2MFnXL7CXSlTbKgfyDU'

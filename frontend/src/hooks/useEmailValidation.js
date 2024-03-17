@@ -8,7 +8,7 @@ function useEmailValidation() {
     setIsValid(pattern.test(email));
   };
 
-  return [isValidEmail, validateEmail];
+  return [validateEmail, isValidEmail];
 }
 
 export default useEmailValidation;
