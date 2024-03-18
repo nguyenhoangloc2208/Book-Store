@@ -1,0 +1,48 @@
+@import '../../App.scss';
+
+.responsive-table {
+    width: 72%;
+    margin: 20px auto;
+    padding: 0;
+    li {
+    border-radius: 3px;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    }
+    .table-header {
+    background-color: #fff;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    }
+    .table-row {
+    background-color: #ffffff;
+    }
+    .col-1 {
+    flex-basis: 65%;
+    }
+    .col-2 {
+    flex-basis: 25%;
+    }
+    .col-3 {
+    flex-basis: 10%;
+    }
+    .product{
+        display: flex;
+        .product-image{
+            overflow: hidden;
+            width: 35%;
+            aspect-ratio: 1;
+            img{
+                width: 80%;
+                object-position: center center;
+                object-fit: cover;
+            }
+        }
+        .product-content{
+            padding: 20px;
+            margin-right: 30%;
+        }
+    }
+}

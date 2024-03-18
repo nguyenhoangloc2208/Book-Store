@@ -37,7 +37,7 @@ const Login = () =>{
             setPasswordNull(false);
             if (isValidEmail){
                 try{
-                    AuthService.login(email, password);
+                    await AuthService.login(email, password);
                     dispatch(setIsLogin(true));
                     navigate('/');
                 }catch(err){

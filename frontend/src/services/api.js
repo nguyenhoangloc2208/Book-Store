@@ -8,14 +8,17 @@ const instance = axios.create({
     },
 });
 
+instance.defaults.requiresAuth = true;
+
 instance.interceptors.request.use(
     (config) => {
-    const token = TokenService.getLocalAccessToken();
-    if (token) {
-        config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
-        // config.headers["access"] = token;
-    }
-    return config;
+        if (config.requiresAuth) {
+            const token = TokenService.getLocalAccessToken();
+            if (token) {
+                config.headers["Authorization"] = `Bearer ${token}`;
+            }
+        }
+        return config;
     },
     (error) => {
     return Promise.reject(error);
@@ -24,29 +27,30 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
     async (res) => {
-        console.log('check response axios:', res);
         return res.data ?? {statusCode: res.status};
     },
     async (err) => {
     const originalConfig = err.config;
 
-    if (originalConfig && originalConfig.url !== "/api/user/login/" && err.response) {
+    const refresh = TokenService.getLocalRefreshToken();
+    const access = TokenService.getLocalAccessToken();
+    if(refresh && refresh.length > 0 && access && access.length > 0){
+        if (originalConfig && originalConfig.url !== "/api/user/login/" && err.response) {
         // Access Token was expired
-        if (err.response.status === 401 && !originalConfig._retry) {
-        originalConfig._retry = true;
-
-        try {
-            const rs = await instance.post("/dj-rest-auth/token/refresh/", {
-            refresh: TokenService.getLocalRefreshToken(),
-            });
-
-            const { access } = rs.access;
-            TokenService.updateLocalAccessToken(access);
-
-            return instance(originalConfig);
-        } catch (_error) {
-            return Promise.reject(_error);
-        }
+            if (err.response.status === 401 && !originalConfig._retry) {
+                originalConfig._retry = true;
+                
+                try {            
+                    const rs = await instance.post("/dj-rest-auth/token/refresh/", {
+                        refresh: refresh,
+                    });
+                    TokenService.updateLocalAccessToken(rs.access);
+                    
+                    return instance(originalConfig);
+                } catch (_error) {
+                    return Promise.reject(_error);
+                }
+            }
         }
     }
 

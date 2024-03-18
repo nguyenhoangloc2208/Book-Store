@@ -57,3 +57,11 @@ export const selectProductByAuthor = createSelector(
     [selectProduct, (_, author) => author],
     (books, author) => books.filter(books => books.author === author)
 )
+
+export const selectProductById = createSelector(
+    [selectProduct, (_, order) => order.order_items],
+    (products, orderItems) => {
+        const productIds = orderItems?.map(item => item.product);
+        return products.filter(product => productIds.includes(product.id));
+    }
+);

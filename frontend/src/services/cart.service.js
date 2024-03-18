@@ -12,8 +12,13 @@ const CartList = () => {
 
 const CartCreate = (order_items, quantity) => {
     return api.post("/api/user/orders/", {
-        "order_items": order_items,
-        "quantity": quantity
+        "status": "P",
+        "order_items": [
+            {
+            "product": order_items,
+            "quantity": quantity
+            }
+        ]
     })
     .catch((error) => {
         throw error
@@ -48,7 +53,7 @@ const CartReadItems = (order_id) => {
 }
 
 const CartUpdateItems = (order_id, product_id, quantity) =>{
-    return api.post(`/api/user/orders/${order_id}/order-items`, {
+    return api.post(`/api/user/orders/${order_id}/order-items/`, {
         "product": product_id,
         "quantity": quantity
     })

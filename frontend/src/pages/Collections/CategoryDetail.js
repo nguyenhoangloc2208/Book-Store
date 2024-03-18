@@ -8,7 +8,8 @@ import ProductCard from "../../components/ui/ProductCard";
 const CategoryDetail = () =>{
     const {slug} = useParams();
     const category = useSelector(state => selectCategoryBySlug(state, slug));
-    const products = useSelector(state => selectProductByCategory(state, category.name))
+    const products = useSelector(state => selectProductByCategory(state, category.name));
+    const orderId = useSelector(state => state.order.orderPending.id);
 
     return(
         <section className="category-detail-container">
@@ -22,7 +23,7 @@ const CategoryDetail = () =>{
             </div>
             <div className="product-card-container">
                 {products && products.length > 0 && products.map((item, index)=>(
-                    <ProductCard item={item} index={index} key={index} isBtn={true}/>
+                    <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null}/>
                 ))}
             </div>
         </section>

@@ -3,13 +3,48 @@ import '../../assets/styles/Navbar.scss';
 import logo from '../../assets/images/logo.webp';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "../../components/ui/SearchBar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import AuthService from "../../services/auth.service";
+import { setIsLogin } from "../../store/slice/AuthSlice";
+import CartService from "../../services/cart.service";
+import { setOrderCompleted, setOrderPending } from "../../store/slice/OrderSlice";
+
 
 const Navbar = () =>{
     const navigate = useNavigate();
     const location = useLocation();
+    const [isLoaded, setIsLoaded] = useState(false);
     const [isShowSearchBar, setIsShowSearchBar] = useState(false);
     const isLogin = useSelector(state => state.auth.isLogin);
+    const total_quantity = useSelector(state => state.order.total_quantity);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!isLoaded && isLogin) {
+            fetchOrderData();
+            setIsLoaded(true);
+        }
+    }, [isLoaded, isLogin])
+
+    const fetchOrderData = async () => {
+        try{
+            const order_data = await CartService.CartList();
+            console.log('order_data', order_data);
+            if(order_data && order_data.length > 0){
+                const orderPeiding = order_data.filter(order_data => order_data.status === "P");   
+                console.log('orderPending', orderPeiding);             
+                const orderCompleted = order_data.filter(order_data => order_data.status === "C");
+                if(orderPeiding){
+                    dispatch(setOrderPending(orderPeiding[0]));
+                }
+                if(orderCompleted){
+                    dispatch(setOrderCompleted(orderCompleted));
+                }
+            }
+        }catch(error){
+            console.error(error);
+        }
+    }
 
     const handleShowSearchBar = () =>{
         if (isShowSearchBar === false){
@@ -21,7 +56,6 @@ const Navbar = () =>{
 
     const handleAccount = () =>{
         if(isLogin){
-            navigate("/account/profile");
         }else{
             navigate("/account/login");
         }
@@ -33,6 +67,18 @@ const Navbar = () =>{
 
     const handleLogoClick = () =>{
         navigate("/");
+    }
+    
+    const handleLogout = async () => {
+        try{
+            await AuthService.logout();
+            dispatch(setIsLogin(false));
+            dispatch(setOrderPending({}));
+            dispatch(setOrderCompleted([]));
+            alert('Logout success!');
+        }catch(error){
+            console.error(error);
+        }
     }
 
     return(
@@ -57,12 +103,17 @@ const Navbar = () =>{
                     <i onClick={() => handleShowSearchBar()} className="fa-solid fa-magnifying-glass"></i>
                     <div className="dropdown">
                         <i onClick={() => handleAccount()} className="fa-regular fa-user user"></i>
-                        <div className="dropdown-content">
-                            <Link to='./account/profile'>Profile</Link>
-                            <Link to='./account/logout'>Logout</Link>
-                        </div>
+                        {isLogin && <div className="dropdown-content">
+                            <Link to='./account/'>Profile</Link>
+                            <Link as="button" onClick={()=>handleLogout()}>Logout</Link>
+                        </div>}
                     </div>
-                    <i onClick={() => handleCart()} className="fa-solid fa-bag-shopping"></i>
+                    <div className="cart-quantity">
+                        <i onClick={() => handleCart()} className="fa-solid fa-bag-shopping"></i>
+                        {total_quantity > 0 && <div className="circle">
+                            <span>{total_quantity}</span>
+                        </div>}
+                    </div>
                 </div>
             </div>
         </div>

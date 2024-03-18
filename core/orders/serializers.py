@@ -61,6 +61,7 @@ class OrderReadSerializer(serializers.ModelSerializer):
     buyer = serializers.CharField(source="buyer.get_full_name", read_only=True)
     order_items = OrderItemSerializer(read_only=True, many=True)
     total_cost = serializers.SerializerMethodField(read_only=True)
+    total_quantity = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Order
@@ -70,6 +71,7 @@ class OrderReadSerializer(serializers.ModelSerializer):
             # "payment",
             "order_items",
             "total_cost",
+            "total_quantity",
             "status",
             "created_at",
             "updated_at",
@@ -77,6 +79,8 @@ class OrderReadSerializer(serializers.ModelSerializer):
 
     def get_total_cost(self, obj):
         return obj.total_cost
+    def get_total_quantity(self, obj):
+        return obj.total_quantity
 
 
 class OrderWriteSerializer(serializers.ModelSerializer):
@@ -112,7 +116,7 @@ class OrderWriteSerializer(serializers.ModelSerializer):
         buyer = validated_data.pop("buyer")
         pending_order = Order.objects.filter(buyer=buyer, status=Order.PENDING).first()
         if pending_order:
-            return pending_order
+            raise serializers.ValidationError({"error": "There is already a pending order for this user."})
         status = validated_data.pop("status")
         orders_data = validated_data.pop("order_items")
         order = Order.objects.create(buyer=buyer, status=status) 

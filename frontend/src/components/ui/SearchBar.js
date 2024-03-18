@@ -9,9 +9,10 @@ const SearchBar = ({isOpen, setIsOpen}) =>{
     const navigate = useNavigate();
     const products = useSelector(state => state.products.books);
 
-    const filteredProducts = products.filter((item) =>
-    item.name.toLowerCase().includes(inputText.toLowerCase())
-    );
+    // const filteredProducts = products.filter((item) =>
+    // item.name.toLowerCase().includes(inputText.toLowerCase())
+    // );
+    const filteredProducts = useState();
 
     const handleClick = (item)=>{
         navigate(`/products/${item.slug}`)

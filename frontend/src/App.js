@@ -10,29 +10,25 @@ import { useDispatch } from 'react-redux';
 import { setCategoriesFromRedux, setProductsFromRedux, setAuthorsFromRedux } from './store/slice/ProductSlice';
 import React, { useEffect } from 'react';
 
-const fetcher = (url) => api.get(url).then(res => res.results)
+const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results);
 
 function App() {
-  const {data: products, error: errorProduct, isLoading: isLoadingProduct} = useSWR('/api/products/', fetcher, {refreshInterval: 120000});
-  const {data: categories, error: errorCategory, isLoading: isLoadingCategory} = useSWR('/api/products/categories/', fetcher, {refreshInterval: 120000});
-  const {data: authors, error: errorAuthor, isLoading: isLoadingAuthor} = useSWR('/api/products/authors/', fetcher, {refreshInterval: 120000});
+  const {data: productsData, error: productsError, isLoading: productsLoading} = useSWR('/api/products/', fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+  const {data: categoriesData, error: categoriesError, isLoading: categoriesLoading} = useSWR('/api/products/categories/', fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+  const {data: authorsData, error: authorsError, isLoading: authorsLoading} = useSWR('/api/products/authors', fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
   const dispatch = useDispatch();
-
   
   useEffect(() => {
-    if(products && products.length > 0){
-      dispatch(setProductsFromRedux(products));
+    if(productsData && categoriesData && authorsData){
+      dispatch(setProductsFromRedux(productsData));
+      dispatch(setCategoriesFromRedux(categoriesData));
+      dispatch(setAuthorsFromRedux(authorsData));
     }
-    if(categories && categories.length > 0){
-      dispatch(setCategoriesFromRedux(categories));
-    }
-    if(authors && authors.length > 0){
-      dispatch(setAuthorsFromRedux(authors));
-    }
-  }, [products, categories, authors, dispatch]);
+  }, [productsData, categoriesData, authorsData, dispatch]);
+
   
-  // if (errorProduct && errorCategory && errorAuthor) return <div>failed to load</div>
-  if (isLoadingProduct && isLoadingCategory && isLoadingAuthor) return <div>loading...</div>
+  if (productsError || categoriesError || authorsError) return <div>failed to load</div>
+  if (productsLoading || categoriesLoading || authorsLoading) return <div>loading...</div>
   return (
     <>
     {/* <PayPalScriptProvider options={{clientId: "AZnHMZthBRZSkFK03p6XrOBrMxCUVUUuDlJbjJ-TShQ2SeXkQrW7BhfONP6aSIH3OgK1KwGj0vNNEE2n"}}> */}

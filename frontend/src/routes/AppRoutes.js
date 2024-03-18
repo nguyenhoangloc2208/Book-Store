@@ -17,12 +17,13 @@ const AppRouter = () =>{
         <>
             <Routes basename='/'>
                 <Route path='/' element={<Home />} exact/>
-                <Route path='/collections' element={<Collections />} />
+                <Route path='/collections/' element={<Collections />} />
+                <Route path='/collections/all' element={<Collections />} />
                 <Route path='/collections/:slug' element={<CategoryDetail />} />
                 <Route path='/products/:slug' element={<ProductDetail />} />
                 <Route path='/account/login' element={<Login />} />
                 <Route path='/account/register' element={<Register />} />
-                <Route path='/account/profile' element={<Profile/>}/>
+                <Route path='/account' element={<Profile/>}/>
                 <Route path='/pages/:url' element={<Pages/>}/>
                 <Route path='/cart' element={<Cart/>}/>
                 {/* <Route path='/account/payment/paypal' element={<Payment/>}/> */}

@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage'; // Sử dụng Local Storage
 import { combineReducers } from 'redux';
 import ProductSlice from './slice/ProductSlice';
 import AuthSlice from './slice/AuthSlice';
+import OrderSlice from './slice/OrderSlice';
 
 const persistConfig = {
   key: 'root', // Khóa cho Local Storage
@@ -13,6 +14,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, combineReducers({
   products: ProductSlice,
   auth: AuthSlice,
+  order: OrderSlice,
 }));
 
 const store = configureStore({

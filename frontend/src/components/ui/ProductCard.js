@@ -2,26 +2,27 @@ import React, { useState } from "react";
 import '../../assets/styles/ProductCard.scss';
 import { useNavigate } from "react-router-dom";
 import CartService from "../../services/cart.service";
+import {mutate} from 'swr';
 
-const ProductCard = ({item, index, isBtn}) =>{
+const ProductCard = ({item, index, isBtn, orderId}) =>{
     const navigate = useNavigate();
-
     const handleClickCard = () =>{
         navigate(`/products/${item.slug}`);
     }
 
-    const handleAddtocart = () =>{
-        try{
-            CartService.CartCreate(item.id, 1)
+    const handleAddtocart = async () =>{
+        try {
+            await CartService.CartCreate(item.id, 1);
             alert('Tạo cart thành công');
-        } catch{
-            try{
-                const rs = CartService.CartList();
+        } catch (error) {
+            console.error('Tạo cart thất bại: ', error);
+            try {
+                const rs = await CartService.CartUpdateItems(orderId, item.id, 1);
+                mutate(`/api/user/orders/${orderId}/order_items/`);
                 console.log(rs);
-            }catch{
+            } catch (error) {
                 alert('Tạo cart hoặc thêm item thất bại')
             }
-
         }
     }
 
