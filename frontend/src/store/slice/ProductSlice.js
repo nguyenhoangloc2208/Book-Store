@@ -59,8 +59,11 @@ export const selectProductByAuthor = createSelector(
 )
 
 export const selectProductById = createSelector(
-    [selectProduct, (_, order) => order.order_items],
+    [selectProduct, (_, order) => order],
     (products, orderItems) => {
+        if (!products || !orderItems) {
+            return [];
+        }
         const productIds = orderItems?.map(item => item.product);
         return products.filter(product => productIds.includes(product.id));
     }

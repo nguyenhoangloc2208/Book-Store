@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  orderPending: {},
-  orderCompleted: [],
   total_quantity: 0,
+  idPending: null,
 };
 
 const orderSlice = createSlice({
@@ -11,19 +10,16 @@ const orderSlice = createSlice({
   initialState,
   reducers: {
     setOrderPending: (state, action) => {
-        state.orderPending = action.payload;
-        console.log('action:', action.payload);
         if(action.payload.total_quantity > 0){
             state.total_quantity = action.payload.total_quantity;
+            state.idPending = action.payload.id;
         } else{
             state.total_quantity = 0;
+            state.idPending = 0;
         }
     },
-    setOrderCompleted: (state, action) => {
-        state.orderCompleted = action.payload;
-    }
   },
 });
 
-export const { setOrderPending, setOrderCompleted } = orderSlice.actions;
+export const { setOrderPending } = orderSlice.actions;
 export default orderSlice.reducer;

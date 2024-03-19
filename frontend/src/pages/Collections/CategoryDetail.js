@@ -9,7 +9,7 @@ const CategoryDetail = () =>{
     const {slug} = useParams();
     const category = useSelector(state => selectCategoryBySlug(state, slug));
     const products = useSelector(state => selectProductByCategory(state, category.name));
-    const orderId = useSelector(state => state.order.orderPending.id);
+    const orderId = useSelector(state => state.order.idPending);
 
     return(
         <section className="category-detail-container">

@@ -1,12 +1,13 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
-
+from rest_framework.decorators import action
 from orders.models import Order, OrderItem
 from orders.permissions import (IsOrderByBuyerOrAdmin,
                                 IsOrderItemByBuyerOrAdmin, IsOrderItemPending,
                                 IsOrderPending)
 from orders.serializers import (OrderItemSerializer, OrderReadSerializer,
                                 OrderWriteSerializer)
+from rest_framework.response import Response
 
 
 class OrderItemViewSet(viewsets.ModelViewSet):
@@ -64,3 +65,12 @@ class OrderViewSet(viewsets.ModelViewSet):
             self.permission_classes += [IsOrderPending]
 
         return super().get_permissions()
+    
+    @action(detail=False, methods=['get'])
+    def pending_order(self, request):
+        """
+        Retrieve orders with status 'P' (pending)
+        """
+        pending_orders = self.queryset.filter(status='P')
+        serializer = self.get_serializer(pending_orders, many=True)
+        return Response(serializer.data)

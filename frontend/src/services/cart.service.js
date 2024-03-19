@@ -72,9 +72,10 @@ const ItemRead = (order_id, id) => {
     })
 }
 
-const ItemUpdateQuantity = (order_id, id, quantity) => {
-    return api.patch(`/api/user/orders/${order_id}/order-items/${id}`,{
-        "quantity": quantity
+const ItemUpdateQuantity = (order_id, item, quantity) => {
+    return api.patch(`/api/user/orders/${order_id}/order-items/${item.id}/`,{
+        "product": item.product,
+        "quantity": quantity.toString()
     })
     .catch((error) => {
         throw error

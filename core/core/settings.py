@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     
     #payment
     'paypal.standard.ipn',
+    'paypalrestsdk',
 ]
 
 REST_FRAMEWORK = {
@@ -218,4 +219,11 @@ PAYMENT_CANCEL_URL = 'http://localhost:3000/checkout/failed/'
 PAYPAL_RECEIVER_EMAIL = 'sb-itf8e30048587@personal.example.com'
 PAYPAL_TEST = True
 PAYPAL_CLIENT_ID = 'AZnHMZthBRZSkFK03p6XrOBrMxCUVUUuDlJbjJ-TShQ2SeXkQrW7BhfONP6aSIH3OgK1KwGj0vNNEE2n'
-PAYPAL_SECRET_ID = 'ECkf6qoABxs0XyzDFlKBGoVgoilOmrYPRj_AeVis3nL-TwfdVziA_qXqeTLrB2MFnXL7CXSlTbKgfyDU'
+PAYPAL_SECRET = 'ECkf6qoABxs0XyzDFlKBGoVgoilOmrYPRj_AeVis3nL-TwfdVziA_qXqeTLrB2MFnXL7CXSlTbKgfyDU'
+# PAYPAL_ACCESS_TOKEN = 'ctqsx48wwzy6qv3r$bbf2d42ce1f6303f70d39392e8871c9d'
+PAYPAL_ACCESS_TOKEN = 'access_token$sandbox$ctqsx48wwzy6qv3r$bbf2d42ce1f6303f70d39392e8871c9d'
+PAYPAL_BASE_URL = "https://api.sandbox.paypal.com"
+
+
+
+EXCHANGE_RATE = 0.000040

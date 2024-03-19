@@ -11,7 +11,7 @@ from rest_framework import viewsets, permissions
 # Create your views here.
 
 class ProductCategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = ProductCategory.objects.all()
+    queryset = ProductCategory.objects.all().order_by('name')
     serializer_class = ProductCategoryReadSerializer
     permission_classes = (permissions.AllowAny, )
     
@@ -25,6 +25,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     CRUD products
     """
     queryset = Product.objects.all()
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.order_by('-created_at')
     
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update", "destroy"):

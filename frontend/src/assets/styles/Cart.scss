@@ -1,4 +1,9 @@
 @import '../../App.scss';
+$black: #000;
+$white: #fff;
+$gray: #ccc;
+$smoke: #e2e2e2;
+$disable: #f2f2f2;
 
 .responsive-table {
     width: 72%;
@@ -6,7 +11,7 @@
     padding: 0;
     li {
     border-radius: 3px;
-    padding: 25px 30px;
+    padding: 20px 0;
     display: flex;
     justify-content: space-between;
     }
@@ -32,8 +37,11 @@
         display: flex;
         .product-image{
             overflow: hidden;
-            width: 35%;
+            width: 20%;
             aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
             img{
                 width: 80%;
                 object-position: center center;
@@ -44,5 +52,113 @@
             padding: 20px;
             margin-right: 30%;
         }
+    }
+    .quantity{
+        .qty{
+            width: auto;
+            display: inline-flex;
+            align-items: center;
+            flex: 1;
+            .qty-input {
+                border: 1px solid $smoke;
+                color: $black;
+                background: $white;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                .product-qty,
+                .qty-count {
+                    background: transparent;
+                    color: inherit;
+                    font-weight: bold;
+                    font-size: inherit;
+                    border: none;
+                    display: inline-block;
+                    min-width: 0;
+                    height: 2.5rem;
+                    line-height: 1;
+                    
+                    
+                    &:focus {
+                        outline: none;
+                    }
+                }
+                
+                .product-qty {
+                    width: 50px;
+                    min-width: 0;
+                    display: inline-block;
+                    text-align: center;
+                    appearance: textfield;		
+                    
+                &::-webkit-outer-spin-button,
+                &::-webkit-inner-spin-button {
+                    appearance: none;
+                    margin: 0;
+                }
+                }
+            .qty-count {
+                padding: 0;
+                cursor: pointer;
+                width: 2.5rem;
+                font-size: 1.25em;
+                text-indent: -100px;
+                overflow: hidden;
+                position: relative;
+                
+                &:before, 
+                &:after {
+                    content: "";
+                    height: 2px;
+                    width: 10px;
+                    position: absolute;
+                    display: block;
+                    background: $black;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    margin: auto;
+                }
+                &--minus {
+                    border-right: 1px solid $smoke;
+                }
+                &--add {
+                    border-left: 1px solid $smoke;
+                    &:after {
+                        transform: rotate(90deg);
+                    }
+                }
+                
+                &:disabled {
+                    color: $gray;
+                    background: $disable;
+                    cursor: not-allowed;
+                    border-color: transparent;
+                    
+                    &:before,
+                    &:after {
+                        background: $gray;
+                    }
+                }
+                }
+            }
+            .delete{
+                margin-left: 10px;
+                font-size: 20px;
+                transition: all 0.3s;
+                color: #1B6E94;
+                &:hover{
+                    cursor: pointer;
+                    color: $black;
+                    margin-bottom: 2px;
+                }
+            }
+        }
+    }
+    .qty-input {
+        border-radius: 4px;
+        box-shadow: 0 1em 2em -0.9em rgba(#000, 0.3);
+        transform: scale(1);
     }
 }

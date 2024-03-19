@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AuthService from "../../services/auth.service";
 import { setIsLogin } from "../../store/slice/AuthSlice";
 import CartService from "../../services/cart.service";
-import { setOrderCompleted, setOrderPending } from "../../store/slice/OrderSlice";
+import { setOrderPending } from "../../store/slice/OrderSlice";
 
 
 const Navbar = () =>{
@@ -29,16 +29,10 @@ const Navbar = () =>{
     const fetchOrderData = async () => {
         try{
             const order_data = await CartService.CartList();
-            console.log('order_data', order_data);
             if(order_data && order_data.length > 0){
-                const orderPeiding = order_data.filter(order_data => order_data.status === "P");   
-                console.log('orderPending', orderPeiding);             
-                const orderCompleted = order_data.filter(order_data => order_data.status === "C");
-                if(orderPeiding){
-                    dispatch(setOrderPending(orderPeiding[0]));
-                }
-                if(orderCompleted){
-                    dispatch(setOrderCompleted(orderCompleted));
+                const orderPending = order_data.filter(order_data => order_data.status === "P");   
+                if(orderPending){
+                    dispatch(setOrderPending(orderPending[0]));
                 }
             }
         }catch(error){
@@ -73,8 +67,7 @@ const Navbar = () =>{
         try{
             await AuthService.logout();
             dispatch(setIsLogin(false));
-            dispatch(setOrderPending({}));
-            dispatch(setOrderCompleted([]));
+            dispatch(setOrderPending(0));
             alert('Logout success!');
         }catch(error){
             console.error(error);
