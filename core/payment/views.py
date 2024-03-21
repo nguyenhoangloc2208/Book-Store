@@ -215,11 +215,10 @@ class CreateOrderViewRemote(APIView):
             },
             "purchase_units": [
                 {
-                    "reference_id": "294375635",
-                    "description": "African Art and Collectibles",
+                    # "reference_id": "294375635",
+                    "reference_id": "d9f80740-38f0-11e8-b467-0ed5f89f718b",
+                    "description": "HoangLoc Book Store",
 
-                    "custom_id": "CUST-AfricanFashion",
-                    "soft_descriptor": "AfricanFashions",
                     "amount": {
                         "currency_code": "USD",
                         "value": str(round(total_cost_usd, 2))  #amount,
@@ -233,16 +232,23 @@ class CreateOrderViewRemote(APIView):
         linkForPayment = response.json()['links'][1]['href']
         return Response({"linkForPayment": linkForPayment, "token": token})
 
-class CaptureOrderView(APIView):
-    permission_classes = (
-        IsPaymentForOrderNotCompleted,
-        # DoesOrderHaveAddress,
-    )
-    #capture order aims to check whether the user has authorized payments.
-    def get(self, request, *args, **kwargs):
-        token = self.kwargs.get("token")
-        # token = request.GET.get('token')#the access token we used above for creating an order, or call the function for generating the token
-        captureurl = request.GET.get('url')#captureurl = 'https://api.sandbox.paypal.com/v2/checkout/orders/6KF61042TG097104C/capture'#see transaction status
-        headers = {"Content-Type": "application/json", "Authorization": "Bearer "+token}
-        response = requests.post(captureurl, headers=headers)
-        return Response(response.json())
+# class CaptureOrderView(APIView):
+#     # permission_classes = (
+#     #     IsPaymentForOrderNotCompleted,
+#     #     # DoesOrderHaveAddress,
+#     # )
+#     def get(self, request, *args, **kwargs):
+#         token = paypal_token()['access_token']
+#         authorization_id = '4X711612NK480823C'
+#         captureurl = 'https://api-m.paypal.com/v2/payments/authorizations/EKBWYH8PBAM2N' #captureurl = 'https://api.sandbox.paypal.com/v2/checkout/orders/6KF61042TG097104C/capture'#see transaction status
+#         headers = {
+#             "Content-Type": "application/json",
+#             "Authorization": "Bearer "+token
+#         }
+#         response = requests.post(captureurl, headers=headers)
+#         if response.status_code == 200:
+#             link = response.json()
+#         else:
+#             link = {"error": "Failed to capture order"}
+
+#         return Response({"link": link, "token": token})

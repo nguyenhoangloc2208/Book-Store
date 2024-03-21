@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EmptyCart from "../../components/ui/EmptyCart";
-import {Helmet} from 'react-helmet';
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import '../../assets/styles/Cart.scss';
 import { selectProductById } from "../../store/slice/ProductSlice";
 import { PayPalButtons } from "@paypal/react-paypal-js";
@@ -10,6 +8,7 @@ import useSWR, {mutate} from "swr";
 import api from '../../services/api';
 import CartService from "../../services/cart.service";
 
+import {Helmet} from 'react-helmet';
 const TITLE = 'Your Shopping Cart';
 
 const ExchangeRate = 0.000040;
@@ -114,24 +113,34 @@ const Cart = () =>{
                     </div>
                     <div>
                         <PayPalButtons 
-                            createOrder={(data, actions) => {
-                                return actions.order.create({
-                                    purchase_units: [
-                                        {
-                                            amount: {
-                                                currency_code: 'USD',
-                                                value: totalCostUSD.toString(),
-                                            },
-                                        },
-                                    ],
-                                });
+                            createOrder={async () => {
+                                return await api.get(`/api/user/payments/paypal/create/order/${data.id}/`)
+                                    .then(response => {
+                                        // const linkForPayment = response.linkForPayment;
+                                        // window.location.href = linkForPayment;
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
                             }}
-                            onApprove={(data, actions) => {
-                                return actions.order.capture().then((details) => {
-                                    const name = details.payer.name.given_name;
-                                    alert(`Transaction completed by ${name}`)
-                                })
-                            }}
+                            // createOrder={(data, actions) => {
+                            //     return actions.order.create({
+                            //         purchase_units: [
+                            //             {
+                            //                 amount: {
+                            //                     currency_code: 'USD',
+                            //                     value: totalCostUSD.toString(),
+                            //                 },
+                            //             },
+                            //         ],
+                            //     });
+                            // }}
+                            // onApprove={(data, actions) => {
+                            //     return actions.order.capture().then((details) => {
+                            //         const name = details.payer.name.given_name;
+                            //         alert(`Transaction completed by ${name}`)
+                            //     })
+                            // }}
                         />
                     </div>
                 </section>

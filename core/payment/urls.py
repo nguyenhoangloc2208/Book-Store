@@ -6,7 +6,7 @@ from .views import (CheckoutAPIView,
                     StripeCheckoutSessionCreateAPIView, 
                     StripeWebhookAPIView, 
                     CreateOrderViewRemote,
-                    CaptureOrderView,
+                    # CaptureOrderView,
                     )
 
 app_name = "payment"
@@ -23,5 +23,5 @@ urlpatterns = [
 
 urlpatterns += [
     path('paypal/create/order/<int:order_id>/', CreateOrderViewRemote.as_view(), name='ordercreate'),
-    path('paypal/capture/order/<str:token>/', CaptureOrderView.as_view(), name='captureorder'),
+    # path('paypal/capture/order/', CaptureOrderView.as_view(), name='captureorder'),
 ]
