@@ -9,6 +9,8 @@ import api from '../../services/api';
 import CartService from "../../services/cart.service";
 
 import {Helmet} from 'react-helmet';
+import PaymentService from "../../services/payment.service";
+import { useNavigate } from "react-router-dom";
 const TITLE = 'Your Shopping Cart';
 
 const ExchangeRate = 0.000040;
@@ -20,13 +22,22 @@ const Cart = () =>{
     const {data, error, isLoading} = useSWR('/api/user/orders/pending_order', fetcher, {refreshInterval: null, revalidateOnFocus: false});
     const [totalCostUSD, setTotalCostUSD] = useState();
     const cartItems = useSelector(state => selectProductById(state, data?.order_items));
-    
+    const [isEmpty, setIsEmpty] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(data && data.total_cost){
             setTotalCostUSD((parseFloat(data.total_cost) * ExchangeRate).toFixed(2));
         }
-
+        console.log('data: ', data);
+        if (!data || !data.order_items || !Array.isArray(data.order_items)) {
+            setIsEmpty(true);
+            if(data){
+                handleDeleteOrder(data?.id);
+            }
+        } else {
+            setIsEmpty(false);
+        }
     }, [data])
 
     if (error) return <div>failed to load</div>
@@ -60,10 +71,24 @@ const Cart = () =>{
     const handleDelete = async (index) => {
         try{
             await CartService.ItemDelete(data.id, data.order_items[index].id);
-            mutate('/api/user/orders/pending_order');
+            await mutate('/api/user/orders/pending_order');
         }catch{
             alert('Lỗi khi xóa');
         }
+    }
+
+    const handleCreatePayment = async (payment_option, order) => {
+        const payment = await PaymentService.PaymentList();
+        const filteredPayments = payment.filter(payment => payment.order === order);
+        try{
+            await PaymentService.PaymentCreate(payment_option, order);
+        } catch(error){
+            await PaymentService.PaymentUpdate(payment_option, order, filteredPayments[0].id)
+        }
+    }
+
+    const handleDeleteOrder = async (id) => {
+        await CartService.CartDelete(id);
     }
 
     return(
@@ -71,7 +96,7 @@ const Cart = () =>{
             <Helmet>
                 <title>{TITLE}</title>
             </Helmet>
-            {Object.keys(data).length === 0 ? 
+            {isEmpty? 
                 <EmptyCart/>
                 : 
                 <section>
@@ -114,33 +139,34 @@ const Cart = () =>{
                     <div>
                         <PayPalButtons 
                             createOrder={async () => {
-                                return await api.get(`/api/user/payments/paypal/create/order/${data.id}/`)
-                                    .then(response => {
-                                        // const linkForPayment = response.linkForPayment;
-                                        // window.location.href = linkForPayment;
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                    });
+                                await handleCreatePayment("P", data.id);
+                                try {
+                                    const response = await api.get(`/api/user/payments/paypal/create/order/${data.id}/`);
+                                    const orderId = response.orderId; // Lấy ID đơn hàng từ phản hồi của API
+                                    console.log(orderId);
+                                    return orderId; // Trả về ID đơn hàng để PayPal xử lý
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                }
                             }}
-                            // createOrder={(data, actions) => {
-                            //     return actions.order.create({
-                            //         purchase_units: [
-                            //             {
-                            //                 amount: {
-                            //                     currency_code: 'USD',
-                            //                     value: totalCostUSD.toString(),
-                            //                 },
-                            //             },
-                            //         ],
-                            //     });
-                            // }}
-                            // onApprove={(data, actions) => {
-                            //     return actions.order.capture().then((details) => {
-                            //         const name = details.payer.name.given_name;
-                            //         alert(`Transaction completed by ${name}`)
-                            //     })
-                            // }}
+                            onApprove={ (event, actions) => {
+                                actions.order.capture().then(async (details) => {
+                                    const name = details.payer.name.given_name;
+                                    const id = details.id;
+                                    try {
+                                        await api.post(`/api/user/payments/paypal/checkout/order/${data.id}/`, {
+                                            id: id,
+                                            orderId: data.id,
+                                        });
+                                        await mutate('/api/user/orders/pending_order');
+                                        alert(`Transaction completed by ${name}`);
+                                        navigate('/');
+                                    } catch (error) {
+                                        console.error('Error:', error);
+                                        // Xử lý lỗi nếu cần
+                                    }
+                                })
+                            }}
                         />
                     </div>
                 </section>

@@ -3,9 +3,13 @@ import '../../assets/styles/ProductCard.scss';
 import { useNavigate } from "react-router-dom";
 import CartService from "../../services/cart.service";
 import {mutate} from 'swr';
+import { useDispatch } from "react-redux";
+import { setOrderPending } from "../../store/slice/OrderSlice";
 
 const ProductCard = ({item, index, isBtn, orderId}) =>{
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const handleClickCard = () =>{
         navigate(`/products/${item.slug}`);
     }
@@ -13,17 +17,25 @@ const ProductCard = ({item, index, isBtn, orderId}) =>{
     const handleAddtocart = async () =>{
         try {
             await CartService.CartCreate(item.id, 1);
+            mutate(`/api/user/orders/${orderId}/order_items/`);
+            dispatch(setOrderPending({ total_quantity: 1, id: orderId }));
             alert('Tạo cart thành công');
         } catch (error) {
             console.error('Tạo cart thất bại: ', error);
             try {
                 const rs = await CartService.CartUpdateItems(orderId, item.id, 1);
                 mutate(`/api/user/orders/${orderId}/order_items/`);
-                console.log(rs);
             } catch (error) {
-                alert('Tạo cart hoặc thêm item thất bại')
+                const data = await CartService.GetPendingOrder();
+                const orderItem = data[0].order_items.find(orderItem => orderItem.product === item.id);
+                try{
+                    const rs = await CartService.ItemUpdateQuantity(orderId, orderItem, orderItem.quantity + 1);
+                } catch{
+                    alert('Hết hàng!')
+                }
             }
         }
+        mutate('/api/user/orders/pending_order');
     }
 
     return(

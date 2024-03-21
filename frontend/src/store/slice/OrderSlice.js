@@ -10,7 +10,7 @@ const orderSlice = createSlice({
   initialState,
   reducers: {
     setOrderPending: (state, action) => {
-        if(action.payload.total_quantity > 0){
+        if(action.payload.total_quantity !== null & action.payload.total_quantity > 0){
             state.total_quantity = action.payload.total_quantity;
             state.idPending = action.payload.id;
         } else{

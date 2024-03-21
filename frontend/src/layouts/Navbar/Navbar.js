@@ -8,6 +8,10 @@ import AuthService from "../../services/auth.service";
 import { setIsLogin } from "../../store/slice/AuthSlice";
 import CartService from "../../services/cart.service";
 import { setOrderPending } from "../../store/slice/OrderSlice";
+import api from '../../services/api'
+import useSWR, { mutate } from "swr";
+
+const fetcher = (url) => api.get(url).then(res => res[0]);
 
 
 const Navbar = () =>{
@@ -16,26 +20,30 @@ const Navbar = () =>{
     const [isLoaded, setIsLoaded] = useState(false);
     const [isShowSearchBar, setIsShowSearchBar] = useState(false);
     const isLogin = useSelector(state => state.auth.isLogin);
-    const total_quantity = useSelector(state => state.order.total_quantity);
+    const [total_quantity,setTotalQuantity] = useState(0);
     const dispatch = useDispatch();
+    const {data, error, isLoading} = useSWR('/api/user/orders/pending_order', fetcher, {refreshInterval: null, revalidateOnFocus: false});
+
 
     useEffect(() => {
         if (!isLoaded && isLogin) {
-            fetchOrderData();
             setIsLoaded(true);
         }
-    }, [isLoaded, isLogin])
+        fetchOrderData();
+    }, [data, isLoaded, isLogin])
 
     const fetchOrderData = async () => {
-        try{
+        try {
             const order_data = await CartService.CartList();
-            if(order_data && order_data.length > 0){
-                const orderPending = order_data.filter(order_data => order_data.status === "P");   
-                if(orderPending){
-                    dispatch(setOrderPending(orderPending[0]));
-                }
+            const orderPending = order_data.find(order => order.status === "P");
+            if (orderPending && Object.keys(orderPending).length > 0) {
+                dispatch(setOrderPending(orderPending));
+                setTotalQuantity(orderPending.total_quantity);
+            } else {
+                dispatch(setOrderPending({ total_quantity: 0, id: 0 }));
+                setTotalQuantity(0);
             }
-        }catch(error){
+        } catch (error) {
             console.error(error);
         }
     }
@@ -101,10 +109,10 @@ const Navbar = () =>{
                             <Link as="button" onClick={()=>handleLogout()}>Logout</Link>
                         </div>}
                     </div>
-                    <div className="cart-quantity">
-                        <i onClick={() => handleCart()} className="fa-solid fa-bag-shopping"></i>
-                        {total_quantity > 0 && <div className="circle">
-                            <span>{total_quantity}</span>
+                    <div className="cart-quantity" onClick={() => handleCart()}>
+                        <i  className="fa-solid fa-bag-shopping"></i>
+                        {data && data?.total_quantity > 0 && <div className="circle">
+                            <span>{data.total_quantity}</span>
                         </div>}
                     </div>
                 </div>

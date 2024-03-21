@@ -89,6 +89,13 @@ const ItemDelete = (order_id, id) => {
     })
 }
 
+const GetPendingOrder = () => {
+    return api.get(`/api/user/orders/pending_order/`)
+    .catch((error) => {
+        throw error
+    })
+}
+
 const CartService = {
     CartList,
     CartCreate,
@@ -99,6 +106,7 @@ const CartService = {
     ItemRead,
     ItemUpdateQuantity,
     ItemDelete,
+    GetPendingOrder,
 }
 
 export default CartService;

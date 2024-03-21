@@ -187,7 +187,7 @@ class StripeWebhookAPIView(APIView):
 
         return Response(status=status.HTTP_200_OK)
         
-class CreateOrderViewRemote(APIView):
+class CreatePaypalOrderViewRemote(APIView):
     
     permission_classes = (
         IsPaymentForOrderNotCompleted,
@@ -205,13 +205,13 @@ class CreateOrderViewRemote(APIView):
         json_data = {
             "intent": "CAPTURE",
             "application_context": {
-                "notify_url": "http://localhost:3000/payment/notify/",
+                # "notify_url": "http://localhost:3000/payment/notify/",
                 "return_url": "http://localhost:3000/payment/success/",#change to your doma$
                 "cancel_url": "http://localhost:3000/payment/cancel/", #change to your domain
-                "brand_name": "PESAPEDIA SANDBOX",
-                "landing_page": "BILLING",
-                "shipping_preference": "NO_SHIPPING",
-                "user_action": "CONTINUE"
+            #     "brand_name": "PESAPEDIA SANDBOX",
+                "landing_page": "NO_PREFERENCE",
+            #     "shipping_preference": "NO_SHIPPING",
+            #     "user_action": "CONTINUE"
             },
             "purchase_units": [
                 {
@@ -230,25 +230,42 @@ class CreateOrderViewRemote(APIView):
         response = requests.post('https://api-m.sandbox.paypal.com/v2/checkout/orders', headers=headers, json=json_data)
         order_id = response.json()['id']
         linkForPayment = response.json()['links'][1]['href']
-        return Response({"linkForPayment": linkForPayment, "token": token})
+        return Response({"linkForPayment": linkForPayment, "orderId" : order_id, "token": token})
 
-# class CaptureOrderView(APIView):
-#     # permission_classes = (
-#     #     IsPaymentForOrderNotCompleted,
-#     #     # DoesOrderHaveAddress,
-#     # )
-#     def get(self, request, *args, **kwargs):
-#         token = paypal_token()['access_token']
-#         authorization_id = '4X711612NK480823C'
-#         captureurl = 'https://api-m.paypal.com/v2/payments/authorizations/EKBWYH8PBAM2N' #captureurl = 'https://api.sandbox.paypal.com/v2/checkout/orders/6KF61042TG097104C/capture'#see transaction status
-#         headers = {
-#             "Content-Type": "application/json",
-#             "Authorization": "Bearer "+token
-#         }
-#         response = requests.post(captureurl, headers=headers)
-#         if response.status_code == 200:
-#             link = response.json()
-#         else:
-#             link = {"error": "Failed to capture order"}
+class CheckoutPaypalOrderView(APIView):
+    permission_classes = (
+        IsPaymentForOrderNotCompleted,
+        # DoesOrderHaveAddress,
+    )
+    def post(self, request, *args, **kwargs):
+        token = paypal_token()
+        id = request.data.get('id', '')
+        orderId = request.data.get('orderId', '')
+        captureurl = f"https://api.sandbox.paypal.com/v2/checkout/orders/{id}" #captureurl = 'https://api.sandbox.paypal.com/v2/checkout/orders/6KF61042TG097104C/capture'#see transaction status
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "+token
+        }
+        try:
+            response = requests.get(captureurl, headers=headers)
+            status = response.json()['status']
+            if status == 'COMPLETED':
+                payment = get_object_or_404(Payment, order=orderId)
+                payment.status = "C"
+                payment.save()
 
-#         return Response({"link": link, "token": token})
+                order = get_object_or_404(Order, id=orderId)
+                order.status = "C"
+                order.save()
+
+                # send_payment_success_email_task.delay(order.customer_email)
+
+                for order_item in order.order_items.all():
+                    product = order_item.product
+                    quantity = order_item.quantity
+                    new_quantity = max(product.count_in_stock - quantity, 0)
+                    product.count_in_stock = new_quantity
+                    product.save()
+            return Response({"status": status, "token": token})
+        except Exception as e:
+            return Response({"error": str(e), "id": id, "orderId": orderId, "status": status})
