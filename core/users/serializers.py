@@ -5,8 +5,8 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework.validators import UniqueValidator
 from django.utils.translation import gettext as _
 from .exceptions import (AccountDisabledException, AccountNotRegisteredException, InvalidCredentialsException)
-from .models import PhoneNumber
-
+from .models import PhoneNumber, Address, Profile
+from django_countries.serializers import CountryFieldMixin
 
 User = get_user_model()
 
@@ -113,3 +113,94 @@ class UserLoginSerializer(serializers.Serializer):
             
         validated_data["user"] = user
         return validated_data
+
+
+class AddressSerializer(CountryFieldMixin, serializers.ModelSerializer):
+    """
+    Serializer class to seralize Address model
+    """
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Address
+        fields = "__all__"
+    
+
+class ProfileSerializer(serializers.ModelSerializer):
+    """
+    Serializer class to serialize the user Profile model
+    """
+
+    class Meta:
+        model = Profile
+        fields = (
+            "avatar",
+            "created_at",
+            "updated_at",
+        )
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer class to seralize User model
+    """
+
+    profile = ProfileSerializer(read_only=True)
+    phone_number = PhoneNumberField(source="phone", read_only=True)
+    addresses = AddressSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+            "phone_number",
+            "first_name",
+            "last_name",
+            "is_active",
+            "profile",
+            "addresses",
+        )
+
+
+
+class ShippingAddressSerializer(CountryFieldMixin, serializers.ModelSerializer):
+    """
+    Serializer class to seralize address of type shipping
+
+    For shipping address, automatically set address type to shipping
+    """
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Address
+        fields = "__all__"
+        read_only_fields = ("address_type",)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["address_type"] = "S"
+
+        return representation
+
+
+class BillingAddressSerializer(CountryFieldMixin, serializers.ModelSerializer):
+    """
+    Serializer class to seralize address of type billing
+
+    For billing address, automatically set address type to billing
+    """
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Address
+        fields = "__all__"
+        read_only_fields = ("address_type",)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["address_type"] = "B"
+
+        return representation

@@ -79,7 +79,7 @@ class StripeCheckoutSessionCreateAPIView(APIView):
 
     permission_classes = (
         IsPaymentForOrderNotCompleted,
-        # DoesOrderHaveAddress,
+        DoesOrderHaveAddress,
     )
 
     def post(self, request, *args, **kwargs):
@@ -91,15 +91,6 @@ class StripeCheckoutSessionCreateAPIView(APIView):
             product = order_item.product
             quantity = order_item.quantity
 
-            image = product.image.first()
-
-            if image:  # Kiểm tra xem cover_image có tồn tại không
-                image_urls = [f"{settings.BACKEND_DOMAIN}{image.image.url}"]
-            else:
-                # Xử lý trường hợp khi cover_image không tồn tại
-                # Ví dụ: image_urls = []
-                image_urls = ['https://picsum.photos/200/300']
-
             data = {
                 "price_data": {
                     "currency": "usd",
@@ -107,7 +98,6 @@ class StripeCheckoutSessionCreateAPIView(APIView):
                     "product_data": {
                         "name": product.name,
                         "description": product.description if product.description else "No description available",
-                        "images": image_urls,
                     },
                 },
                 "quantity": quantity,
@@ -158,12 +148,22 @@ class StripeWebhookAPIView(APIView):
             order_id = session["metadata"]["order_id"]
 
             print("Payment successfull")
+            print("order_id", order_id)
+            try:
+                payment = Payment.objects.get(order=order_id)
+            except Payment.DoesNotExist:
+                print('Không tìm thấy payment')
+                return Response(status=status.HTTP_404_NOT_FOUND)
 
-            payment = get_object_or_404(Payment, order=order_id)
             payment.status = "C"
             payment.save()
 
-            order = get_object_or_404(Order, id=order_id)
+            try:
+                order = Order.objects.get(id=order_id)
+            except Order.DoesNotExist:
+                print('Không tìm thấy order')
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
             order.status = "C"
             order.save()
 
@@ -191,7 +191,7 @@ class CreatePaypalOrderViewRemote(APIView):
     
     permission_classes = (
         IsPaymentForOrderNotCompleted,
-        # DoesOrderHaveAddress,
+        DoesOrderHaveAddress,
     )
 
     def get(self, request, *args, **kwargs):
@@ -235,7 +235,7 @@ class CreatePaypalOrderViewRemote(APIView):
 class CheckoutPaypalOrderView(APIView):
     permission_classes = (
         IsPaymentForOrderNotCompleted,
-        # DoesOrderHaveAddress,
+        DoesOrderHaveAddress,
     )
     def post(self, request, *args, **kwargs):
         token = paypal_token()

@@ -16,7 +16,7 @@ class ProductCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.AllowAny, )
     
 class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Author.objects.all()
+    queryset = Author.objects.all().order_by('name')
     serializer_class = AuthorReadSerializer
     permission_classes = (permissions.AllowAny, )
     

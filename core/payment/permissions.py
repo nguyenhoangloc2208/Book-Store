@@ -51,7 +51,7 @@ class DoesOrderHaveAddress(BasePermission):
         if request.user.is_authenticated:
             order_id = view.kwargs.get("order_id")
             order = get_object_or_404(Order, id=order_id)
-            return order.shipping_address and order.billing_address
+            return order.shipping_address or order.billing_address
         return False
 
 

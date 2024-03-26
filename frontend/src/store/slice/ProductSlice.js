@@ -68,3 +68,13 @@ export const selectProductById = createSelector(
         return products.filter(product => productIds.includes(product.id));
     }
 );
+
+export const selectProductByProductId = createSelector(
+    [selectProduct, (_, uniqueProductIds) => uniqueProductIds],
+    (products, uniqueProductIds) => {
+        if (!products || !uniqueProductIds) {
+            return [];
+        }
+        return products.filter(product => uniqueProductIds.includes(product.id));
+    }
+);

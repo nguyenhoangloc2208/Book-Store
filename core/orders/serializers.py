@@ -68,7 +68,9 @@ class OrderReadSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "buyer",
-            # "payment",
+            "payment",
+            "shipping_address",
+            "billing_address",
             "order_items",
             "total_cost",
             "total_quantity",

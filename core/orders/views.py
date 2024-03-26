@@ -8,6 +8,7 @@ from orders.permissions import (IsOrderByBuyerOrAdmin,
 from orders.serializers import (OrderItemSerializer, OrderReadSerializer,
                                 OrderWriteSerializer)
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 
 
 class OrderItemViewSet(viewsets.ModelViewSet):
@@ -73,4 +74,15 @@ class OrderViewSet(viewsets.ModelViewSet):
         """
         pending_orders = self.queryset.filter(status='P')
         serializer = self.get_serializer(pending_orders, many=True)
+
+        # Thay đổi trạng thái của đơn hàng nếu order_items rỗng
+        for order in serializer.data:
+            if not order['order_items']:
+                order_instance = self.get_queryset().get(pk=order['id'])
+                order_instance.status = Order.DELETE
+                order_instance.save()
+                
+        if not pending_orders.exists():
+            raise NotFound("No pending orders found.")
+
         return Response(serializer.data)

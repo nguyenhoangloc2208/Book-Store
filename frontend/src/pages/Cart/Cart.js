@@ -7,10 +7,12 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 import useSWR, {mutate} from "swr";
 import api from '../../services/api';
 import CartService from "../../services/cart.service";
-
+import images from "../../assets/images/image";
 import {Helmet} from 'react-helmet';
 import PaymentService from "../../services/payment.service";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import tokenService from "../../services/token.service";
 const TITLE = 'Your Shopping Cart';
 
 const ExchangeRate = 0.000040;
@@ -23,24 +25,27 @@ const Cart = () =>{
     const [totalCostUSD, setTotalCostUSD] = useState();
     const cartItems = useSelector(state => selectProductById(state, data?.order_items));
     const [isEmpty, setIsEmpty] = useState(true);
+    
     const navigate = useNavigate();
+    console.log('data', data);
 
     useEffect(() => {
+        if(error){
+            setIsEmpty(true);
+        }
         if(data && data.total_cost){
             setTotalCostUSD((parseFloat(data.total_cost) * ExchangeRate).toFixed(2));
         }
-        console.log('data: ', data);
-        if (!data || !data.order_items || !Array.isArray(data.order_items)) {
+        if (data && Array.isArray(data.order_items) && data.order_items.length === 0) {
             setIsEmpty(true);
-            if(data){
-                handleDeleteOrder(data?.id);
-            }
-        } else {
+        }else if(!data){
+            setIsEmpty(true)
+        }
+        else {
             setIsEmpty(false);
         }
-    }, [data])
+    }, [data, error])
 
-    if (error) return <div>failed to load</div>
     if (isLoading) return <div>loading...</div>
 
     const handleMinusClick = async (index) => {
@@ -87,8 +92,17 @@ const Cart = () =>{
         }
     }
 
-    const handleDeleteOrder = async (id) => {
-        await CartService.CartDelete(id);
+    const handleCreateStripePayment = async () => {
+        await handleCreatePayment("S", data.id);
+        try {
+            const response = await PaymentService.StripePayment(data.id)
+            if(response.paymentUrl){
+                window.location.href = response.paymentUrl;
+            }
+          } catch (error) {
+            // Xử lý lỗi
+            console.error('Error:', error);
+          }
     }
 
     return(
@@ -132,42 +146,61 @@ const Cart = () =>{
                             ))}
                             <hr/>
                     </ul>
-                    <div>
-                        <div>Subtotal {data?.total_cost}</div>
-                        <div>Subtotal {totalCostUSD}</div>
-                    </div>
-                    <div>
-                        <PayPalButtons 
-                            createOrder={async () => {
-                                await handleCreatePayment("P", data.id);
-                                try {
-                                    const response = await api.get(`/api/user/payments/paypal/create/order/${data.id}/`);
-                                    const orderId = response.orderId; // Lấy ID đơn hàng từ phản hồi của API
-                                    console.log(orderId);
-                                    return orderId; // Trả về ID đơn hàng để PayPal xử lý
-                                } catch (error) {
-                                    console.error('Error:', error);
-                                }
-                            }}
-                            onApprove={ (event, actions) => {
-                                actions.order.capture().then(async (details) => {
-                                    const name = details.payer.name.given_name;
-                                    const id = details.id;
-                                    try {
-                                        await api.post(`/api/user/payments/paypal/checkout/order/${data.id}/`, {
-                                            id: id,
-                                            orderId: data.id,
-                                        });
-                                        await mutate('/api/user/orders/pending_order');
-                                        alert(`Transaction completed by ${name}`);
-                                        navigate('/');
-                                    } catch (error) {
-                                        console.error('Error:', error);
-                                        // Xử lý lỗi nếu cần
-                                    }
-                                })
-                            }}
-                        />
+                    <div className="payment">
+                        <div>
+                            <div>Subtotal {data?.total_cost}</div>
+                            <div>Subtotal {totalCostUSD}</div>
+                        </div>
+                        <div className="checkout">
+                            <button onClick={() => navigate(`/checkouts/${data.buyer}`)}>Check out</button>
+                        </div>
+                        <div className="stripe">
+                        {!data?.billing_address && !data?.shipping_address ? 
+                            <button  className="no-address">Pay with <img src={images.Stripe} alt="Stripe"/></button>
+                            : 
+                            <button onClick={() => handleCreateStripePayment()}>Pay with <img src={images.Stripe} alt="Stripe"/></button>
+                        }
+                        </div>
+                        <div>
+                            {!data?.billing_address && !data?.shipping_address ? 
+                            <div className="no-address" style={{ width: '400px' }}>
+                                <PayPalButtons fundingSource="paypal" disabled={true} />
+                            </div> :
+                            <div style={{width : '400px'}}>
+                                <PayPalButtons fundingSource="paypal"
+                                    createOrder={async () => {
+                                            await handleCreatePayment("P", data.id);
+                                            try {
+                                                const response = await api.get(`/api/user/payments/paypal/create/order/${data.id}/`);
+                                                const orderId = response.orderId;
+                                                return orderId;
+                                            }catch(error) {
+                                                alert('Không có địa chỉ')
+                                                console.error('Error:', error);
+                                            }
+                                    }}
+                                    onApprove={ (event, actions) => {
+                                            actions.order.capture().then(async (details) => {
+                                                const name = details.payer.name.given_name;
+                                                const id = details.id;
+                                                try {
+                                                    await api.post(`/api/user/payments/paypal/checkout/order/${data.id}/`, {
+                                                        id: id,
+                                                        orderId: data.id,
+                                                    });
+                                                    await mutate('/api/user/orders/pending_order');
+                                                    alert(`Transaction completed by ${name}`);
+                                                    navigate('/');
+                                                } catch (error) {
+                                                    console.error('Error:', error);
+                                                }
+                                            })
+                                    }}
+                                />
+                            </div>
+                            }
+                                
+                        </div>
                     </div>
                 </section>
             }

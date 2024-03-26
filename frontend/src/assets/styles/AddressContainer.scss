@@ -1,0 +1,36 @@
+@import '../../App.scss';
+
+.address-container{
+    .address-info{
+        .address{
+            display: flex;
+            padding: 5px;
+            line-height: 36px;
+            i{
+                line-height: 30px;
+                margin: 0 10px;
+                transition: all 0.3s ease-in-out;
+                &:hover{
+                    cursor: pointer;
+                    line-height: 28px;
+                }
+            }
+        }
+    }
+    .address-update{
+
+        button{
+            border: none;
+            padding: 10px 15px;
+            font-size: 18px;
+            font-weight: 500;
+            border-radius: 5px;
+            margin-top: 10px;
+            background-color: $btn;
+            transition: background-color 0.3s ease-in-out;
+            &:hover{
+                background-color: darken($btn, 10%);
+            }
+        }
+    }
+}

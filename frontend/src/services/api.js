@@ -1,5 +1,6 @@
 import axios from "axios";
 import TokenService from "./token.service";
+import AuthService from "./auth.service";
 
 const instance = axios.create({
     baseURL: "http://127.0.0.1:8000",
@@ -34,12 +35,12 @@ instance.interceptors.response.use(
 
     const refresh = TokenService.getLocalRefreshToken();
     const access = TokenService.getLocalAccessToken();
+    let i = 0;
     if(refresh && refresh.length > 0 && access && access.length > 0){
         if (originalConfig && originalConfig.url !== "/api/user/login/" && err.response) {
         // Access Token was expired
-            if (err.response.status === 401 && !originalConfig._retry) {
+            if (err.response.status === 401 && !originalConfig._retry && i < 3) {
                 originalConfig._retry = true;
-                
                 try {            
                     const rs = await instance.post("/dj-rest-auth/token/refresh/", {
                         refresh: refresh,
@@ -48,6 +49,11 @@ instance.interceptors.response.use(
                     
                     return instance(originalConfig);
                 } catch (_error) {
+                    i += 1;
+                    if(i === 3){
+                        AuthService.logout();
+                        i = 0;
+                    }
                     return Promise.reject(_error);
                 }
             }

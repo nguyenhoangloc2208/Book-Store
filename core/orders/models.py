@@ -4,6 +4,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from products.models import Product
+from users.models import Address
 
 User = get_user_model()
 
@@ -11,13 +12,29 @@ User = get_user_model()
 class Order(models.Model):
     PENDING = "P"
     COMPLETED = "C"
-
-    STATUS_CHOICES = ((PENDING, _("pending")), (COMPLETED, _("completed")))
+    CANCELLED = "X"
+    DELETE = "D"
+    STATUS_CHOICES = ((PENDING, _("pending")), (COMPLETED, _("completed")), (CANCELLED, _("cancelled")), (DELETE, _("delete")))
 
     buyer = models.ForeignKey(
         User, related_name="orders", on_delete=models.CASCADE)
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default=PENDING)
+    
+    shipping_address = models.ForeignKey(
+        Address,
+        related_name="shipping_orders",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
+    billing_address = models.ForeignKey(
+        Address,
+        related_name="billing_orders",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

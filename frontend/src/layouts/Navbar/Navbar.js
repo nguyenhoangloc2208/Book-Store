@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import '../../assets/styles/Navbar.scss';
-import logo from '../../assets/images/logo.webp';
+import images from "../../assets/images/image";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "../../components/ui/SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import AuthService from "../../services/auth.service";
 import { setIsLogin } from "../../store/slice/AuthSlice";
-import CartService from "../../services/cart.service";
 import { setOrderPending } from "../../store/slice/OrderSlice";
 import api from '../../services/api'
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 
 const fetcher = (url) => api.get(url).then(res => res[0]);
 
@@ -20,34 +19,29 @@ const Navbar = () =>{
     const [isLoaded, setIsLoaded] = useState(false);
     const [isShowSearchBar, setIsShowSearchBar] = useState(false);
     const isLogin = useSelector(state => state.auth.isLogin);
-    const [total_quantity,setTotalQuantity] = useState(0);
     const dispatch = useDispatch();
     const {data, error, isLoading} = useSWR('/api/user/orders/pending_order', fetcher, {refreshInterval: null, revalidateOnFocus: false});
-
-
+    
+    
+    
     useEffect(() => {
         if (!isLoaded && isLogin) {
             setIsLoaded(true);
         }
         fetchOrderData();
     }, [data, isLoaded, isLogin])
-
+    
     const fetchOrderData = async () => {
         try {
-            const order_data = await CartService.CartList();
-            const orderPending = order_data.find(order => order.status === "P");
-            if (orderPending && Object.keys(orderPending).length > 0) {
-                dispatch(setOrderPending(orderPending));
-                setTotalQuantity(orderPending.total_quantity);
+            if (data && Object.keys(data).length > 0) {
+                dispatch(setOrderPending(data));
             } else {
                 dispatch(setOrderPending({ total_quantity: 0, id: 0 }));
-                setTotalQuantity(0);
             }
         } catch (error) {
             console.error(error);
         }
     }
-
     const handleShowSearchBar = () =>{
         if (isShowSearchBar === false){
             setIsShowSearchBar(true);
@@ -87,7 +81,7 @@ const Navbar = () =>{
         <div className="navbar-container">
             <div className="row gutters-sm">
                 <div className="col-md-3">
-                    <img onClick={()=>handleLogoClick()} style={{cursor: "pointer"}} src={logo} alt="logo" width={190}/>
+                    <img onClick={()=>handleLogoClick()} style={{cursor: "pointer"}} src={images.Logo} alt="logo" width={190}/>
                 </div>
                 <div className="col-md-7">
                     <ul className="menu-list">

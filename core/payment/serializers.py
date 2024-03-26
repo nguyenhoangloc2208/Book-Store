@@ -1,7 +1,12 @@
 from rest_framework import serializers
-
 from orders.models import Order
 from payment.models import Payment
+
+from users.serializers import (BillingAddressSerializer,
+                               ShippingAddressSerializer,
+                               AddressSerializer)
+
+from users.models import Address
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -48,41 +53,35 @@ class PaymentOptionSerializer(serializers.ModelSerializer):
         read_only_fields = ("status", "order")
 
 
-class CheckoutSerializer(serializers.ModelSerializer):
-    """
-    Serializer class to set or update shipping address, billing address and payment of an order.
-    """
 
-    payment = PaymentOptionSerializer()
+class CheckoutSerializer(serializers.ModelSerializer):
+    address_id = serializers.IntegerField(required=False)
+    payment_id = serializers.IntegerField(required=False)
 
     class Meta:
         model = Order
         fields = (
             "id",
-            "payment",
+            "address_id",
+            "payment_id",
         )
 
     def update(self, instance, validated_data):
-        order_shipping_address = None
-        order_billing_address = None
-        order_payment = None
+        address_id = validated_data.get("address_id")
+        payment_id = validated_data.get("payment_id")
 
-        payment = validated_data["payment"]
+        if address_id:
+            address = Address.objects.get(pk=address_id)
+            if address.address_type == 'B':
+                instance.billing_address = address
+                instance.shipping_address = None
+            elif address.address_type == 'S':
+                instance.shipping_address = address
+                instance.billing_address = None
 
-        # Payment option is not set for an order
-        if not instance.payment:
-            order_payment = Payment(**payment, order=instance)
-            order_payment.save()
-
-        else:
-            # Payment option is set so update its value
-            p = Payment.objects.filter(order=instance)
-            p.update(**payment)
-
-            order_payment = p.first()
-
-        # Update order
-        instance.payment = order_payment
+        if payment_id:
+            payment = Payment.objects.get(pk=payment_id)
+            instance.payment = payment
+        
         instance.save()
-
         return instance

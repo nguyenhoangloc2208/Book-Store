@@ -23,14 +23,20 @@ const ProductCard = ({item, index, isBtn, orderId}) =>{
         } catch (error) {
             console.error('Tạo cart thất bại: ', error);
             try {
-                const rs = await CartService.CartUpdateItems(orderId, item.id, 1);
+                await CartService.CartUpdateItems(orderId, item.id, 1);
                 mutate(`/api/user/orders/${orderId}/order_items/`);
             } catch (error) {
-                const data = await CartService.GetPendingOrder();
-                const orderItem = data[0].order_items.find(orderItem => orderItem.product === item.id);
                 try{
-                    const rs = await CartService.ItemUpdateQuantity(orderId, orderItem, orderItem.quantity + 1);
-                } catch{
+
+                    const data = await CartService.GetPendingOrder();
+                    const orderItem = data[0].order_items.find(orderItem => orderItem.product === item.id);
+                    try{
+                        await CartService.ItemUpdateQuantity(orderId, orderItem, orderItem.quantity + 1);
+                        alert('+1 số lượng');
+                    } catch{
+                        alert('Hết hàng!');
+                    }
+                }catch{
                     alert('Hết hàng!')
                 }
             }
@@ -41,6 +47,7 @@ const ProductCard = ({item, index, isBtn, orderId}) =>{
     return(
         <>
             <div className={`product-card ${isBtn ? 'btn':'no-btn'}`} >
+                <div className={item.count_in_stock === 0 ? 'out-in-stock' : 'in-stock'}>Hết hàng</div>
                 <div onClick={() => handleClickCard()} className="card-image-container">
                     <img className="card-image" src={item.image[0].image} alt="none"/>
                 </div>
