@@ -3,7 +3,6 @@ import '../../assets/styles/Login.scss';
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import { useDispatch } from "react-redux";
-import { setIsLogin } from "../../store/slice/AuthSlice";
 
 const Login = () =>{
     const [email, setEmail] = useState();
@@ -38,7 +37,6 @@ const Login = () =>{
             if (isValidEmail){
                 try{
                     await AuthService.login(email, password);
-                    dispatch(setIsLogin(true));
                     navigate('/');
                 }catch(err){
                     console.error(err);

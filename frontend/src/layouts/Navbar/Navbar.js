@@ -5,7 +5,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "../../components/ui/SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import AuthService from "../../services/auth.service";
-import { setIsLogin } from "../../store/slice/AuthSlice";
 import { setOrderPending } from "../../store/slice/OrderSlice";
 import api from '../../services/api'
 import useSWR from "swr";
@@ -20,10 +19,28 @@ const Navbar = () =>{
     const [isShowSearchBar, setIsShowSearchBar] = useState(false);
     const isLogin = useSelector(state => state.auth.isLogin);
     const dispatch = useDispatch();
-    const {data, error, isLoading} = useSWR('/api/user/orders/pending_order', fetcher, {refreshInterval: null, revalidateOnFocus: false});
+    const {data, error, isLoading} = useSWR(isLogin ? '/api/user/orders/pending_order/' : null, fetcher, {refreshInterval: null, revalidateOnFocus: false});
     
-    
-    
+    useEffect(() => {
+        const handleScroll = () => {
+            const header = document.querySelector('.navbar-container');
+            const headerHeight = header.offsetHeight;
+            const scrollPosition = window.scrollY;
+            const hideOffset = 50;
+            if (scrollPosition > headerHeight - hideOffset) {
+                header.classList.add('navbar-hidden');
+            } else {
+                header.classList.remove('navbar-hidden');
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     useEffect(() => {
         if (!isLoaded && isLogin) {
             setIsLoaded(true);
@@ -68,7 +85,6 @@ const Navbar = () =>{
     const handleLogout = async () => {
         try{
             await AuthService.logout();
-            dispatch(setIsLogin(false));
             dispatch(setOrderPending(0));
             alert('Logout success!');
         }catch(error){
@@ -113,7 +129,6 @@ const Navbar = () =>{
             </div>
         </div>
         <SearchBar isOpen={isShowSearchBar} setIsOpen={setIsShowSearchBar}/>
-        <hr/>
         </>
     );
 }

@@ -1,0 +1,87 @@
+.slider-card-container {
+    .slider-card {
+        padding: 15px;
+        position: relative;
+        margin: 5px;
+        transition: box-shadow 0.3s ease;
+        border-radius: 1%;
+        .image-container {
+            width: 100%;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 1%;
+            img {
+                padding: 0;
+                width: 100%;
+                object-fit: contain;
+            }
+            .discount{
+                position:absolute;
+                z-index: 2;
+                border-radius: 50%;
+                background-color: rgba(#D51C24, 0.8);
+                color: #fff;
+                width: 40px;
+                height: 40px;
+                text-align: center;
+                line-height: 40px;
+                top: 0;
+                right: 0;
+            }
+        }
+        .name{
+            margin-top: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            &:hover{
+                color: #D51C24;
+            }
+        }
+        .price-container{
+            display: flex;
+            justify-content: space-between;
+            .final_price{
+                color: red;
+            }
+            .price{
+                color: #757575;
+                text-decoration: line-through;
+            }
+        }
+        &:hover{
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+    }
+}
+.auto-slider-container{
+    position: relative;
+    .next-prev-slider-btn{
+        background-color: rgba(#757575, 0.2);
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        color: rgba(#fff, 0.8);
+        margin: 5px;
+        transition: all 0.3s;
+        border-radius: 3%;
+        &:hover{
+            background-color: rgba(#757575, 0.5);
+            color: rgba(#fff, 1);
+            cursor: pointer;
+        }
+    }
+    .prev-slider-btn{
+        position: absolute;
+        left: 0;
+        top: 50%;
+    }
+    .next-slider-btn{
+        position: absolute;
+        right: 0;
+        top:50%;
+    }
+}

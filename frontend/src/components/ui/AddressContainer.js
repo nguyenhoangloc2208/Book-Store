@@ -44,13 +44,13 @@ const AddressContainer = ({ address, checkout,selectedAddress,  setSelectedAddre
                 {address && address.length > 0 ? address.map((item, index) => (
                     <div className="address" key={index}>
                         <div>
-                            <input
+                            {checkout ? <input
                                 type="radio"
                                 name="address"
                                 value={item.id}
                                 checked={selectedAddress === item.id}
                                 onChange={() => handleAddressSelect(item.id)}
-                            />
+                            /> : null }
                             Address {index+1}: {item.apartment_address}/{item.street_address}/{item.city}/{item.country} &nbsp; Postal Code: {item.postal_code}</div>
                         <i onClick={() => handleAddressUpdate(item)} className="fa-solid fa-pen"></i>
                         <i onClick={() => handleDeleteAddress(item.id)} className="fa-solid fa-circle-xmark"></i>

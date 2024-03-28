@@ -11,6 +11,8 @@ import React, { useEffect } from 'react';
 
 // Third party
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import ScrollToTopButton from './utils/ScrollToTopButton';
+import ScrollToTop from './utils/ScrollToTop';
 
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results);
@@ -36,12 +38,14 @@ function App() {
     <>
     <PayPalScriptProvider options={{clientId: "AZnHMZthBRZSkFK03p6XrOBrMxCUVUUuDlJbjJ-TShQ2SeXkQrW7BhfONP6aSIH3OgK1KwGj0vNNEE2n"}}>
       <div className='App'>
+        <ScrollToTop/>
         <Header/>
         <Navbar/>
         <div className='site-content'>
           <AppRouter/>
         </div>
         <Footer/>
+        <ScrollToTopButton/>
       </div>
     </PayPalScriptProvider>
     </>

@@ -1,6 +1,7 @@
 import api from "./api";
 import TokenService from "./token.service";
-
+import {store} from '../store/store'
+import { setIsLogin } from "../store/slice/AuthSlice";
 
 const register = (username, email, password) => {
   return api.post("/auth/signup/", {
@@ -18,6 +19,7 @@ const login = (email, password) => {
     })
     .then((response) => {
       if (response.access) {
+      store.dispatch(setIsLogin(true));
         TokenService.setUser(response);
       }
 
@@ -27,6 +29,7 @@ const login = (email, password) => {
 
 const logout = () => {
   TokenService.removeUser();
+  store.dispatch(setIsLogin(false));
   return api.post("/dj-rest-auth/logout/")
 };
 

@@ -16,6 +16,7 @@ import Checkout from "../pages/Cart/Checkout";
 import { REACT_APP_STRIPE_KEY } from "../config/config";
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from "@stripe/stripe-js/pure"
+import CardSwiper from "../components/ui/AutoPlaySlider";
 const stripe_key = REACT_APP_STRIPE_KEY
 const stripePromise = loadStripe(stripe_key)
 
@@ -38,6 +39,7 @@ const AppRouter = () =>{
                 <Route path='/checkouts/:buyer' element={<Checkout/>}/>
                 {/* <Route path='/account/payment/paypal' element={<Payment/>}/> */}
                 <Route path='*' element={<NotFound />} />
+                <Route path='/test' element={<CardSwiper />} />
             </Routes>
         </Elements>
         </>

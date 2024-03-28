@@ -77,7 +77,6 @@ const OrderHistory = () =>{
                             <div className="col col-8 " data-label="Action"><i class="fa-regular fa-eye"></i></div>
                         </li>
                 ))}
-                <hr/>
             </ul>
         </>
     )
