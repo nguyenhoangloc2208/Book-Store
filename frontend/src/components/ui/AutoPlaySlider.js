@@ -25,7 +25,6 @@ const AutoPlaySlider = ({item}) => {
         autoplaySpeed: 3000,
         pauseOnHover: true,
     };
-    console.log(item);
     return (
         <div className="auto-slider-container">
             <Slider
@@ -34,7 +33,7 @@ const AutoPlaySlider = ({item}) => {
                 }}
             {...settings}>
             {item && item.length > 0 && item.slice(0,5).map((item, index)=>(
-                <SliderCard item={item} index={index} />
+                <SliderCard key={index} item={item} index={index} />
             ))}
             </Slider>
             <div style={{ textAlign: "center" }}>

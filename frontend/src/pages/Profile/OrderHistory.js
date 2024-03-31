@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import '../../assets/styles/Profile.scss';
 import useSWR from "swr";
 import api from '../../services/api';
 import { useSelector } from "react-redux";
 import { selectProductByProductId } from "../../store/slice/ProductSlice";
+import Loading from "../../components/ui/Loading";
 
 const fetcher = (url) => api.get(url).then(res => res.results);
 
@@ -13,11 +14,12 @@ const OrderHistory = () =>{
     const orderItems = orderData ? orderData.flatMap(order => order.order_items) : [];
     const productIds = orderItems.map(orderItem => orderItem.product);
     const uniqueProductIds = productIds.filter((productId, index) => productIds.indexOf(productId) === index);
-
+    const [ordersPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
     const products = useSelector(state => selectProductByProductId(state, uniqueProductIds));
 
     if (error || orderError) return <div>failed to load...</div>
-    if (isLoading || orderLoading) return <div>loading...</div>
+    if (isLoading || orderLoading) return <div><Loading/></div>
     
     const handleFormatDate = (date) => {
         const createdAtDate = new Date(date);
@@ -41,6 +43,17 @@ const OrderHistory = () =>{
         }
     }
 
+    const indexOfLastOrder = currentPage * ordersPerPage;
+    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+    const currentOrders = orderData.slice(indexOfFirstOrder, indexOfLastOrder);
+
+    // Tạo một mảng chứa số trang có sẵn
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(orderData.length / ordersPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
+
     return(
         <>
             <ul className="order-history-container">
@@ -55,8 +68,8 @@ const OrderHistory = () =>{
                     <div className="col col-8">Action</div>
                 </li>
 
-                {orderData && orderData.length >0 &&
-                orderData.map((item, index) => (
+                {currentOrders && currentOrders.length >0 &&
+                currentOrders.map((item, index) => (
                         <li className="table-row" key={index}>
                             <div className="col col-1 " data-label="Order ID">{item.id}</div>
                             <div className="col col-2 " data-label="Customer">{item.buyer}</div>
@@ -76,6 +89,15 @@ const OrderHistory = () =>{
                             <div className="col col-7 " data-label="Date Added">{handleFormatDate(item.created_at)}</div>
                             <div className="col col-8 " data-label="Action"><i class="fa-regular fa-eye"></i></div>
                         </li>
+                ))}
+            </ul>
+            <ul className="pagination">
+                {pageNumbers.map(number => (
+                    <li key={number} className="page-item">
+                        <a onClick={() => setCurrentPage(number)} className="page-link">
+                            {number}
+                        </a>
+                    </li>
                 ))}
             </ul>
         </>

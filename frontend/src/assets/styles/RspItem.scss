@@ -1,8 +1,10 @@
 .rsp-item-container{
     display: flex;
+    justify-content: space-between;
+    width: 100%;
     margin: 15px;
     .image-container {
-        width: 80%;
+        width: 40%;
         height: auto;
         display: flex;
         align-items: center;
@@ -17,6 +19,9 @@
             object-fit: contain;
         }
     }    
+    .right-content{
+        width: 60%;
+    }
     .name{
         transition: all 0.3s ease-in-out;
         font-size: 12px;

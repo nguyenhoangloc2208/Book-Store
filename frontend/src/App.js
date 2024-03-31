@@ -13,6 +13,8 @@ import React, { useEffect } from 'react';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import ScrollToTopButton from './utils/ScrollToTopButton';
 import ScrollToTop from './utils/ScrollToTop';
+import Loading from './components/ui/Loading';
+import {ToastContainer} from 'react-toastify';
 
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results);
@@ -33,7 +35,7 @@ function App() {
 
   
   if (productsError || categoriesError || authorsError) return <div>failed to load</div>
-  if (productsLoading || categoriesLoading || authorsLoading) return <div>loading...</div>
+  if (productsLoading || categoriesLoading || authorsLoading) return <div><Loading/></div>
   return (
     <>
     <PayPalScriptProvider options={{clientId: "AZnHMZthBRZSkFK03p6XrOBrMxCUVUUuDlJbjJ-TShQ2SeXkQrW7BhfONP6aSIH3OgK1KwGj0vNNEE2n"}}>
@@ -46,6 +48,19 @@ function App() {
         </div>
         <Footer/>
         <ScrollToTopButton/>
+        <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        // transition: Bounce,
+        />
       </div>
     </PayPalScriptProvider>
     </>

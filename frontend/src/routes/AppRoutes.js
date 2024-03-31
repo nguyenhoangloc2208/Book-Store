@@ -17,6 +17,8 @@ import { REACT_APP_STRIPE_KEY } from "../config/config";
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from "@stripe/stripe-js/pure"
 import CardSwiper from "../components/ui/AutoPlaySlider";
+import Loading from "../components/ui/Loading";
+import PaymentSuccess from "../components/ui/Success";
 const stripe_key = REACT_APP_STRIPE_KEY
 const stripePromise = loadStripe(stripe_key)
 
@@ -40,6 +42,8 @@ const AppRouter = () =>{
                 {/* <Route path='/account/payment/paypal' element={<Payment/>}/> */}
                 <Route path='*' element={<NotFound />} />
                 <Route path='/test' element={<CardSwiper />} />
+                <Route path='/loading' element={<Loading />} />
+                <Route path='/payment/success' element={<PaymentSuccess />} />
             </Routes>
         </Elements>
         </>

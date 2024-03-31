@@ -82,7 +82,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 order_instance.status = Order.DELETE
                 order_instance.save()
                 
-        if not pending_orders.exists():
-            raise NotFound("No pending orders found.")
+        # if not pending_orders.exists():
+        #     raise NotFound("No pending orders found.")
 
         return Response(serializer.data)

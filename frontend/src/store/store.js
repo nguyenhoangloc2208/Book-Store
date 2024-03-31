@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 import ProductSlice from './slice/ProductSlice';
 import AuthSlice from './slice/AuthSlice';
 import OrderSlice from './slice/OrderSlice';
+import ViewedProductsSlice from './slice/ViewedProductsSlice';
 
 const persistConfig = {
   key: 'root', // Khóa cho Local Storage
@@ -15,6 +16,7 @@ const persistedReducer = persistReducer(persistConfig, combineReducers({
   products: ProductSlice,
   auth: AuthSlice,
   order: OrderSlice,
+  viewedProducts: ViewedProductsSlice,
 }));
 
 const store = configureStore({

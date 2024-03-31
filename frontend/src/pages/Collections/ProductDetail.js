@@ -1,23 +1,36 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { selectProductByAuthor, selectProductByCategory, selectProductBySlug } from "../../store/slice/ProductSlice";
 import '../../assets/styles/ProductDetail.scss';
 import RspItem from "../../components/ui/RspItem";
-
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Thumbs, Navigation } from 'swiper/modules';
+import 'swiper/css/navigation';
+import Fancybox from "../../components/ui/FancyBox";
 import AutoPlaySlider from "../../components/ui/AutoPlaySlider";
 import { numberWithCommas } from "../../utils/utils";
+import { addViewedProduct, selectRandomViewedProducts } from "../../store/slice/ViewedProductsSlice";
+import { AddToCartBtn } from "../../utils/AddToCartBtn";
 
 const ProductDetail = () =>{
     const {slug} = useParams();
     const item = useSelector(state => selectProductBySlug(state, slug));
     const authorBook = useSelector(state => selectProductByAuthor(state, item.author));
     const categoryBook = useSelector(state => selectProductByCategory(state, item.category));
-    const shuffledCategoryBook = [...categoryBook].sort(() => Math.random() - 0.5);
+    const shuffledCategoryBook = item ? [...categoryBook.filter(product => product.id !== item.id)].sort(() => Math.random() - 0.5) : [];
     const [quantity, setQuantity] = useState(1);
     const [isComment, setIsComment] = useState(false);
-
+    const orderId = useSelector(state => state.order.idPending);
     const [thumbsSwiper, setThumbsSwiper] = useState();
+    
+    const dispatch = useDispatch();
+    const viewedProducts = useSelector(state => selectRandomViewedProducts(state, item));
+
+    useEffect(() => {
+        dispatch(addViewedProduct({ item: item }));
+    }, [item, dispatch]);
+
 
     const handleMinusClick = () =>{
         if (quantity>1){
@@ -32,12 +45,73 @@ const ProductDetail = () =>{
         }
     }
 
+    const handleAddToCart = async () => {
+        await AddToCartBtn(item, orderId ? orderId : null, dispatch);
+    }
+
+
     return(
         <section className="product-detail-container">
             <div className="product-detail row gutters-sm">
+
                 <div className="image-container col-md-8">
-                    <img src={item.image[0].image} alt="img"/>
+                    <div className="image-thumbs-container">
+                        <Swiper
+                        onSwiper={setThumbsSwiper}
+                        loop={true}
+                        spaceBetween={10}
+                        slidesPerView={5}
+                        modules={[Navigation, Thumbs]}
+                        className='product-images-slider-thumbs'
+                        >
+                            {item && 
+                            item.image.map((item, index) =>{
+                                return(
+                                    <>
+                                        <SwiperSlide key={index}>
+                                            <div className='product-images-slider-thumbs-wrapper'>
+                                                <img src={item.image} alt=''/>
+                                            </div>
+                                        </SwiperSlide>
+                                    </>
+                            )
+                        })}
+                        </Swiper>
+                    </div>
+                    <div className="fancybox-container">
+                        <Fancybox
+                            options={{
+                                Carousel: {
+                                infinite: false,
+                            },
+                            }}
+                            >
+                            <Swiper
+                            loop={true}
+                            navigation={true}
+                            modules={[Navigation, Thumbs]}
+                            grabCursor={true}
+                            thumbs={{swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null}}
+                            className='product-images-slider'
+                            >
+                                {item && 
+                                item.image.map((item, index) =>{
+                                return(
+                                    <>
+                                    <SwiperSlide key={index}>
+                                        <a href={item.image} data-fancybox="gallery" data-caption={item.caption}>
+                                        {(<img src={item.image} alt=''/>)}
+                                        </a>
+                                    </SwiperSlide>
+                                    </>
+                                )
+                            })}
+                            </Swiper>
+                        </Fancybox>
+                    </div>
                 </div>
+
+
                 <div className="content col-md-4">
                     <div className="author">{item.author}</div>
                     <div className="title">{item.name}</div>
@@ -60,7 +134,7 @@ const ProductDetail = () =>{
                         </div>
                     </div>
                     <div className="payment-btn">
-                        <button className="add-to-cart-btn">Add to cart</button>
+                        <button onClick={() => handleAddToCart()} className="add-to-cart-btn">Add to cart</button>
                         <button className="buy-btn">Buy with</button>
                     </div>
                 </div>
@@ -72,7 +146,14 @@ const ProductDetail = () =>{
                                 <span className={isComment ? 'review-title' : 'review-hide'} onClick={()=> setIsComment(true)}>BÌNH LUẬN</span>
                             </div>
                             <div className="review-content">
-                                {isComment ? 'a' : <p>{item.description}</p>}    
+                                {isComment ? 'a' : 
+                                    <p>{item.description.split('\n').map((paragraph, index) => (
+                                        <span key={index}>
+                                            {paragraph}
+                                            <br/>
+                                        </span>
+                                    ))}</p>
+                                }    
                             </div>
                         </div>
                         <div className="rating-container">
@@ -100,11 +181,16 @@ const ProductDetail = () =>{
                         <AutoPlaySlider item={shuffledCategoryBook}/>
                     </div>
                 </section>
+                {viewedProducts && viewedProducts.length > 5 ? 
                 <section className="viewed-container">
                     <div className="viewed-title clearfixx">
                         <h2>Sản phẩm đã xem</h2>
                     </div>
-                </section>
+                    <div className="auto-play">
+                        <AutoPlaySlider item={viewedProducts}/>
+                    </div>
+                </section> : null
+                }
             </div>
                 
         </section>

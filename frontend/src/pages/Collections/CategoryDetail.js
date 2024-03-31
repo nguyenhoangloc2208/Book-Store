@@ -4,12 +4,14 @@ import { useParams } from "react-router-dom";
 import { selectCategoryBySlug, selectProductByCategory } from "../../store/slice/ProductSlice";
 import '../../assets/styles/CategoryDetail.scss';
 import ProductCard from "../../components/ui/ProductCard";
+import useDataMutation from "../../hooks/useDataMutation";
 
 const CategoryDetail = () =>{
     const {slug} = useParams();
     const category = useSelector(state => selectCategoryBySlug(state, slug));
     const products = useSelector(state => selectProductByCategory(state, category.name));
     const orderId = useSelector(state => state.order.idPending);
+    const {updateData} = useDataMutation(`/api/user/orders/pending_order`);
 
     return(
         <section className="category-detail-container">
@@ -23,7 +25,7 @@ const CategoryDetail = () =>{
             </div>
             <div className="product-card-container">
                 {products && products.length > 0 && products.map((item, index)=>(
-                    <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null}/>
+                    <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null} updateData={updateData}/>
                 ))}
             </div>
         </section>

@@ -37,6 +37,19 @@
             transform: scale(1);
             transition: 0.3s ease-in-out;
         }
+        .discount{
+            position:absolute;
+            z-index: 2;
+            border-radius: 50%;
+            background-color: rgba(#D51C24, 0.9);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            top: 0;
+            right: 0;
+        }
     }
     .card-name{
         margin-top: 16px;
@@ -45,11 +58,17 @@
     }
     .card-price{
         text-align: center;
+        display: flex;
+        justify-content: space-between;
         font-size: 20px;
         font-weight: 600;
         color: $price;
         .vnd{
             text-decoration: underline;
+        }
+        .price{
+            color: #757575;
+            text-decoration: line-through;
         }
     }
     &:hover{

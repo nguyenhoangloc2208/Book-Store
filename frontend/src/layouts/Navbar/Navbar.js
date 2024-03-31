@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import AuthService from "../../services/auth.service";
 import { setOrderPending } from "../../store/slice/OrderSlice";
 import api from '../../services/api'
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
+import useDataMutation from "../../hooks/useDataMutation";
 
 const fetcher = (url) => api.get(url).then(res => res[0]);
 
@@ -15,11 +16,12 @@ const fetcher = (url) => api.get(url).then(res => res[0]);
 const Navbar = () =>{
     const navigate = useNavigate();
     const location = useLocation();
-    const [isLoaded, setIsLoaded] = useState(false);
     const [isShowSearchBar, setIsShowSearchBar] = useState(false);
     const isLogin = useSelector(state => state.auth.isLogin);
     const dispatch = useDispatch();
-    const {data, error, isLoading} = useSWR(isLogin ? '/api/user/orders/pending_order/' : null, fetcher, {refreshInterval: null, revalidateOnFocus: false});
+    // const {data, error, isLoading} = useSWR(isLogin ? '/api/user/orders/pending_order/' : null, fetcher, {refreshInterval: null});
+    const {data, error, isLoading, updateData} = useDataMutation('/api/user/orders/pending_order');
+
     
     useEffect(() => {
         const handleScroll = () => {
@@ -42,23 +44,13 @@ const Navbar = () =>{
     }, []);
 
     useEffect(() => {
-        if (!isLoaded && isLogin) {
-            setIsLoaded(true);
+        if (data && Object.keys(data).length > 0) {
+            dispatch(setOrderPending(data));
+        }else {
+            dispatch(setOrderPending({ total_quantity: 0, id: 0 }));
         }
-        fetchOrderData();
-    }, [data, isLoaded, isLogin])
+    }, [data, dispatch, location])
     
-    const fetchOrderData = async () => {
-        try {
-            if (data && Object.keys(data).length > 0) {
-                dispatch(setOrderPending(data));
-            } else {
-                dispatch(setOrderPending({ total_quantity: 0, id: 0 }));
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
     const handleShowSearchBar = () =>{
         if (isShowSearchBar === false){
             setIsShowSearchBar(true);
@@ -121,9 +113,11 @@ const Navbar = () =>{
                     </div>
                     <div className="cart-quantity" onClick={() => handleCart()}>
                         <i  className="fa-solid fa-bag-shopping"></i>
-                        {data && data?.total_quantity > 0 && <div className="circle">
+                        {
+                            data && data?.total_quantity > 0 && <div className="circle">
                             <span>{data.total_quantity}</span>
-                        </div>}
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

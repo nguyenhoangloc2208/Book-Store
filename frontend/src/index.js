@@ -10,7 +10,9 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import 'swiper/css';
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import 'react-toastify/dist/ReactToastify.css';
 //redux
 import { store } from './store/store';
 import { Provider } from 'react-redux';

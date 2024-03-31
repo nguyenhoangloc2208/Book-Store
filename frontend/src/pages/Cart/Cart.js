@@ -4,15 +4,16 @@ import { useSelector } from "react-redux";
 import '../../assets/styles/Cart.scss';
 import { selectProductById } from "../../store/slice/ProductSlice";
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import useSWR, {mutate} from "swr";
+import useSWR, { mutate } from "swr";
 import api from '../../services/api';
 import CartService from "../../services/cart.service";
 import images from "../../assets/images/image";
 import {Helmet} from 'react-helmet';
 import PaymentService from "../../services/payment.service";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import tokenService from "../../services/token.service";
+import Loading from "../../components/ui/Loading";
+import { toast } from "react-toastify";
+import useDataMutation from "../../hooks/useDataMutation";
 const TITLE = 'Your Shopping Cart';
 
 const ExchangeRate = 0.000040;
@@ -21,13 +22,13 @@ const fetcher = (url) => api.get(url).then(res => res[0]);
 
 
 const Cart = () =>{
-    const {data, error, isLoading} = useSWR('/api/user/orders/pending_order', fetcher, {refreshInterval: null, revalidateOnFocus: false});
+    // const {data, error, isLoading} = useSWR('/api/user/orders/pending_order', fetcher, {refreshInterval: null, revalidateOnFocus: false});
+    const {data, error, isLoading, updateData} = useDataMutation('/api/user/orders/pending_order');
     const [totalCostUSD, setTotalCostUSD] = useState();
     const cartItems = useSelector(state => selectProductById(state, data?.order_items));
     const [isEmpty, setIsEmpty] = useState(true);
     
     const navigate = useNavigate();
-    console.log('data', data);
 
     useEffect(() => {
         if(error){
@@ -46,7 +47,7 @@ const Cart = () =>{
         }
     }, [data, error])
 
-    if (isLoading) return <div>loading...</div>
+    if (isLoading) return <div><Loading/></div>
 
     const handleMinusClick = async (index) => {
         const quantity = data.order_items[index]?.quantity;
@@ -54,6 +55,7 @@ const Cart = () =>{
             try{
                 await CartService.ItemUpdateQuantity(data.id, data.order_items[index], quantity - 1)
                 mutate('/api/user/orders/pending_order');
+                updateData();
             }catch{
                 console.error(error);
             }
@@ -67,6 +69,7 @@ const Cart = () =>{
             try{
                 await CartService.ItemUpdateQuantity(data.id, data.order_items[index], quantity + 1);
                 mutate('/api/user/orders/pending_order');
+                updateData();
             }catch(error){
                 console.error(error);
                 alert('Hết hàng');
@@ -76,7 +79,8 @@ const Cart = () =>{
     const handleDelete = async (index) => {
         try{
             await CartService.ItemDelete(data.id, data.order_items[index].id);
-            await mutate('/api/user/orders/pending_order');
+            mutate('/api/user/orders/pending_order');
+            updateData();
         }catch{
             alert('Lỗi khi xóa');
         }
@@ -167,15 +171,17 @@ const Cart = () =>{
                                 <PayPalButtons fundingSource="paypal" disabled={true} />
                             </div> :
                             <div style={{width : '400px'}}>
-                                <PayPalButtons fundingSource="paypal"
-                                    createOrder={async () => {
+                                <PayPalButtons 
+                                // fundingSource="paypal"
+                                    // style={{ layout: "horizontal" }}
+                                    createOrder={async (e, actions) => {
                                             await handleCreatePayment("P", data.id);
                                             try {
                                                 const response = await api.get(`/api/user/payments/paypal/create/order/${data.id}/`);
                                                 const orderId = response.orderId;
+                                                toast('Running!');
                                                 return orderId;
                                             }catch(error) {
-                                                alert('Không có địa chỉ')
                                                 console.error('Error:', error);
                                             }
                                     }}
@@ -188,10 +194,10 @@ const Cart = () =>{
                                                         id: id,
                                                         orderId: data.id,
                                                     });
-                                                    await mutate('/api/user/orders/pending_order');
-                                                    alert(`Transaction completed by ${name}`);
-                                                    navigate('/');
+                                                    toast.success(`Transaction completed by ${name}`);
+                                                    navigate(`/payment/success/`);
                                                 } catch (error) {
+                                                    alert('Lỗi');
                                                     console.error('Error:', error);
                                                 }
                                             })

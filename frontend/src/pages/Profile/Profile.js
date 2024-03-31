@@ -4,6 +4,7 @@ import useSWR, { mutate } from "swr";
 import api from '../../services/api';
 import OrderHistory from "./OrderHistory";
 import AddressContainer from "../../components/ui/AddressContainer";
+import Loading from "../../components/ui/Loading";
 
 const fetcher = (url) => api.get(url).then(res => res);
 const fetcherAddress = (url) => api.get(url).then(res => res.results);
@@ -15,7 +16,7 @@ const Profile = () =>{
     const [tab, setTab] = useState(0);
 
     if (error || addressError) return <div>failed to load...</div>
-    if (isLoading || addressLoading) return <div>loading...</div>
+    if (isLoading || addressLoading) return <div><Loading/></div>
     
 
     return(

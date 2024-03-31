@@ -246,10 +246,13 @@ class CheckoutPaypalOrderView(APIView):
             "Content-Type": "application/json",
             "Authorization": "Bearer "+token
         }
+        res = requests.get(captureurl, headers=headers)
+        print('---------------------Status là:', res.json())
         try:
             response = requests.get(captureurl, headers=headers)
             status = response.json()['status']
             if status == 'COMPLETED':
+                print('--------------------Paypal payment success!-------------------------')
                 payment = get_object_or_404(Payment, order=orderId)
                 payment.status = "C"
                 payment.save()

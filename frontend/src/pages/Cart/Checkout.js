@@ -7,21 +7,23 @@ import api from '../../services/api';
 import AddressContainer from "../../components/ui/AddressContainer";
 import PaymentService from "../../services/payment.service";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../components/ui/Loading";
+import useDataMutation from "../../hooks/useDataMutation";
 
 const fetcher = (url) => api.get(url).then(res => res[0]);
 const fetcherAddress = (url) => api.get(url).then(res => res.results);
 
 
 const Checkout = ({order}) => {
-    const {data, error, isLoading} = useSWR('/api/user/orders/pending_order', fetcher, {refreshInterval: null, revalidateOnFocus: false});
+    const {data, error, isLoading, updateData} = useDataMutation('/api/user/orders/pending_order');
+
     const {data: address, error: addressError, isLoading: addressLoading} = useSWR('/api/user/profile/address/', fetcherAddress, {refreshInterval: null, revalidateOnFocus: false});
-    const [totalCostUSD, setTotalCostUSD] = useState();
     const cartItems = useSelector(state => selectProductById(state, data?.order_items));
     const [selectedAddress, setSelectedAddress] = useState(null);
     const navigate = useNavigate();
 
     if(error || addressError)return(<div>failed to load...</div>)
-    if(isLoading || addressLoading)return(<div>loading...</div>)
+    if(isLoading || addressLoading)return(<div><Loading/></div>)
 
     const handleCheckout = async () => {
         try{
@@ -36,7 +38,7 @@ const Checkout = ({order}) => {
             const payment = response.find(response => response.order = data.id);
             await PaymentService.Checkout(payment.id, selectedAddress, data.id);
         }
-        await mutate('api/user/orders/pending_order');
+        updateData()
         navigate('/cart');
     }
 

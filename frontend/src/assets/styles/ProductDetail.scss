@@ -9,9 +9,76 @@ $disable: #f2f2f2;
     width: 72%;
     margin: 0 auto;
     .image-container{
+        display: flex;
+        .fancybox-container{
+            width: 80%;
+            .product-images-slider{
+                margin: 0;
+                img{
+                    height: auto;
+                    width: 100%;
+                }
+            }
+        }
+        
+        .image-thumbs-container{
+            width: 20%;
+            height: 60%;
+            .product-images-slider-thumbs{
+                margin-top: 10px;
+                height: 100%;
+                .swiper-wrapper{
+                    flex-direction: column;
+                }
+                .swiper-slide{
+                    width: 100%!important;
+                    height: 20%!important;
+                    border: none!important;
+                    flex-shrink: unset;
+                }
+                .product-images-slider-thumbs-wrapper{
+                    position: relative;
+                    overflow: hidden;
+                    padding: 0!important;
+                    height: 100%;
+                    img{
+                        width: 80%;
+                        // height: 100%;
+                        object-position: center center;
+                        object-fit: contain;
+                        margin: auto auto;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        right: 0;
+                        padding: 0;
+                    }
+                }
+                .swiper-slide{
+                    cursor: pointer;
+                    border: 1px solid #ccc;
+                    &-thumb-active{
+                        border-color: #ccc;
+                    }
+                }
+                &-wrapper{
+                    width: 100%;
+                    padding-top: 65%;
+                    overflow: hidden;
+                    position: relative;
+                    img{
+                        position: absolute;
+                        top: -15px;
+                        left: 0;
+                        width: 100%;
+                    }
+                }
+            }
+        }
         img{
             width: 100%;
-            padding-right: 40px;
+            // padding-right: 40px;
         }
     }
     .content{
@@ -140,16 +207,25 @@ $disable: #f2f2f2;
         .payment-btn{
             display: flex;
             flex-direction: column;
+            margin-top: 32px;
             .add-to-cart-btn, .buy-btn{
-                padding: 5px 10px;
+                margin: 15px 0;
+                width: 100%;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background-color: #fff;
+                color: #1B84BF;
+                border: #1B84BF 1px solid;
                 border-radius: 5px;
-                margin: 15px 0;font-size: 20px;
-                border: none;
-                font-weight: bold;
-                background-color: $btn;
-                transition: all 0.3s;
+                font-size: 20px;
+                padding: 8px;
+                transition: 0.1s border;
+                z-index: 1;
+                left: 50%;
+                box-sizing: border-box;
                 &:hover{
-                    scale: (1.01);
+                    box-shadow: 0 0 5px rgba(27, 110, 148, 0.5);
                 }
             }
         }
