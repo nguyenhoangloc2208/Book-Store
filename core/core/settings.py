@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'orders',
     'payment',
     'import_export',
+    # 'ckeditor',
+    # 'blogs',
     
     #payment
     'paypal.standard.ipn',
@@ -226,3 +228,34 @@ PAYPAL_BASE_URL = "https://api.sandbox.paypal.com"
 
 
 EXCHANGE_RATE = 0.000040
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 800,
+        'language': 'en-us',
+        'plugins': {
+            'autoformat': True,
+            'autolink': True,
+            'autoembed': True,
+            'embedsemantic': True,
+            'codesnippet': True,
+            'format': 'paragraph',
+            'indent': True,
+            'indentblock': True,
+            'indentlist': True,
+            'link': True,
+            'lists': True,
+            'image': True,
+            'table': True,
+            'uploadimage': True,
+            'uploadfile': True,
+            'mediaembed': True,
+            'pasting': True,
+            'sourceediting': True,
+            'templates': True,
+            'clipboard': True,
+        },
+    },
+}

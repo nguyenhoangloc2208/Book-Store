@@ -1,7 +1,7 @@
 @import '../../App.scss';
 
 .product-card{
-    width: 24%;
+    width: 25%;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -81,7 +81,7 @@
         }
     }
     .card-btn{
-        width: 100%;
+        width: 90%;
         margin: 1px auto;
         position: absolute;
         bottom: 0;

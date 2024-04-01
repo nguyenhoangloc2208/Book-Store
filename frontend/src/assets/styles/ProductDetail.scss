@@ -85,6 +85,9 @@ $disable: #f2f2f2;
         .author{
             color: rgba($color: #757575, $alpha: 0.9);
             text-transform: uppercase;
+            &:hover{
+                cursor: pointer;
+            }
         }
         .title{
             font-size: 36px;

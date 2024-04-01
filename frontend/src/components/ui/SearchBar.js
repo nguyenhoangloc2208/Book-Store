@@ -5,16 +5,19 @@ import { useSelector } from "react-redux";
 
 const SearchBar = ({isOpen, setIsOpen}) =>{
     const [inputText, setInputText] = useState('');
-    const [isSearching, setIsSearching] = useState(false);
+    const [debouncedInputText, setDebouncedInputText] = useState('');
+    const [isSearching, setIsSearching] = useState(false); // Khởi tạo isSearching với giá trị false
     const navigate = useNavigate();
     const products = useSelector(state => state.products.books);
 
-    // const filteredProducts = products.filter((item) =>
-    // item.name.toLowerCase().includes(inputText.toLowerCase())
-    // );
-    const filteredProducts = useState();
+    const filteredProducts = products.filter((item) =>
+        item.name.toLowerCase().includes(debouncedInputText.toLowerCase())
+    );
 
+    const randomProducts = filteredProducts.sort(() => Math.random() - 0.5).slice(0, 3);
+    
     const handleClick = (item)=>{
+        setIsOpen(false);
         navigate(`/products/${item.slug}`)
         setInputText('');
         setIsSearching(false);
@@ -22,15 +25,23 @@ const SearchBar = ({isOpen, setIsOpen}) =>{
 
     const handleSearch = (e) => {
         setInputText(e.target.value);
-    
-        if (e.target.value) {
-          setIsSearching(true); // Bật trạng thái tìm kiếm khi có nội dung
-        } else {
-          setIsSearching(false); // Tắt trạng thái tìm kiếm khi không có nội dung
-        }
-      }
+
+        // Cập nhật isSearching dựa trên có nội dung nhập hay không
+        setIsSearching(!!e.target.value.trim());
+    }
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedInputText(inputText);
+        }, 2000); // Delay 2 giây
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [inputText]);
+
     const handleSearchClick = () =>{
-    navigate(`/search/${inputText}`);
+        navigate(`/search/${inputText}`);
     }
 
     useEffect(() => {
@@ -48,24 +59,36 @@ const SearchBar = ({isOpen, setIsOpen}) =>{
                 <div className="overlay">
                     <div className="search-background">
                     <form className="search-container">
+                        <div className="form-floating input">
+                        <input type="text" className="form-control" id="Search" placeholder="Search" value={inputText} onChange={(e) => handleSearch(e)} />
+                        <label htmlFor="search">Search</label>
+                        <button type="button" onClick={() => handleSearchClick()} >
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                    {/* Sử dụng isSearching để kiểm tra và hiển thị ul */}
+                    {isSearching && filteredProducts && 
+                    <>
+                        <ul className='search-list'>
+                            <div className="search-list-title">Products</div>
+                            {randomProducts.map((item) => (
+                                <>
+                                    <li onClick={()=> handleClick(item)} key={item.id}>
+                                        <div className="image-container">
+                                            <img alt="" src={item.image[0]?.image || ''}/> 
+                                        </div>
+                                        <span>{item.name}<br/>{parseInt(item.price).toLocaleString('en-US').replace(/,/g, '.')}₫</span>
+                                    </li>
+                                </>
+                            ))}
                         <div>
-                            <input type="text" name="q" placeholder="Search" aria-label="Search" value={inputText} onChange={(e) => handleSearch(e)}/>
-                            <button type="button" onClick={() => handleSearchClick()} >
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </button>
+                            <div>Search for <span>{inputText}</span></div>
                         </div>
+                        </ul>
+                    </>
+                    }
                     </form>
                     <i onClick={() => setIsOpen(false)} className="fa-solid fa-xmark xmark"></i>
-                    <div>
-                    <ul className='search-list'>
-                    {isSearching && filteredProducts.map((item) => (
-                        <li onClick={()=> handleClick(item)} key={item.id}>
-                            {/* <img alt="" src={item.image[0]?.image || ''}/>  */}
-                        <span>{item.name}<br/>{parseInt(item.price).toLocaleString('en-US').replace(/,/g, '.')}₫</span>
-                        </li>
-                        ))}
-                </ul>
-                    </div>
                     </div>
                     <div onClick={() => setIsOpen(false)} className="background">
 

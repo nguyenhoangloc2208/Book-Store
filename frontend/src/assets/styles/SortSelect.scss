@@ -1,0 +1,115 @@
+.arrange{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    .filter-container{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        .filter{
+            width: 60%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .filter-menu{
+            position: absolute;
+            background-color: #fff;
+            border: 1px rgb(0 0 0 / 10%) solid;
+            width: 24rem;
+            z-index: 11;
+            font-size: 18px;
+            &-title{
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 1px rgb(0 0 0 / 10%) solid;
+                span:first-child{
+                    padding: 15px 20px;
+                }
+                facet-remove{
+                    padding: 15px 20px;
+                    a{
+                        text-decoration: underline;
+                        text-decoration-thickness: 1px;
+                        color:rgb(27 110 148 / 85%);
+                    }
+                    &:hover{
+                        cursor: pointer;
+                        a{
+                            text-decoration: underline;
+                            text-decoration-thickness: none;
+                        }
+                    }
+                }
+            }
+            fieldset{
+
+                ul{
+                    padding: 0 10px;
+                    list-style: none;
+                    li{
+                        padding: 10px 0;
+                        .checkbox-label{
+                            display: flex;
+                            align-items: center;
+                            #inStockCheckbox, #outOfStockCheckbox{
+                                width: 16px;
+                                height: 16px;
+                                cursor: pointer;
+                            }
+                            span{
+                                padding-left: 10px;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        &-option{
+
+        }
+        .availability{
+            position: relative;
+        }
+        .price{
+            position: relative;
+        }
+    }
+    .sort-container{
+        width: 50%;
+        display: flex;
+        justify-content:end;
+        .sort{
+            width: 60%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .form-select{
+            width: 50%;
+            border: none;
+        }
+
+        .value{
+            
+        }
+    }
+
+}
+summary{
+    list-style: none;
+}
+.disclosure-has-popup[open]>summary:before{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    display: block;
+    cursor: default;
+    content: " ";
+    background: transparent;
+}

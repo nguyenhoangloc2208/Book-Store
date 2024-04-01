@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import '../../assets/styles/Login.scss';
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
+import useDataMutation from "../../hooks/useDataMutation";
+
+const TITLE = 'Login Page';
 
 const Login = () =>{
     const [email, setEmail] = useState();
@@ -14,6 +18,9 @@ const Login = () =>{
     const [isValidEmail, setIsValid] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const isLogin = useSelector(state => state.auth.isLogin);
+    const {updateData} = useDataMutation(isLogin);
+
 
     useEffect(() => {
         const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,6 +44,7 @@ const Login = () =>{
             if (isValidEmail){
                 try{
                     await AuthService.login(email, password);
+                    await updateData();
                     navigate('/');
                 }catch(err){
                     console.error(err);
@@ -53,6 +61,9 @@ const Login = () =>{
     }
     return(
         <>
+        <Helmet>
+            <title>{TITLE}</title>
+        </Helmet>
             <section className="login-container">
                 <div>
                     <h1>Login</h1>

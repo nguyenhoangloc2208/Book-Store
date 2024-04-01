@@ -19,6 +19,8 @@ import { loadStripe } from "@stripe/stripe-js/pure"
 import CardSwiper from "../components/ui/AutoPlaySlider";
 import Loading from "../components/ui/Loading";
 import PaymentSuccess from "../components/ui/Success";
+import Author from "../pages/Collections/Author";
+import AllProduct from "../pages/Collections/AllProduct";
 const stripe_key = REACT_APP_STRIPE_KEY
 const stripePromise = loadStripe(stripe_key)
 
@@ -30,7 +32,7 @@ const AppRouter = () =>{
             <Routes basename='/'>
                 <Route path='/' element={<Home />} exact/>
                 <Route path='/collections/' element={<Collections />} />
-                <Route path='/collections/all' element={<Collections />} />
+                <Route path='/collections/all' element={<AllProduct />} />
                 <Route path='/collections/:slug' element={<CategoryDetail />} />
                 <Route path='/products/:slug' element={<ProductDetail />} />
                 <Route path='/account/login' element={<Login />} />
@@ -44,6 +46,8 @@ const AppRouter = () =>{
                 <Route path='/test' element={<CardSwiper />} />
                 <Route path='/loading' element={<Loading />} />
                 <Route path='/payment/success' element={<PaymentSuccess />} />
+                <Route path='/payment/cancel' element={<PaymentSuccess />} />
+                <Route path='/collections/author/:slug' element={<Author />} />
             </Routes>
         </Elements>
         </>

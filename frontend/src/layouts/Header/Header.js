@@ -1,8 +1,9 @@
 import React from "react";
 import '../../assets/styles/Header.scss'
+import toast from "react-hot-toast";
 
 const handleClickHeader = () =>{
-    alert('0332649498');
+    toast('0332649498');
 }
 
 const Header = () =>{

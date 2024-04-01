@@ -12,18 +12,17 @@ import {Helmet} from 'react-helmet';
 import PaymentService from "../../services/payment.service";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/ui/Loading";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import useDataMutation from "../../hooks/useDataMutation";
 const TITLE = 'Your Shopping Cart';
 
 const ExchangeRate = 0.000040;
 
-const fetcher = (url) => api.get(url).then(res => res[0]);
-
 
 const Cart = () =>{
     // const {data, error, isLoading} = useSWR('/api/user/orders/pending_order', fetcher, {refreshInterval: null, revalidateOnFocus: false});
-    const {data, error, isLoading, updateData} = useDataMutation('/api/user/orders/pending_order');
+    const isLogin = useSelector(state => state.auth.isLogin);
+    const {data, error, isLoading, updateData} = useDataMutation(isLogin);
     const [totalCostUSD, setTotalCostUSD] = useState();
     const cartItems = useSelector(state => selectProductById(state, data?.order_items));
     const [isEmpty, setIsEmpty] = useState(true);
@@ -45,7 +44,7 @@ const Cart = () =>{
         else {
             setIsEmpty(false);
         }
-    }, [data, error])
+    }, [isLoading, error])
 
     if (isLoading) return <div><Loading/></div>
 
@@ -53,14 +52,13 @@ const Cart = () =>{
         const quantity = data.order_items[index]?.quantity;
         if (quantity > 1) {
             try{
-                await CartService.ItemUpdateQuantity(data.id, data.order_items[index], quantity - 1)
-                mutate('/api/user/orders/pending_order');
-                updateData();
+                await CartService.ItemUpdateQuantity(data.id, data.order_items[index], quantity - 1);
+                if(isLogin){updateData();}
             }catch{
                 console.error(error);
             }
         } else{
-            alert('Không thể trừ thêm');
+            toast.dismiss('Error!')
         }
     };
 
@@ -68,21 +66,19 @@ const Cart = () =>{
         const quantity = data.order_items[index]?.quantity;
             try{
                 await CartService.ItemUpdateQuantity(data.id, data.order_items[index], quantity + 1);
-                mutate('/api/user/orders/pending_order');
-                updateData();
+                if(isLogin){updateData();}
             }catch(error){
                 console.error(error);
-                alert('Hết hàng');
+                toast.error('Out of stock!')
             }
     };
 
     const handleDelete = async (index) => {
         try{
             await CartService.ItemDelete(data.id, data.order_items[index].id);
-            mutate('/api/user/orders/pending_order');
-            updateData();
+            if(isLogin){updateData();}
         }catch{
-            alert('Lỗi khi xóa');
+            toast.error('Error!')
         }
     }
 
@@ -197,7 +193,6 @@ const Cart = () =>{
                                                     toast.success(`Transaction completed by ${name}`);
                                                     navigate(`/payment/success/`);
                                                 } catch (error) {
-                                                    alert('Lỗi');
                                                     console.error('Error:', error);
                                                 }
                                             })

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../../assets/styles/AddressModal.scss';
 import AddressService from '../../services/address.service';
 import { mutate } from 'swr';
+import {toast} from 'react-hot-toast';
 
 const AddressModal = ({ isShowing, hide, create, item }) => {
     const [country, setCountry] = useState('');
@@ -26,7 +27,7 @@ const AddressModal = ({ isShowing, hide, create, item }) => {
         }
 
         if (!addressType || !country || !city || !street || !apartment || !postalCode) {
-            alert('Please fill in all fields');
+            toast.error('Please fill in all fields');
             return; 
         }
 

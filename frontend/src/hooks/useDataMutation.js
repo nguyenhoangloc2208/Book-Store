@@ -1,16 +1,34 @@
 import useSWR, { mutate } from 'swr';
 import api from '../services/api';
 
+const url = '/api/user/orders/pending_order';
+
 const fetcher = (url) => api.get(url).then(res => res[0]);
 
-
-const useDataMutation = (url) => {
-    const { data, error, isLoading } = useSWR(url, fetcher, {refreshInterval: null});
+const useDataMutation = (isLogin) => {
+    const { data, error, isLoading } = useSWR(isLogin ? url:null, fetcher, { refreshInterval: null, revalidateOnFocus: false });
 
     const updateData = async () => {
-        // Update the local cache immediately
-        mutate(url);
+        if (isLogin) {
+            await mutate(url);
+        }
     };
+
+    if (!isLogin) {
+        return {
+            data: null,
+            error: null,
+            isLoading: false,
+            updateData: () => {}, // Trả về hàm rỗng
+        };
+    }
+
+    if (error && (error.response.status === 401 || error.response.status === 404)) {
+        return {
+            error,
+            updateData: () => {},
+        };
+    }
 
     return {
         data,
@@ -18,7 +36,6 @@ const useDataMutation = (url) => {
         isLoading,
         updateData,
     };
-
 }
 
 export default useDataMutation;

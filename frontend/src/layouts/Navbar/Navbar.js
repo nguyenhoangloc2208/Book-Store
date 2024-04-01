@@ -7,10 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import AuthService from "../../services/auth.service";
 import { setOrderPending } from "../../store/slice/OrderSlice";
 import api from '../../services/api'
-import useSWR, { mutate } from "swr";
 import useDataMutation from "../../hooks/useDataMutation";
+import {toast} from 'react-hot-toast';
 
-const fetcher = (url) => api.get(url).then(res => res[0]);
 
 
 const Navbar = () =>{
@@ -20,7 +19,7 @@ const Navbar = () =>{
     const isLogin = useSelector(state => state.auth.isLogin);
     const dispatch = useDispatch();
     // const {data, error, isLoading} = useSWR(isLogin ? '/api/user/orders/pending_order/' : null, fetcher, {refreshInterval: null});
-    const {data, error, isLoading, updateData} = useDataMutation('/api/user/orders/pending_order');
+    const {data, error, isLoading, updateData} = useDataMutation(isLogin);
 
     
     useEffect(() => {
@@ -76,9 +75,11 @@ const Navbar = () =>{
     
     const handleLogout = async () => {
         try{
+            if(isLogin) {await updateData();}
             await AuthService.logout();
             dispatch(setOrderPending(0));
-            alert('Logout success!');
+            toast.success('Logout success!');
+            navigate('/');
         }catch(error){
             console.error(error);
         }

@@ -9,13 +9,18 @@ import PaymentService from "../../services/payment.service";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/ui/Loading";
 import useDataMutation from "../../hooks/useDataMutation";
+import {toast} from 'react-hot-toast';
+import { Helmet } from "react-helmet";
+
+const TITLE = 'Check out'
 
 const fetcher = (url) => api.get(url).then(res => res[0]);
 const fetcherAddress = (url) => api.get(url).then(res => res.results);
 
 
 const Checkout = ({order}) => {
-    const {data, error, isLoading, updateData} = useDataMutation('/api/user/orders/pending_order');
+    const isLogin = useSelector(state => state.auth.isLogin);
+    const {data, error, isLoading, updateData} = useDataMutation(isLogin);
 
     const {data: address, error: addressError, isLoading: addressLoading} = useSWR('/api/user/profile/address/', fetcherAddress, {refreshInterval: null, revalidateOnFocus: false});
     const cartItems = useSelector(state => selectProductById(state, data?.order_items));
@@ -30,19 +35,30 @@ const Checkout = ({order}) => {
             const response = await PaymentService.PaymentList();
             const payment = response.find(response => response.order = data.id);
             await PaymentService.Checkout(payment.id, selectedAddress, data.id);
-            alert('Checkout success');
+            toast.success('Checkout success');
 
         }catch{
-            await PaymentService.PaymentCreate('P', data.id);
-            const response = await PaymentService.PaymentList();
-            const payment = response.find(response => response.order = data.id);
-            await PaymentService.Checkout(payment.id, selectedAddress, data.id);
+            try{
+
+                await PaymentService.PaymentCreate('P', data.id);
+                const response = await PaymentService.PaymentList();
+                const payment = response.find(response => response.order = data.id);
+                await PaymentService.Checkout(payment.id, selectedAddress, data.id);
+                toast.success('Checkout success');
+            }catch(error){
+                console.error(error);
+                toast.error('Error!');
+            }
         }
         updateData()
         navigate('/cart');
     }
 
     return(
+        <>
+        <Helmet>
+            <title>{TITLE}</title>
+        </Helmet>
         <div className="checkout-container">
             <div className="div1">
                 <div>
@@ -80,6 +96,7 @@ const Checkout = ({order}) => {
                 }
             </div>
         </div>
+        </>
     )
 }
 

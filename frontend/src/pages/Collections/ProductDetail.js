@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { selectProductByAuthor, selectProductByCategory, selectProductBySlug } from "../../store/slice/ProductSlice";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { selectAuthorByName, selectProductByAuthor, selectProductByCategory, selectProductBySlug } from "../../store/slice/ProductSlice";
 import '../../assets/styles/ProductDetail.scss';
 import RspItem from "../../components/ui/RspItem";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,18 +12,20 @@ import AutoPlaySlider from "../../components/ui/AutoPlaySlider";
 import { numberWithCommas } from "../../utils/utils";
 import { addViewedProduct, selectRandomViewedProducts } from "../../store/slice/ViewedProductsSlice";
 import { AddToCartBtn } from "../../utils/AddToCartBtn";
+import toast from "react-hot-toast";
 
 const ProductDetail = () =>{
     const {slug} = useParams();
     const item = useSelector(state => selectProductBySlug(state, slug));
     const authorBook = useSelector(state => selectProductByAuthor(state, item.author));
+    const author = useSelector(state => selectAuthorByName(state, item.author));
     const categoryBook = useSelector(state => selectProductByCategory(state, item.category));
     const shuffledCategoryBook = item ? [...categoryBook.filter(product => product.id !== item.id)].sort(() => Math.random() - 0.5) : [];
     const [quantity, setQuantity] = useState(1);
     const [isComment, setIsComment] = useState(false);
     const orderId = useSelector(state => state.order.idPending);
     const [thumbsSwiper, setThumbsSwiper] = useState();
-    
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const viewedProducts = useSelector(state => selectRandomViewedProducts(state, item));
 
@@ -47,6 +49,14 @@ const ProductDetail = () =>{
 
     const handleAddToCart = async () => {
         await AddToCartBtn(item, orderId ? orderId : null, dispatch);
+    }
+
+    const handleAuthorClick = () => {
+        if(author){
+            navigate(`/collections/author/${author.slug}`);
+        }else{
+            toast.error('Error!');
+        }
     }
 
 
@@ -113,7 +123,7 @@ const ProductDetail = () =>{
 
 
                 <div className="content col-md-4">
-                    <div className="author">{item.author}</div>
+                    <div className="author" onClick={() => handleAuthorClick()}>{item.author}</div>
                     <div className="title">{item.name}</div>
                     <hr/>
                     <div className="price-content">

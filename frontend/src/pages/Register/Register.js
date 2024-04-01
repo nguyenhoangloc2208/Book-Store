@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import '../../assets/styles/Register.scss';
 import useEmailValidation from "../../hooks/useEmailValidation";
+import { Helmet } from "react-helmet";
+
+const TITLE = 'Register Page';
 
 const Register = () =>{
     const [firstName, setFirstName] = useState();
@@ -13,15 +16,17 @@ const Register = () =>{
 
     const handleRegisterAccount= () =>{
         validateEmail(email);
-        if(isValidEmail){
-            alert("đúng");
-        } else{
+        if(!isValidEmail){
             setEmailValidation(false);
             setPasswordValidation(false);
         }
     }
 
     return(
+        <>
+        <Helmet>
+            <title>{TITLE}</title>
+        </Helmet>
         <section className="register-container">
             <div>
                 <h1>Create account</h1>
@@ -45,6 +50,7 @@ const Register = () =>{
                 <button onClick={() => handleRegisterAccount()}>Create</button>
             </div>
         </section>
+        </>
     )
 }
 

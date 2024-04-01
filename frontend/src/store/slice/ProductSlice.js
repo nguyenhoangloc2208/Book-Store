@@ -32,9 +32,21 @@ export const selectCategory = createSelector(
     selectProductState,
     productsState => productsState.categories
 )
+export const selectAuthor = createSelector(
+    selectProductState,
+    productsState => productsState.authors
+)
 export const selectCategoryBySlug = createSelector(
     [selectCategory, (_, slug) => slug],
     (categories, slug) => categories.find(categories => categories.slug === slug)
+)
+export const selectAuthorBySlug = createSelector(
+    [selectAuthor, (_, slug) => slug],
+    (authors, slug) => authors.find(authors => authors.slug === slug)
+)
+export const selectAuthorByName = createSelector(
+    [selectAuthor, (_, name) => name],
+    (authors, name) => authors.find(authors => authors.name === name)
 )
 export const selectProduct = createSelector(
     selectProductState,

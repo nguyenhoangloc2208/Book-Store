@@ -14,7 +14,8 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import ScrollToTopButton from './utils/ScrollToTopButton';
 import ScrollToTop from './utils/ScrollToTop';
 import Loading from './components/ui/Loading';
-import {ToastContainer} from 'react-toastify';
+
+import { Toaster } from 'react-hot-toast';
 
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results);
@@ -48,19 +49,31 @@ function App() {
         </div>
         <Footer/>
         <ScrollToTopButton/>
-        <ToastContainer
+        <Toaster
         position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        // transition: Bounce,
-        />
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: '',
+          duration: 3000,
+          style: {
+            background: '#FFF0D3',
+            color: '#010101',
+          },
+
+          // Default options for specific types
+          success: {
+            duration: 3000,
+            theme: {
+              primary: 'green',
+              secondary: 'black',
+            },
+          },
+        }}
+      />
       </div>
     </PayPalScriptProvider>
     </>
