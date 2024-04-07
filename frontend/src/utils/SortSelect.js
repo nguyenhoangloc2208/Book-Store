@@ -13,20 +13,21 @@ const SortSelect = ({ value, setValue, data, setData, _data }) => {
     const [isPriceFilter, setIsPriceFilter] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
 
-
     useEffect(() => {
-        if(value === '2'){
-            setData(Sort.sortAZ(data));
+        if (value === '1'){
+            setData(Sort.bestSelling(_data));
+        }else if(value === '2'){
+            setData(Sort.sortAZ(_data));
         }else if(value === '3'){
-            setData(Sort.sortZA(data));
+            setData(Sort.sortZA(_data));
         }else if(value === '4'){
-            setData(Sort.sortPriceMinToMax(data));
+            setData(Sort.sortPriceMinToMax(_data));
         }else if(value === '5'){
-            setData(Sort.sortPriceMaxToMin(data));
+            setData(Sort.sortPriceMaxToMin(_data));
         }else if(value === '6'){
-            setData(Sort.sortCreatedAtNew(data));
+            setData(Sort.sortCreatedAtNew(_data));
         }else if(value === '7'){
-            setData(Sort.sortCreatedAtOld(data));
+            setData(Sort.sortCreatedAtOld(_data));
         }
     }, [value])
 
@@ -149,13 +150,15 @@ const SortSelect = ({ value, setValue, data, setData, _data }) => {
                                 <div>
                                     <fieldset>
                                         {/* <legend>Contact Information</legend> */}
-                                        <div className="form-floating input">
-                                            <input type="text" className="form-control" id="From" placeholder="From" value={minPrice} onChange={handleMinPriceChange} />
-                                            <label htmlFor="From">From</label>
-                                        </div>
-                                        <div className="form-floating input">
-                                            <input type="text" className="form-control" id="To" placeholder="To" value={maxPrice} onChange={handleMaxPriceChange} />
-                                            <label htmlFor="To">To</label>
+                                        <div className='input-container'>
+                                            <div className="form-floating input">
+                                                <input type="text" className="form-control" id="From" placeholder="From" value={minPrice} onChange={handleMinPriceChange} />
+                                                <label htmlFor="From">From</label>
+                                            </div>
+                                            <div className="form-floating input">
+                                                <input type="text" className="form-control" id="To" placeholder="To" value={maxPrice} onChange={handleMaxPriceChange} />
+                                                <label htmlFor="To">To</label>
+                                            </div>
                                         </div>
                                     </fieldset>
                                 </div>

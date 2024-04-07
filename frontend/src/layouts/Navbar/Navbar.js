@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import '../../assets/styles/Navbar.scss';
 import images from "../../assets/images/image";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import SearchBar from "../../components/ui/SearchBar";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import AuthService from "../../services/auth.service";
 import { setOrderPending } from "../../store/slice/OrderSlice";
-import api from '../../services/api'
 import useDataMutation from "../../hooks/useDataMutation";
 import {toast} from 'react-hot-toast';
+import Cookies from "js-cookie";
+import SearchBarOverlay from "../../components/ui/SearchBarOverlay";
 
 
 
@@ -16,10 +16,10 @@ const Navbar = () =>{
     const navigate = useNavigate();
     const location = useLocation();
     const [isShowSearchBar, setIsShowSearchBar] = useState(false);
-    const isLogin = useSelector(state => state.auth.isLogin);
     const dispatch = useDispatch();
     // const {data, error, isLoading} = useSWR(isLogin ? '/api/user/orders/pending_order/' : null, fetcher, {refreshInterval: null});
-    const {data, error, isLoading, updateData} = useDataMutation(isLogin);
+    const {data, updateData} = useDataMutation();
+    const isLoggedInStr = Cookies.get('isLoggedIn');
 
     
     useEffect(() => {
@@ -59,7 +59,7 @@ const Navbar = () =>{
     }
 
     const handleAccount = () =>{
-        if(isLogin){
+        if(isLoggedInStr === 'true'){
         }else{
             navigate("/account/login");
         }
@@ -75,7 +75,7 @@ const Navbar = () =>{
     
     const handleLogout = async () => {
         try{
-            if(isLogin) {await updateData();}
+            if(isLoggedInStr === 'true') {await updateData();}
             await AuthService.logout();
             dispatch(setOrderPending(0));
             toast.success('Logout success!');
@@ -86,7 +86,7 @@ const Navbar = () =>{
     }
 
     return(
-        <>
+        <div className="navbar-containerr">
         <div className="navbar-container">
             <div className="row gutters-sm">
                 <div className="col-md-3">
@@ -96,18 +96,18 @@ const Navbar = () =>{
                     <ul className="menu-list">
                         <li><Link to="/" className={location.pathname === "/" ? "text-decoration-underline" : ""}>Trang chủ - Home Page</Link></li>
                         <li><Link to="/collections" className={location.pathname === "/collections" ? "text-decoration-underline" : ""}>Danh mục sách - Collections</Link></li>
-                        <li><Link to="/pages/about" className={location.pathname === "/pages/about" ? "text-decoration-underline" : ""}>Câu chuyện của chúng tôi - Our Story</Link></li>
+                        <li><Link to="/pages/ap-u-mot-giac-mo-va-niem-tu-hao-sach-viet-tren-dat-my" className={location.pathname === "/pages/ap-u-mot-giac-mo-va-niem-tu-hao-sach-viet-tren-dat-my" ? "text-decoration-underline" : ""}>Câu chuyện của chúng tôi - Our Story</Link></li>
                         <li><Link to="/pages/pre-order" className={location.pathname === "/pages/pre-order" ? "text-decoration-underline" : ""}>Liên hệ Pre-Order</Link></li>
                         <li><Link to="/blogs/reviews" className={location.pathname === "/blogs/reviews" ? "text-decoration-underline" : ""}>Review Sách và Truyện tranh - Book & Manga Review</Link></li>
-                        <li><Link to="/pages/books-for-libraries" className={location.pathname === "/pages/books-for-libraries" ? "text-decoration-underline" : ""}>For Libraries</Link></li>
-                        <li><Link to="/blogs/our-blogs" className={location.pathname === "/blogs/our-blogs" ? "text-decoration-underline" : ""}>Our blogs</Link></li>
+                        <li><Link to="/pages/vietnamese-books-for-libraries-in-the-us" className={location.pathname === "/pages/vietnamese-books-for-libraries-in-the-us" ? "text-decoration-underline" : ""}>For Libraries</Link></li>
+                        {/* <li><Link to="/blogs/our-blogs" className={location.pathname === "/blogs/our-blogs" ? "text-decoration-underline" : ""}>Our blogs</Link></li> */}
                     </ul>
                 </div>
                 <div className="col-md-2">
                     <i onClick={() => handleShowSearchBar()} className="fa-solid fa-magnifying-glass"></i>
                     <div className="dropdown">
                         <i onClick={() => handleAccount()} className="fa-regular fa-user user"></i>
-                        {isLogin && <div className="dropdown-content">
+                        {isLoggedInStr === 'true' && <div className="dropdown-content">
                             <Link to='./account/'>Profile</Link>
                             <Link as="button" onClick={()=>handleLogout()}>Logout</Link>
                         </div>}
@@ -123,8 +123,10 @@ const Navbar = () =>{
                 </div>
             </div>
         </div>
-        <SearchBar isOpen={isShowSearchBar} setIsOpen={setIsShowSearchBar}/>
-        </>
+        <div className="overlay-container">
+            <SearchBarOverlay isOpen={isShowSearchBar} setIsOpen={setIsShowSearchBar}/>
+        </div>
+        </div>
     );
 }
 

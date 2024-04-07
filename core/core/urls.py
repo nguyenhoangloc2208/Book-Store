@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/products/', include('products.urls', namespace="products")),
     path('api/user/orders/', include('orders.urls', namespace='orders')),
     path('api/user/payments/', include('payment.urls', namespace='payment')),
+    path('api/blogs/', include('blogs.urls', namespace="blogs")),
     path('logout/', LogoutView.as_view(), name="rest_logout"),
     path(
         'resend-email/', ResendEmailVerificationView.as_view(), name='rest_resend_email'

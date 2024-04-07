@@ -13,8 +13,7 @@ const CategoryDetail = () =>{
     const products = useSelector(state => selectProductByCategory(state, category.name));
     const [filteredroducts, setFilteredProducts] = useState(products);
     const orderId = useSelector(state => state.order.idPending);
-    const {updateData} = useDataMutation(`/api/user/orders/pending_order`);
-    const isLogin = useSelector(state => state.auth.isLogin);
+    const {updateData} = useDataMutation();
     const [arrangeType, setArrangeType] = useState();
 
     return(
@@ -29,8 +28,8 @@ const CategoryDetail = () =>{
             </div>
             <SortSelect value={arrangeType} setValue={setArrangeType} data={filteredroducts} setData={setFilteredProducts} _data={products}/>
             <div className="product-card-container">
-                {filteredroducts && filteredroducts.length > 0 && filteredroducts.map((item, index)=>(
-                    <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null} updateData={updateData} isLogin={isLogin}/>
+                {filteredroducts && filteredroducts.length > 0 && filteredroducts.slice().sort(() => Math.random() - 0.5).map((item, index)=>(
+                    <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null} updateData={updateData}/>
                 ))}
             </div>
         </section>

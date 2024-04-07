@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import '../../assets/styles/Cart.scss';
 import { selectProductById } from "../../store/slice/ProductSlice";
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import useSWR, { mutate } from "swr";
 import api from '../../services/api';
 import CartService from "../../services/cart.service";
 import images from "../../assets/images/image";
@@ -14,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/ui/Loading";
 import { toast } from "react-hot-toast";
 import useDataMutation from "../../hooks/useDataMutation";
+import Cookies from "js-cookie";
 const TITLE = 'Your Shopping Cart';
 
 const ExchangeRate = 0.000040;
@@ -21,11 +21,11 @@ const ExchangeRate = 0.000040;
 
 const Cart = () =>{
     // const {data, error, isLoading} = useSWR('/api/user/orders/pending_order', fetcher, {refreshInterval: null, revalidateOnFocus: false});
-    const isLogin = useSelector(state => state.auth.isLogin);
-    const {data, error, isLoading, updateData} = useDataMutation(isLogin);
+    const {data, error, isLoading, updateData} = useDataMutation();
     const [totalCostUSD, setTotalCostUSD] = useState();
     const cartItems = useSelector(state => selectProductById(state, data?.order_items));
     const [isEmpty, setIsEmpty] = useState(true);
+    const isLoggedInStr = Cookies.get('isLoggedIn');
     
     const navigate = useNavigate();
 
@@ -53,7 +53,7 @@ const Cart = () =>{
         if (quantity > 1) {
             try{
                 await CartService.ItemUpdateQuantity(data.id, data.order_items[index], quantity - 1);
-                if(isLogin){updateData();}
+                if(isLoggedInStr === 'true'){updateData();}
             }catch{
                 console.error(error);
             }
@@ -66,7 +66,7 @@ const Cart = () =>{
         const quantity = data.order_items[index]?.quantity;
             try{
                 await CartService.ItemUpdateQuantity(data.id, data.order_items[index], quantity + 1);
-                if(isLogin){updateData();}
+                if(isLoggedInStr==='true'){updateData();}
             }catch(error){
                 console.error(error);
                 toast.error('Out of stock!')
@@ -76,7 +76,7 @@ const Cart = () =>{
     const handleDelete = async (index) => {
         try{
             await CartService.ItemDelete(data.id, data.order_items[index].id);
-            if(isLogin){updateData();}
+            if(isLoggedInStr==='true'){updateData();}
         }catch{
             toast.error('Error!')
         }
@@ -171,18 +171,20 @@ const Cart = () =>{
                                 // fundingSource="paypal"
                                     // style={{ layout: "horizontal" }}
                                     createOrder={async (e, actions) => {
+                                            const toastId = toast.loading("Running...", { duration: 0 });
                                             await handleCreatePayment("P", data.id);
                                             try {
                                                 const response = await api.get(`/api/user/payments/paypal/create/order/${data.id}/`);
                                                 const orderId = response.orderId;
-                                                toast('Running!');
                                                 return orderId;
                                             }catch(error) {
                                                 console.error('Error:', error);
                                             }
+                                            toast.dismiss(toastId);
                                     }}
                                     onApprove={ (event, actions) => {
                                             actions.order.capture().then(async (details) => {
+                                                const toastId = toast.loading("Running...", { duration: 0 });
                                                 const name = details.payer.name.given_name;
                                                 const id = details.id;
                                                 try {
@@ -192,9 +194,12 @@ const Cart = () =>{
                                                     });
                                                     toast.success(`Transaction completed by ${name}`);
                                                     navigate(`/payment/success/`);
+
                                                 } catch (error) {
                                                     console.error('Error:', error);
                                                 }
+                                                toast.dismiss(toastId);
+
                                             })
                                     }}
                                 />

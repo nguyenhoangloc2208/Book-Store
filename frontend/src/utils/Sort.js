@@ -1,3 +1,8 @@
+const bestSelling = (data) => {
+    const filteredData = data.filter(product => product.sold_count > 0);
+    return filteredData.sort((a, b) => b.sold_count - a.sold_count);
+};
+
 const sortAZ = (data) => {
     return [...data].sort((a, b) => {
     const nameA = a.name.toLowerCase();
@@ -59,6 +64,7 @@ const sortCreatedAtNew = (products) => {
   };
 
 const Sort = {
+    bestSelling,
     sortAZ,
     sortZA,
     sortPriceMaxToMin,

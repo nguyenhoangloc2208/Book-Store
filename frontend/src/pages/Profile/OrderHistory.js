@@ -56,7 +56,7 @@ const OrderHistory = () =>{
 
     return(
         <>
-            <ul className="order-history-container">
+            {currentOrders && currentOrders.length > 0 ? <ul className="order-history-container">
                 <li className="table-header">
                     <div className="col col-1">Order ID</div>
                     <div className="col col-2">Customer</div>
@@ -90,7 +90,10 @@ const OrderHistory = () =>{
                             <div className="col col-8 " data-label="Action"><i class="fa-regular fa-eye"></i></div>
                         </li>
                 ))}
-            </ul>
+            </ul> 
+            :
+            <div>No Order Yet</div>
+}
             <ul className="pagination">
                 {pageNumbers.map(number => (
                     <li key={number} className="page-item">

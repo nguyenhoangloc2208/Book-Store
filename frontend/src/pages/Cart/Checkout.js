@@ -14,13 +14,11 @@ import { Helmet } from "react-helmet";
 
 const TITLE = 'Check out'
 
-const fetcher = (url) => api.get(url).then(res => res[0]);
 const fetcherAddress = (url) => api.get(url).then(res => res.results);
 
 
-const Checkout = ({order}) => {
-    const isLogin = useSelector(state => state.auth.isLogin);
-    const {data, error, isLoading, updateData} = useDataMutation(isLogin);
+const Checkout = () => {
+    const {data, error, isLoading, updateData} = useDataMutation();
 
     const {data: address, error: addressError, isLoading: addressLoading} = useSWR('/api/user/profile/address/', fetcherAddress, {refreshInterval: null, revalidateOnFocus: false});
     const cartItems = useSelector(state => selectProductById(state, data?.order_items));

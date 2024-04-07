@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import useDataMutation from "../../hooks/useDataMutation";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 const PaymentSuccess = () => {
-    const isLogin = useSelector(state => state.auth.isLogin);
-    const {updateData} = useDataMutation(isLogin);
+    const {updateData} = useDataMutation();
+    const isLoggedInStr = Cookies.get('isLoggedIn');
     useEffect(() => {
-        if(isLogin) {updateData();}
+        if(isLoggedInStr === 'true') {updateData();}
     }, [])
 
     const handleOnClick = () => {

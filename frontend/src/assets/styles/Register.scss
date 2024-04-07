@@ -1,6 +1,9 @@
 @import '../../App.scss';
 
 .register-container{
+    .validation{
+        width: 100%;
+    }
     div{
         margin: 0 auto;
         display: flex;

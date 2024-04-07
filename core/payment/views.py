@@ -173,7 +173,7 @@ class StripeWebhookAPIView(APIView):
             for order_item in order.order_items.all():
                 product = order_item.product
                 quantity = order_item.quantity
-
+                product.sold_count += quantity
                 # Calculate the new product quantity
                 new_quantity = product.quantity - quantity
 
@@ -266,6 +266,7 @@ class CheckoutPaypalOrderView(APIView):
                 for order_item in order.order_items.all():
                     product = order_item.product
                     quantity = order_item.quantity
+                    product.sold_count += quantity
                     new_quantity = max(product.count_in_stock - quantity, 0)
                     product.count_in_stock = new_quantity
                     product.save()

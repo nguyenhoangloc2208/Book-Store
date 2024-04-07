@@ -1,13 +1,11 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import '../../assets/styles/EmptyCart.scss';
-import { useSelector } from "react-redux";
-
+import Cookies from 'js-cookie';
 
 const EmptyCart = () =>{
     const navigate = useNavigate();
-    const isLogin = useSelector(state => state.auth.isLogin);
-
+    const isLoggedInStr = Cookies.get('isLoggedIn');
     const handleContinueShopping = () =>{
         navigate("/collections/all");
     }
@@ -16,7 +14,7 @@ const EmptyCart = () =>{
         <section className="empty-cart-container">
             <h2>Your cart is empty</h2>
             <button onClick={()=>handleContinueShopping()}>Continue shopping</button>
-            {!isLogin && 
+            {isLoggedInStr === 'false' && 
                 <>
                     <h3>Have an account?</h3>
                     <div><Link to="/account/login">Log in</Link> to check out faster.</div>

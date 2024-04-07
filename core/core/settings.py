@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'payment',
     'import_export',
     # 'ckeditor',
-    # 'blogs',
+    'blogs',
     
     #payment
     'paypal.standard.ipn',
@@ -119,7 +119,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
+    'backup': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'backup.sqlite3',
+    },
 }
 
 
@@ -228,34 +232,3 @@ PAYPAL_BASE_URL = "https://api.sandbox.paypal.com"
 
 
 EXCHANGE_RATE = 0.000040
-
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'full',
-        'height': 300,
-        'width': 800,
-        'language': 'en-us',
-        'plugins': {
-            'autoformat': True,
-            'autolink': True,
-            'autoembed': True,
-            'embedsemantic': True,
-            'codesnippet': True,
-            'format': 'paragraph',
-            'indent': True,
-            'indentblock': True,
-            'indentlist': True,
-            'link': True,
-            'lists': True,
-            'image': True,
-            'table': True,
-            'uploadimage': True,
-            'uploadfile': True,
-            'mediaembed': True,
-            'pasting': True,
-            'sourceediting': True,
-            'templates': True,
-            'clipboard': True,
-        },
-    },
-}

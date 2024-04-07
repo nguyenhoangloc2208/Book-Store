@@ -2,33 +2,31 @@ import React, { useEffect, useState } from "react";
 import '../../assets/styles/Login.scss';
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
-import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import useDataMutation from "../../hooks/useDataMutation";
+import useEmailValidation from "../../hooks/useEmailValidation";
+import {toast} from 'react-hot-toast';
 
 const TITLE = 'Login Page';
 
 const Login = () =>{
-    const [email, setEmail] = useState();
+    const { email, isValidEmail, validateEmail } = useEmailValidation();
     const [password, setPassword] = useState();
     const [emailValidation, setEmailValidation] = useState(true);
     const [passwordValidation, setPasswordValidation] = useState(true);
     const [isEmailNull, setEmailNull] = useState(false);
     const [isPasswordNull, setPasswordNull] = useState(false);
-    const [isValidEmail, setIsValid] = useState(false);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const isLogin = useSelector(state => state.auth.isLogin);
-    const {updateData} = useDataMutation(isLogin);
+    const {updateData} = useDataMutation();
+    
 
 
     useEffect(() => {
-        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const isValid = pattern.test(email);
-        setIsValid(isValid);
+        validateEmail(email);
     }, [email]);
 
     const handleSignIn = async () =>{
+        console.log(isValidEmail);
         if(email==='' && password===''){
             setEmailNull(true);
             setPasswordNull(true);
@@ -48,6 +46,7 @@ const Login = () =>{
                     navigate('/');
                 }catch(err){
                     console.error(err);
+                    toast.error(`Account doesn't exists!`);
                 }
             }else {
                 setEmailValidation(false);
@@ -73,7 +72,7 @@ const Login = () =>{
                         </ul>
                     </div>
                     <div className="input-container">
-                        <input className={(!emailValidation || isEmailNull) && `emailValidation`} type="email" placeholder="Email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value) }/>
+                        <input className={(!emailValidation || isEmailNull) && `emailValidation`} type="email" placeholder="Email" id="email" name="email" value={email} onChange={(e) => validateEmail(e.target.value) }/>
                         {isEmailNull && <div className="login-warning"><i class="fa-solid fa-circle-exclamation"></i>Email can't be blank.</div>}
                     </div>
                     <div className="input-container">

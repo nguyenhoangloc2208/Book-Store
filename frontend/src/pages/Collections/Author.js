@@ -14,9 +14,8 @@ const Author = () => {
     const authorBook = useSelector(state => selectProductByAuthor(state, author.name));
     const [filteredAuthorBook, setFilteredAuthorBook] = useState(authorBook);
     const orderId = useSelector(state => state.order.idPending);
-    const {updateData} = useDataMutation(`/api/user/orders/pending_order`);
+    const {updateData} = useDataMutation();
     const [arrangeType, setArrangeType] = useState();
-    const isLogin = useSelector(state => state.auth.isLogin);
 
 
     if(!author) return(<NotFound/>)
@@ -34,8 +33,8 @@ const Author = () => {
                     <SortSelect value={arrangeType} setValue={setArrangeType} data={filteredAuthorBook} setData={setFilteredAuthorBook} _data={authorBook}/>   
                 </div>
                 {filteredAuthorBook && filteredAuthorBook.length > 0 &&
-                    filteredAuthorBook.map((item, index) => (
-                    <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null} updateData={updateData} isLogin={isLogin}/>
+                    filteredAuthorBook.slice().sort(() => Math.random() - 0.5).map((item, index) => (
+                    <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null} updateData={updateData}/>
                     ))
                 }
             </section>

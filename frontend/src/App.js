@@ -8,12 +8,14 @@ import api from './services/api';
 import { useDispatch } from 'react-redux';
 import { setCategoriesFromRedux, setProductsFromRedux, setAuthorsFromRedux } from './store/slice/ProductSlice';
 import React, { useEffect } from 'react';
+import images from './assets/images/image';
 
 // Third party
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import ScrollToTopButton from './utils/ScrollToTopButton';
 import ScrollToTop from './utils/ScrollToTop';
 import Loading from './components/ui/Loading';
+import Cookies from "js-cookie";
 
 import { Toaster } from 'react-hot-toast';
 
@@ -25,12 +27,19 @@ function App() {
   const {data: categoriesData, error: categoriesError, isLoading: categoriesLoading} = useSWR('/api/products/categories/', fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
   const {data: authorsData, error: authorsError, isLoading: authorsLoading} = useSWR('/api/products/authors', fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
   const dispatch = useDispatch();
+
+  const isLoggedInStr = Cookies.get('isLoggedIn');
+  if(!isLoggedInStr) {
+      Cookies.set('isLoggedIn', false.toString());
+      // Xử lý khi chưa đăng nhập
+  }
   
   useEffect(() => {
     if(productsData && categoriesData && authorsData){
       dispatch(setProductsFromRedux(productsData));
       dispatch(setCategoriesFromRedux(categoriesData));
       dispatch(setAuthorsFromRedux(authorsData));
+      Cookies.set('blogs')
     }
   }, [productsData, categoriesData, authorsData, dispatch]);
 

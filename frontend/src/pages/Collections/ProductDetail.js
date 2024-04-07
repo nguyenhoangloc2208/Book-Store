@@ -13,6 +13,7 @@ import { numberWithCommas } from "../../utils/utils";
 import { addViewedProduct, selectRandomViewedProducts } from "../../store/slice/ViewedProductsSlice";
 import { AddToCartBtn } from "../../utils/AddToCartBtn";
 import toast from "react-hot-toast";
+import useDataMutation from "../../hooks/useDataMutation";
 
 const ProductDetail = () =>{
     const {slug} = useParams();
@@ -28,6 +29,7 @@ const ProductDetail = () =>{
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const viewedProducts = useSelector(state => selectRandomViewedProducts(state, item));
+    const {updateData} = useDataMutation();
 
     useEffect(() => {
         dispatch(addViewedProduct({ item: item }));
@@ -49,6 +51,7 @@ const ProductDetail = () =>{
 
     const handleAddToCart = async () => {
         await AddToCartBtn(item, orderId ? orderId : null, dispatch);
+        updateData();
     }
 
     const handleAuthorClick = () => {

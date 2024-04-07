@@ -56,6 +56,7 @@ class Product(models.Model):
     count_in_stock = models.IntegerField(validators=[MinValueValidator(0)])
     image = models.ManyToManyField('ProductImage', blank=True, related_name='product_image')
     available = models.BooleanField()
+    sold_count = models.IntegerField(default=0)
     slug = models.SlugField(max_length=100, unique=True, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -1,14 +1,18 @@
 $btn : #ffcb65;
-$layout: #F0BF5F;
+$layout-hover: #F0BF5F;
+$layout: #ffcb65;
 $price: #d51c24;
 
 body {
     margin: 0;
     padding: 0;
-    font-family: "Libre Baskerville", serif !important;
-// padding-top: 61px;
-box-sizing: border-box;
-transition: all 0.3s;
+    font-family: serif, "Libre Baskerville"!important;
+    font-style: normal;
+    font-weight: 400;
+    // padding-top: 61px;
+    box-sizing: border-box;
+    letter-spacing: 0.06rem;
+    transition: all 0.3s;
 ul{
     margin: 0;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import '../../assets/styles/Profile.scss';
 import useSWR, { mutate } from "swr";
 import api from '../../services/api';
@@ -33,7 +33,7 @@ const Profile = () =>{
                     {tab === 0 &&  <div className="profile">
                         <div className="avatar-container">
                             <div className="circle">
-                                {data.profile.avatar ?
+                                {data.profile && data.profile.avatar ?
                                     <img src={data.profile.avatar} alt="avatar"/>
                                     :
                                     <img src="https://i.pravatar.cc/300" alt="avatar" />

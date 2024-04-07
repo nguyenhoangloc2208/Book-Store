@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-function useEmailValidation() {
+const useEmailValidation = () => {
+  const [email, setEmail] = useState('');
   const [isValidEmail, setIsValid] = useState(false);
 
-  const validateEmail = (email) => {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setIsValid(pattern.test(email));
+  const validateEmail = (input) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    setIsValid(emailRegex.test(input));
+    setEmail(input);
   };
 
-  return [validateEmail, isValidEmail];
-}
+  return { email, isValidEmail, validateEmail };
+};
 
 export default useEmailValidation;

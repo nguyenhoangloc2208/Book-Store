@@ -8,6 +8,12 @@
     transform: translateY(-150%);
     transition: transform 0.6s ease;
 }
+.navbar-containerr{
+    position: relative;
+    .overlay-container{
+        width: 100%;
+    }
+}
 
 .navbar-container{
     padding: 10px 14%;
@@ -17,7 +23,7 @@
     background-color: #fff;
     border-bottom: 1px solid rgba(#757575, 0.5);
     padding-bottom: 20px;
-    margin-bottom:60px;
+    margin-bottom:40px;
     div{
         div:nth-child(2){
             display: flex;

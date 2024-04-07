@@ -21,3 +21,12 @@ def product_image_path(instance, filename):
 def author_image_path(instance, filename):
     return f"products/author/{custom_slugify(instance.name)}/{filename}"
 
+def blogs_image_path(instance, filename):
+    cleaned_title = ''.join(c for c in instance.post.title if c.isalnum() or c in ['-', '_', ' '])
+    shortened_title = cleaned_title[:50]
+    return f"blogs/{custom_slugify(shortened_title)}/{filename}"
+
+def blogs_post_image_path(instance, filename):
+    cleaned_title = ''.join(c for c in instance.title if c.isalnum() or c in ['-', '_', ' '])
+    shortened_title = cleaned_title[:50]
+    return f"blogs/{custom_slugify(shortened_title)}/{filename}"
