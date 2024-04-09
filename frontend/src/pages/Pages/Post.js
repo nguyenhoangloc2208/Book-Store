@@ -4,6 +4,7 @@ import '../../assets/styles/Pages.scss';
 import api from '../../services/api';
 import Loading from "../../components/ui/Loading";
 import {useParams} from "react-router-dom";
+import { replaceLinksAndSplitLines } from "../../utils/utils";
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res);
 
@@ -21,12 +22,13 @@ const Post = () => {
         {console.log('content',data.content)}
         {data.content.map((item, index) => (
             <>
-                <p className="content">{item.paragraph.split('\r\n').map((line, index) => (
-                    <React.Fragment key={index}>
-                        {line}
-                        <br />
-                    </React.Fragment>
-                ))}
+                <p className="blog-content-paragraph">
+                    {replaceLinksAndSplitLines(item.paragraph).map((part, index) => (
+                        <React.Fragment key={index}>
+                            {part}
+                            <br />
+                        </React.Fragment>
+                    ))}
                 </p>
                 {item.image && 
                 <>

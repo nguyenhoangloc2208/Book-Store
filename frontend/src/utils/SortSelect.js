@@ -180,7 +180,9 @@ const SortSelect = ({ value, setValue, data, setData, _data }) => {
                         <option value="7">Date, old to new</option>
                     </select>
                     <div className='value'>
-                        <span>{data.length} products</span>
+                        {data && data.length &&
+                            <span>{data.length} products</span>
+                        }
                     </div>
                 </div>
             </div>

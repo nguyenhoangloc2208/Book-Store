@@ -14,21 +14,28 @@ import { addViewedProduct, selectRandomViewedProducts } from "../../store/slice/
 import { AddToCartBtn } from "../../utils/AddToCartBtn";
 import toast from "react-hot-toast";
 import useDataMutation from "../../hooks/useDataMutation";
+import useSWR from 'swr';
+import api from '../../services/api';
+import Loading from "../../components/ui/Loading";
+
+const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results[0]);
+const _fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results);
 
 const ProductDetail = () =>{
     const {slug} = useParams();
-    const item = useSelector(state => selectProductBySlug(state, slug));
-    const authorBook = useSelector(state => selectProductByAuthor(state, item.author));
-    const author = useSelector(state => selectAuthorByName(state, item.author));
-    const categoryBook = useSelector(state => selectProductByCategory(state, item.category));
-    const shuffledCategoryBook = item ? [...categoryBook.filter(product => product.id !== item.id)].sort(() => Math.random() - 0.5) : [];
+    const {data: item, error: itemError, isLoading: itemLoading} = useSWR(`/api/products/product_slug/${slug}/`, fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+    const {data: author, error: authorError, isLoading: authorLoading} = useSWR(item ? `/api/products/author_by_author_name/${item.author}/` : null, fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+    const {data: authorBook, error: authorBookError, isLoading: authorBookLoading} = useSWR(author ? `/api/products/product_by_author_slug/${author.slug}/` : null, _fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+    const {data: categoryBook, error: categoryBookError, isLoading: categoryBookLoading} = useSWR(item ? `/api/products/product_by_category_name/${item.category}/` : null, _fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+    console.log('item', item);
+    const shuffledCategoryBook = item && categoryBook ? [...categoryBook.filter(product => product.id !== item?.id)].sort(() => Math.random() - 0.5) : [];
     const [quantity, setQuantity] = useState(1);
     const [isComment, setIsComment] = useState(false);
     const orderId = useSelector(state => state.order.idPending);
     const [thumbsSwiper, setThumbsSwiper] = useState();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const viewedProducts = useSelector(state => selectRandomViewedProducts(state, item));
+    const viewedProducts = useSelector(state => selectRandomViewedProducts(state, item ? item : null));
     const {updateData} = useDataMutation();
 
     useEffect(() => {
@@ -61,6 +68,13 @@ const ProductDetail = () =>{
             toast.error('Error!');
         }
     }
+
+    if (itemError) return <div>Failed to load product data</div>;
+    if (authorError) return <div>Failed to load author data</div>;
+    if (authorBookError) return <div>Failed to load author's books data</div>;
+    if (categoryBookError) return <div>Failed to load category's books data</div>;
+
+    if (itemLoading || authorLoading || authorBookLoading || categoryBookLoading) return <div><Loading/></div>;
 
 
     return(
@@ -177,8 +191,13 @@ const ProductDetail = () =>{
                     <div className="same-author col-md-3">
                         <div className="title">SÁCH CÙNG TÁC GIẢ</div>
                         <div className="rsp-item">
-                            {authorBook && authorBook.length > 0 && authorBook.sort(() => Math.random() - 0.5).slice(0, 5).map((item, index) => (
-                                <RspItem item={item} index={index} key={index} />
+                            {authorBook && authorBook.length > 0 && authorBook.sort(() => Math.random() - 0.5).slice(0, 5).map((_item, index) => (
+                                <>
+                                    {item.name !== _item.name &&
+                                        <RspItem item={_item} index={index} key={index} />
+                                    }
+                                </>
+
                             ))}
                         </div>
                         {authorBook && authorBook.length > 5 && <div className="watch-more">

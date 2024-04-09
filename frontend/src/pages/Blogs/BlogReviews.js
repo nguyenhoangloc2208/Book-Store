@@ -41,11 +41,11 @@ const BlogReview = () =>{
                     }
                     return(
                         <>
-                            <div onClick={() => handleClick(item)} className={`blogs-container ${widthClass}`} key={index}>
+                            <div onClick={() => handleClick(item)} className={`blogs-review-container ${widthClass}`} key={index}>
                                 <div className="image-container">
                                     <img src={item.image_title} alt={item.title}/>
                                 </div>
-                                <div className="blogs-title">{truncateString(item.title, 50)}</div>
+                                <div className="blogs-review-title">{truncateString(item.title, 50)}</div>
                                 <div className="blogs-date">{formatDateTime(item.created_at)}</div>
                                 <p>{item.post_paragraph}</p>
                             </div>

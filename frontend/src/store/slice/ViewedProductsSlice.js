@@ -23,10 +23,12 @@ export const viewedProductsSlice = createSlice({
 export const { addViewedProduct } = viewedProductsSlice.actions;
 
 export const selectRandomViewedProducts = (state, currentItem) => {
-  const viewedProducts = [...(state.viewedProducts.viewedProducts || [])];
-  const filteredProducts = viewedProducts.filter(product => product.id !== currentItem.id);
-  const shuffledProducts = filteredProducts.sort(() => Math.random() - 0.5);
-  return shuffledProducts.slice(0, 10);
+  if(currentItem && currentItem.id){
+    const viewedProducts = [...(state.viewedProducts.viewedProducts || [])];
+    const filteredProducts = viewedProducts.filter(product => product.id !== currentItem.id);
+    const shuffledProducts = filteredProducts.sort(() => Math.random() - 0.5);
+    return shuffledProducts.slice(0, 10);
+  }
 };  
 
 export default viewedProductsSlice.reducer;

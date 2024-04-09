@@ -1,0 +1,65 @@
+@import '../../App.scss';
+
+.section-one{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &-container{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        .section-one-content{
+            width: 49%;
+            background-color: #F5F5F5;
+            flex-direction: row;
+            .image-container{
+                width: 100%;
+                img{
+                    width: 100%;
+                }
+            }
+            &t{
+                padding: 32px 40px;
+                a{
+                    text-decoration: none;
+                    font-size: 16px;
+                    .arrow-right-long{
+                        transition: all 0.3s ease-out;
+                    }
+                    &:hover{
+                        cursor: pointer;
+                        .arrow-right-long{
+                            transform: translateX(4px);
+                        }
+                    }
+                }
+                h3{
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+    .shop-now-button-container{
+        position: relative;
+        height: 45px;
+        width: 135px;
+        margin: 40px;
+        .shop-now-button{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: $btn;
+            border: none;
+            border-radius: 4px;
+            transition: all 0.1s ease-out;
+            &:hover{
+                top: -1px;
+                bottom: -1px;
+                left: -1px;
+                right: -1px;
+            }
+        }
+    }
+}

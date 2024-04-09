@@ -40,8 +40,8 @@ const Profile = () =>{
                                 }
                             </div>
                             <div className="info">
-                                <div>Hoàng Lộc</div>
-                                <div>nguyenhoangloc2208@gmail.com</div>
+                                <div>{data.last_name}&nbsp;{data.first_name}</div>
+                                <div>{data.email}</div>
                             </div>
                         </div>
                         <hr/>

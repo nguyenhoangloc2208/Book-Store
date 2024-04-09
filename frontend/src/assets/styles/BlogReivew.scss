@@ -41,7 +41,7 @@
     display: flex;
     flex-wrap: wrap;
 }
-.blogs-container{
+.blogs-review-container{
     
     &:hover{
         cursor: pointer;
@@ -51,7 +51,7 @@
                 transform: scale(1.02);
             }
         }
-        .blogs-title{
+        .blogs-review-title{
             text-decoration: underline;
         }
     }

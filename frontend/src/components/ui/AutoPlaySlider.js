@@ -7,7 +7,6 @@ import '../../assets/styles/SliderCard.scss';
 const AutoPlaySlider = ({item}) => {
     let sliderRef = useRef(null);
 
-
     const next = () => {
         sliderRef.slickNext();
     };

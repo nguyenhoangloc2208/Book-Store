@@ -40,8 +40,8 @@ const AppRouter = () =>{
             <Routes basename='/'>
                 <Route path='/' element={<Home />} exact/>
                 <Route path='/collections/' element={<Collections />} />
-                <Route path='/collections/all' element={<AllProduct />} />
-                <Route path='/collections/:slug' element={<CategoryDetail />} />
+                <Route path='/collections/all' element={<AllProductPage />} />
+                {/* <Route path='/collections/:slug' element={<CategoryDetailPage />} /> */}
                 <Route path='/products/:slug' element={<ProductDetail />} />
                 <Route path='/account/login' element={<Login />} />
                 <Route path='/account/register' element={<Register />} />
@@ -68,5 +68,20 @@ const AppRouter = () =>{
         </>
     )
 }
+
+const AllProductPage = () => {
+    const params = new URLSearchParams(window.location.search);
+    const page = params.get('page') || '1';
+    const path = page === '1' ? '/collections/all' : `/collections/all?page=${page}`;
+    return <AllProduct currentPage={page} path={path} />;
+}
+
+const CategoryDetailPage = () => {
+    const params = new URLSearchParams(window.location.search);
+    const page = params.get('page') || '1';
+    const path = page === '1' ? `/collections/:slug` : `/collections/:slug?page=${page}`;
+    return <CategoryDetail currentPage={page} path={path} />;
+}
+
 
 export default AppRouter;

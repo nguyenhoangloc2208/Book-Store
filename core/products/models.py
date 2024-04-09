@@ -15,7 +15,8 @@ class ProductCategory(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def save(self, *args, **kwargs):
-        self.slug = custom_slugify(self.name)
+        if not self.slug and self.name:  
+            self.slug = custom_slugify(self.name)
         super().save(*args, **kwargs)
     
     class Meta:
@@ -64,7 +65,7 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         self.slug = custom_slugify(self.name)
         if self.discount_percentage is not None:
-            self.final_price = self.price * (1 - (self.discount_percentage / 100))
+            self.final_price = round(self.price * (1 - (self.discount_percentage / 100)), 2)
         else:
             self.final_price = self.price
         super().save(*args, **kwargs)

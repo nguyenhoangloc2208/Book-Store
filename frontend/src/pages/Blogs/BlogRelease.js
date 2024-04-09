@@ -3,7 +3,7 @@ import api from '../../services/api';
 import useSWR from 'swr';
 import Loading from "../../components/ui/Loading";
 import { formatDateTime } from "../../utils/utils";
-import '../../assets/styles/BlogReivew.scss';
+import '../../assets/styles/BlogRelease.scss';
 import {useNavigate} from 'react-router-dom';
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results);

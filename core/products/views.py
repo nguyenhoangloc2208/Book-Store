@@ -6,7 +6,8 @@ from .serializers import (ProductCategoryReadSerializer,
                           ProductWriteSerializer)
 from .models import Product, ProductCategory, ProductImage, Author
 
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -43,3 +44,72 @@ class ProductViewSet(viewsets.ModelViewSet):
             self.permission_classes = (permissions.AllowAny, )
             
         return super().get_permissions()
+    
+class ProductByAuthorListView(generics.ListAPIView):
+    serializer_class = ProductReadSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self):
+        author_slug = self.kwargs['author_slug']
+        author = get_object_or_404(Author, slug=author_slug)
+        return Product.objects.filter(author=author)
+    
+class ProductSlugListView(generics.ListAPIView):
+    serializer_class = ProductReadSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self):
+        product_slug = self.kwargs['product_slug']
+        product = get_object_or_404(Product, slug=product_slug)
+        return [product]
+
+class ProductByCategoryListView(generics.ListAPIView):
+    serializer_class = ProductReadSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self):
+        category_slug = self.kwargs['category_slug']
+        category = get_object_or_404(ProductCategory, slug=category_slug)
+        return Product.objects.filter(category=category)
+    
+class ProductByCategoryNameListView(generics.ListAPIView):
+    serializer_class = ProductReadSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self):
+        category_name = self.kwargs['category_name']
+        category = get_object_or_404(ProductCategory, name=category_name)
+        return Product.objects.filter(category=category)
+    
+class AllProductsListView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductReadSerializer
+    permission_classes = (permissions.AllowAny, )
+    
+class AllCategoriesListView(generics.ListAPIView):
+    queryset = ProductCategory.objects.all()
+    serializer_class = ProductCategoryReadSerializer
+    permission_classes = (permissions.AllowAny, )
+    
+class AllAuthorsListView(generics.ListAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorReadSerializer
+    permission_classes = (permissions.AllowAny, )
+    
+class AuthorByProductSlugListView(generics.ListAPIView):
+    serializer_class = AuthorReadSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self):
+        product_slug = self.kwargs['product_slug']
+        product = get_object_or_404(Product, slug=product_slug)
+        return Author.objects.filter(name=product.author)
+    
+class AuthorByAuthorNameListView(generics.ListAPIView):
+    serializer_class = AuthorReadSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self):
+        author_name = self.kwargs['author_name']
+        author = get_object_or_404(Author, name=author_name)
+        return [author]

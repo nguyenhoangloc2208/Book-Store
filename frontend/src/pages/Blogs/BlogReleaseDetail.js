@@ -1,9 +1,9 @@
 import React from "react";
-import {useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import api from '../../services/api';
 import useSWR from 'swr';
 import Loading from "../../components/ui/Loading";
-import { formatDateTime } from "../../utils/utils";
+import { formatDateTime, replaceLinksAndSplitLines } from "../../utils/utils";
 import '../../assets/styles/BlogReleaseDetail.scss';
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res);
@@ -23,18 +23,27 @@ const BlogReleaseDetail = () => {
                 <div className="blog-date">{formatDateTime(data.created_at)}</div>
                 {data && data.content && data.content.map((item, index) => (
                     <div className="blog-content">
-                        {item.content_title && <h2 className="blog-content-title">{item.content_title}</h2>}
+                        {item.content_title && <h2 className="blog-content-title">
+                        {replaceLinksAndSplitLines(item.content_title).map((part, index) => (
+                                    <React.Fragment key={index}>
+                                        {part}
+                                        <br />
+                                    </React.Fragment>
+                                ))}
+                            </h2>}
                         {item.image && <img className="blog-content-image" src={item.image} alt={item.image_alt}/>}
-                        <p className="blog-content-paragraph">{item.paragraph.split('\r\n').map((line, index) => (
-                            <React.Fragment key={index}>
-                                {line}
-                                <br />
-                            </React.Fragment>
-                        ))}
-                        </p>
+                        <p className="blog-content-paragraph">
+                                {replaceLinksAndSplitLines(item.paragraph).map((part, index) => (
+                                    <React.Fragment key={index}>
+                                        {part}
+                                        <br />
+                                    </React.Fragment>
+                                ))}
+                            </p>
                     </div>
                 ))}
             </section>
+            <Link className="back" to={'/blogs/tong-hop-tin-phat-hanh'}><i className="fa-solid fa-arrow-left-long arrow-left-long"></i>&nbsp;Back to blog</Link>
         </>
     )
 }

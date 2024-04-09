@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import serializers, status
 from django.contrib.auth import get_user_model, authenticate
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from phonenumber_field.serializerfields import PhoneNumberField
@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from .exceptions import (AccountDisabledException, AccountNotRegisteredException, InvalidCredentialsException)
 from .models import PhoneNumber, Address, Profile
 from django_countries.serializers import CountryFieldMixin
+from rest_framework.response import Response
 
 User = get_user_model()
 
@@ -65,7 +66,7 @@ class UserRegistrationSerializer(RegisterSerializer):
 
     def custom_signup(self, request, user):
         self.create_extra(user, self.get_cleaned_data_extra())
-        
+    
 class PhoneNumberSerializer(serializers.ModelSerializer):
     """
     Serializer class to serialize phone number.

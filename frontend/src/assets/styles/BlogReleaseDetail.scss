@@ -28,3 +28,16 @@
         }
     }
 }
+.back{
+    margin: 0 auto;
+    text-decoration: none;
+    .arrow-left-long{
+        transition: all 0.3s ease-out;
+    }
+    &:hover{
+        cursor: pointer;
+        .arrow-left-long{
+            transform: translateX(-4px);
+        }
+    }
+}
