@@ -11,8 +11,6 @@ import ProductDetail from "../pages/Collections/ProductDetail";
 import Profile from "../pages/Profile/Profile";
 import Checkout from "../pages/Cart/Checkout";
 // import Payment from "../components/Payment";
-
-
 import { REACT_APP_STRIPE_KEY } from "../config/config";
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from "@stripe/stripe-js/pure"
@@ -29,8 +27,25 @@ import BlogRelease from "../pages/Blogs/BlogRelease";
 import BlogReleaseDetail from "../pages/Blogs/BlogReleaseDetail";
 import BlogReviewDetail from "../pages/Blogs/BlogReviewDetail";
 import BlogReview from "../pages/Blogs/BlogReviews";
+import ForgotPassWord from "../components/Account/ForgotPassword";
 const stripe_key = REACT_APP_STRIPE_KEY
 const stripePromise = loadStripe(stripe_key)
+
+
+const createDynamicPage = (Component, baseUrl) => {
+    return () => {
+        const params = new URLSearchParams(window.location.search);
+        const page = params.get('page') || '1';
+        const path = page === '1' ? baseUrl : `${baseUrl}?page=${page}`;
+        return <Component currentPage={page} path={path} />;
+    }
+}
+
+const AllProductPage = createDynamicPage(AllProduct, '/collections/all');
+const CategoryDetailPage = createDynamicPage(CategoryDetail, '/collections/:slug');
+const AuthorPage = createDynamicPage(Author, '/collections/author/:slug');
+const BlogReleasePage = createDynamicPage(BlogRelease, `/blogs/tong-hop-tin-phat-hanh`);
+const BlogReviewPage = createDynamicPage(BlogReview, `/blogs/reviews`);
 
 
 const AppRouter = () =>{
@@ -40,10 +55,13 @@ const AppRouter = () =>{
             <Routes basename='/'>
                 <Route path='/' element={<Home />} exact/>
                 <Route path='/collections/' element={<Collections />} />
-                <Route path='/collections/all' element={<AllProductPage />} />
-                {/* <Route path='/collections/:slug' element={<CategoryDetailPage />} /> */}
+                <Route path='/collections/all' element={<AllProductPage/>} />                
+                <Route path='/collections/:slug' element={<CategoryDetailPage />} />
+                <Route path='/collections/author/:slug' element={<AuthorPage />} />
                 <Route path='/products/:slug' element={<ProductDetail />} />
                 <Route path='/account/login' element={<Login />} />
+                <Route path='/account/forgot-password' element={<ForgotPassWord />} />
+                <Route path='/account/change-password' element={<Login />} />
                 <Route path='/account/register' element={<Register />} />
                 <Route path='/account/register/verification/:email' element={<VerificationEmail />} />
                 <Route path='/account' element={<Profile/>}/>
@@ -56,31 +74,16 @@ const AppRouter = () =>{
                 <Route path='/loading' element={<Loading />} />
                 <Route path='/payment/success' element={<PaymentSuccess />} />
                 <Route path='/payment/cancel' element={<PaymentSuccess />} />
-                <Route path='/collections/author/:slug' element={<Author />} />
                 <Route path='/search' element={<SearchResult />} />
                 <Route path='/account/email/confirm/:key/' element={<ConfirmEmail />} />
-                <Route path='/blogs/tong-hop-tin-phat-hanh' element={<BlogRelease />} />
-                <Route path='/blogs/reviews' element={<BlogReview />} />
+                <Route path='/blogs/tong-hop-tin-phat-hanh' element={<BlogReleasePage />} />
+                <Route path='/blogs/reviews' element={<BlogReviewPage />} />
                 <Route path='/blogs/tong-hop-tin-phat-hanh/:slug' element={<BlogReleaseDetail />} />
                 <Route path='/blogs/reviews/:slug' element={<BlogReviewDetail />} />
             </Routes>
         </Elements>
         </>
     )
-}
-
-const AllProductPage = () => {
-    const params = new URLSearchParams(window.location.search);
-    const page = params.get('page') || '1';
-    const path = page === '1' ? '/collections/all' : `/collections/all?page=${page}`;
-    return <AllProduct currentPage={page} path={path} />;
-}
-
-const CategoryDetailPage = () => {
-    const params = new URLSearchParams(window.location.search);
-    const page = params.get('page') || '1';
-    const path = page === '1' ? `/collections/:slug` : `/collections/:slug?page=${page}`;
-    return <CategoryDetail currentPage={page} path={path} />;
 }
 
 

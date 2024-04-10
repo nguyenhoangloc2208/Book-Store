@@ -6,7 +6,7 @@ import { toast }  from 'react-hot-toast';
 const ConfirmEmail = () => {
     const navigate = useNavigate();
     const { key } = useParams();
-    const [isConfirm, setConfirm] = useState(false);
+    const [isConfirm, setConfirm] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {

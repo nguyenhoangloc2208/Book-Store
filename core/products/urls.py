@@ -12,7 +12,9 @@ from .views import (ProductCategoryViewSet,
                     ProductSlugListView,
                     AuthorByProductSlugListView,
                     AuthorByAuthorNameListView,
-                    ProductByCategoryNameListView)
+                    ProductByCategoryNameListView,
+                    ProductCategorySlugListView,
+                    AuthorSlugListView)
 
 app_name = 'products'
 
@@ -28,6 +30,8 @@ urlpatterns = [
 urlpatterns += [
     path('product_by_author_slug/<str:author_slug>/', ProductByAuthorListView.as_view(), name='product-by-author-slug'),
     path('product_slug/<str:product_slug>/', ProductSlugListView.as_view(), name='product-slug'),
+    path('author_slug/<str:author_slug>/', AuthorSlugListView.as_view(), name='author-slug'),
+    path('productcategory_slug/<str:category_slug>/', ProductCategorySlugListView.as_view(), name='productcategory-slug'),
     path('author_by_product_slug/<str:product_slug>/', AuthorByProductSlugListView.as_view(), name='author-by-product-slug'),
     path('author_by_author_name/<str:author_name>/', AuthorByAuthorNameListView.as_view(), name='author-by-author-name'),
     path('product_by_category_slug/<str:category_slug>/', ProductByCategoryListView.as_view(), name='product-by-category-slug'),

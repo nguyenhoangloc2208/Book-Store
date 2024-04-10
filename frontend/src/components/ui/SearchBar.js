@@ -79,16 +79,16 @@ const SearchBar = ({query}) => {
         <>
             <form className="search-container">
                 <div className="form-floating input">
-                <input type="text" className="form-control" id="Search" placeholder="Search" value={inputText} 
-                onChange={(e) => handleSearch(e)} 
-                onKeyDown={handleKeyDown}
-                onFocus={handleInputFocus}
-                onBlur={handleInputBlur}/>
-                <label htmlFor="search">Search</label>
-                <button type="button" onClick={() => handleSearchClick()} >
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </div>
+                    <input type="text" className="form-control" id="Search" placeholder="Search" value={inputText} 
+                    onChange={(e) => handleSearch(e)} 
+                    onKeyDown={handleKeyDown}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}/>
+                    <label htmlFor="search">Search</label>
+                    <button type="button" onClick={() => handleSearchClick()} >
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
             {/* Sử dụng isSearching để kiểm tra và hiển thị ul */}
             {isInputFocused&&  isSearching && randomProducts && 
             <div className="search-list-container">

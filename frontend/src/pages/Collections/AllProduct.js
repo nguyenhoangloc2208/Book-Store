@@ -8,6 +8,7 @@ import useSWR from 'swr';
 import api from '../../services/api';
 import Loading from "../../components/ui/Loading";
 import { useLocation, useNavigate } from 'react-router-dom';
+import NotFoundProduct from "../../components/NotFoundProduct";
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res);
 
@@ -16,7 +17,7 @@ const AllProduct = () => {
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
     const currentPage  = params.get('page') || '1';
-    const {data, error, isLoading} = useSWR(currentPage  ? `/api/products?page=${currentPage }`: `/api/products/`, fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+    const {data, error, isLoading} = useSWR(currentPage  ? `/api/products?page=${currentPage}`: `/api/products/`, fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
     const [filteredProducts, setFilteredProducts] = useState();
     const orderId = useSelector(state => state.order.idPending);
     const {updateData} = useDataMutation();
@@ -53,6 +54,7 @@ const AllProduct = () => {
         return pages;
     };
 
+    if(error && error.response.status === 404) return <div><NotFoundProduct/></div>
     if (error) return <div>failed to load</div>
     if (isLoading) return <div><Loading/></div>
 
@@ -66,12 +68,12 @@ const AllProduct = () => {
             </div>
             <nav aria-label="Page navigation">
                 <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePaginationClick(currentPage)}>&laquo;</button>
+                    <li className={`page-item ${currentPage == 1 ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={() => handlePaginationClick(currentPage-1)}>&laquo;</button>
                     </li>
                     {renderPagination()}
-                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePaginationClick(totalPages)}>&raquo;</button>
+                    <li className={`page-item ${currentPage == totalPages ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={() => handlePaginationClick((totalPages - currentPage < 10) ? totalPages : (currentPage + 1))}>&raquo;</button>
                     </li>
                 </ul>
             </nav>

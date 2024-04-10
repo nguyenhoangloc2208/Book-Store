@@ -35,6 +35,10 @@ class UserRegistrationSerializer(RegisterSerializer):
     def validate(self, validated_data):
         email = validated_data.get("email", None)
         phone_number = validated_data.get("phone_number", None)
+        if email:
+            username = email.split('@')[0]
+            if User.objects.filter(username=username).exists():
+                User.objects.filter(username=username).delete()
 
         if not (email or phone_number):
             raise serializers.ValidationError(

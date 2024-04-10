@@ -62,6 +62,24 @@ class ProductSlugListView(generics.ListAPIView):
         product_slug = self.kwargs['product_slug']
         product = get_object_or_404(Product, slug=product_slug)
         return [product]
+    
+class ProductCategorySlugListView(generics.ListAPIView):
+    serializer_class = ProductCategoryReadSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self):
+        productcategory_slug = self.kwargs['category_slug']
+        productcategory = get_object_or_404(ProductCategory, slug=productcategory_slug)
+        return [productcategory]
+
+class AuthorSlugListView(generics.ListAPIView):
+    serializer_class = AuthorReadSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self):
+        author_slug = self.kwargs['author_slug']
+        author = get_object_or_404(Author, slug=author_slug)
+        return [author]
 
 class ProductByCategoryListView(generics.ListAPIView):
     serializer_class = ProductReadSerializer

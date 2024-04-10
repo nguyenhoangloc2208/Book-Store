@@ -12,6 +12,9 @@
     .blogs-title{
         font-size: 24px;
     }
+    .blogs-paragraph{
+        line-height: 28px;
+    }
     &:hover{
         cursor: pointer;
         .image-container{
@@ -42,5 +45,4 @@
             transition: 0.3s ease-in-out;
         }
     }
-    
 }

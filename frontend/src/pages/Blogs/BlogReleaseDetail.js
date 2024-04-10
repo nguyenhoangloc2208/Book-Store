@@ -23,14 +23,15 @@ const BlogReleaseDetail = () => {
                 <div className="blog-date">{formatDateTime(data.created_at)}</div>
                 {data && data.content && data.content.map((item, index) => (
                     <div className="blog-content">
-                        {item.content_title && <h2 className="blog-content-title">
-                        {replaceLinksAndSplitLines(item.content_title).map((part, index) => (
-                                    <React.Fragment key={index}>
-                                        {part}
-                                        <br />
-                                    </React.Fragment>
-                                ))}
-                            </h2>}
+                        {item.content_title && 
+                        <h2 className="blog-content-title">
+                            {replaceLinksAndSplitLines(item.content_title).map((part, index) => (
+                                <React.Fragment key={index}>
+                                    {part}
+                                    <br />
+                                </React.Fragment>
+                            ))}
+                        </h2>}
                         {item.image && <img className="blog-content-image" src={item.image} alt={item.image_alt}/>}
                         <p className="blog-content-paragraph">
                                 {replaceLinksAndSplitLines(item.paragraph).map((part, index) => (

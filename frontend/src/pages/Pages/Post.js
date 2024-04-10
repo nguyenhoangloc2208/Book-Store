@@ -19,7 +19,6 @@ const Post = () => {
     return (
     <section className="pages-container">
         <h2>{data.title}</h2>
-        {console.log('content',data.content)}
         {data.content.map((item, index) => (
             <>
                 <p className="blog-content-paragraph">
@@ -31,10 +30,10 @@ const Post = () => {
                     ))}
                 </p>
                 {item.image && 
-                <>
+                <div className="image-container">
                     <img src={item.image} alt={item.image_alt} width={!item.image_alt && 150}/>
                     <div>{item.image_alt}</div>
-                </>
+                </div>
                 }
             </>
         ))}

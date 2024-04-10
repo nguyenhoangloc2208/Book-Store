@@ -4,8 +4,6 @@ from dj_rest_auth.views import LoginView
 from .serializers import (UserRegistrationSerializer, 
                           PhoneNumberSerializer, 
                           UserLoginSerializer, 
-                          ShippingAddressSerializer, 
-                          BillingAddressSerializer, 
                           AddressSerializer,
                           UserSerializer,
                           ProfileSerializer)
@@ -17,7 +15,6 @@ from rest_framework.generics import (GenericAPIView, RetrieveAPIView, RetrieveUp
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from .models import Profile, Address
-from rest_framework.views import APIView
 
 User = get_user_model()
 

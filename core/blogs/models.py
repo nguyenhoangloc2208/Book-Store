@@ -35,7 +35,7 @@ class Post(models.Model):
 
 class Content(models.Model):
     post = models.ForeignKey(Post, related_name='content', on_delete=models.CASCADE)
-    paragraph = models.TextField()
+    paragraph = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to=blogs_image_path, null=True, blank=True)
     image_number = models.IntegerField(default=0)  # Số thứ tự của hình ảnh
     image_alt = models.CharField(max_length=100, blank=True)  # Alt của hình ảnh

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { selectAuthorByName, selectProductByAuthor, selectProductByCategory, selectProductBySlug } from "../../store/slice/ProductSlice";
+import { useNavigate, useParams } from "react-router-dom";
 import '../../assets/styles/ProductDetail.scss';
 import RspItem from "../../components/ui/RspItem";
 import { Swiper, SwiperSlide } from 'swiper/react';

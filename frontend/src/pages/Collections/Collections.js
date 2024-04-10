@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import '../../assets/styles/Collections.scss';
 import CollectionsCard from "../../components/ui/CollectionsCard";
-import { useSelector } from "react-redux";
+
+import useSWR from 'swr';
+import api from '../../services/api';
+import Loading from "../../components/ui/Loading";
+
+const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results);
 
 const Collections = () =>{
-    const categories = useSelector(state => state.products.categories);
+    const {data: categories, error, isLoading} = useSWR(`/api/products/categories/`, fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+
+    if (error) return <div>failed to load</div>
+    if (isLoading) return <div><Loading/></div>
 
     return(
         <section className="collections-container">

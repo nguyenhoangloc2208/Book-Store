@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.pagination import PageNumberPagination
 from .models import Post, Content
 
 class ContentSerializer(serializers.ModelSerializer):
@@ -13,3 +14,5 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = "__all__"
 
+class MyPagination(PageNumberPagination):
+    page_size = 6

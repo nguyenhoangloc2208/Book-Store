@@ -64,6 +64,34 @@ const resendEmail = (email) => {
   })
 }
 
+const forgotPassword = (email) => {
+  return api.post("/password/reset/",
+  {
+    email: email,
+  }
+  )
+}
+
+const confirmPassword = (password, uid, token) => {
+  return api.post("/password/reset/confirm/",
+  {
+    "new_password1": password,
+    "new_password2": password,
+    "uid": uid,
+    "token": token
+  }
+  )
+}
+
+const changePassword = (password) => {
+  return api.post("/password/change/",
+  {
+    "new_password1": password,
+    "new_password2": password,
+  }
+  )
+}
+
 const login = (email, password) => {
   return api
     .post("/api/user/login/", {
@@ -117,6 +145,9 @@ const AuthService = {
   verifyToken,
   confirmEmail,
   resendEmail,
+  forgotPassword,
+  changePassword,
+  confirmPassword
 };
 
 export default AuthService;
