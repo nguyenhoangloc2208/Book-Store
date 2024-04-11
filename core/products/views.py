@@ -131,3 +131,7 @@ class AuthorByAuthorNameListView(generics.ListAPIView):
         author_name = self.kwargs['author_name']
         author = get_object_or_404(Author, name=author_name)
         return [author]
+    
+class BestSellerProductListView(generics.ListAPIView):
+    queryset = Product.objects.filter(available=True).order_by('-sold_count')
+    serializer_class = ProductReadSerializer

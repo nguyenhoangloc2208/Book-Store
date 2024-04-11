@@ -20,7 +20,6 @@ const ExchangeRate = 0.000040;
 
 
 const Cart = () =>{
-    // const {data, error, isLoading} = useSWR('/api/user/orders/pending_order', fetcher, {refreshInterval: null, revalidateOnFocus: false});
     const {data, error, isLoading, updateData} = useDataMutation();
     const [totalCostUSD, setTotalCostUSD] = useState();
     const cartItems = useSelector(state => selectProductById(state, data?.order_items));
@@ -114,6 +113,7 @@ const Cart = () =>{
                 <EmptyCart/>
                 : 
                 <section>
+                    {console.log(data)}
                     <ul class="responsive-table">
                         <li class="table-header">
                         <div class="col col-1">Product</div>

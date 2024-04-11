@@ -28,6 +28,8 @@ import BlogReleaseDetail from "../pages/Blogs/BlogReleaseDetail";
 import BlogReviewDetail from "../pages/Blogs/BlogReviewDetail";
 import BlogReview from "../pages/Blogs/BlogReviews";
 import ForgotPassWord from "../components/Account/ForgotPassword";
+import ResetPassword from "../components/Account/ResetPassword";
+import ChangePassword from "../components/Account/ChangePassword";
 const stripe_key = REACT_APP_STRIPE_KEY
 const stripePromise = loadStripe(stripe_key)
 
@@ -61,9 +63,10 @@ const AppRouter = () =>{
                 <Route path='/products/:slug' element={<ProductDetail />} />
                 <Route path='/account/login' element={<Login />} />
                 <Route path='/account/forgot-password' element={<ForgotPassWord />} />
-                <Route path='/account/change-password' element={<Login />} />
+                <Route path='/account/change-password' element={<ChangePassword />} />
                 <Route path='/account/register' element={<Register />} />
                 <Route path='/account/register/verification/:email' element={<VerificationEmail />} />
+                <Route path='/account/password-reset/confirm/:uid/:token/' element={<ResetPassword />} />
                 <Route path='/account' element={<Profile/>}/>
                 <Route path='/pages/:slug' element={<Post/>}/>
                 <Route path='/cart' element={<Cart/>}/>

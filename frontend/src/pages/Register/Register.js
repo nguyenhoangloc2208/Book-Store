@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '../../assets/styles/Register.scss';
+import '../../assets/styles/Login.scss';
 import useEmailValidation from "../../hooks/useEmailValidation";
 import { Helmet } from "react-helmet";
 import usePhoneNumberValidation from "../../hooks/usePhoneNumberValidation";
@@ -19,11 +19,18 @@ const Register = () =>{
     const [isSubmit, setIsSubmit] = useState(false);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const [isShowPassword, setShowPassword] = useState(false);
+    const [isPasswordNull, setPasswordNull] = useState(false);
 
 
     const handleRegisterAccount = async () =>{
         setIsLoading(true);
         setIsSubmit(true);
+        if(password.length === 0 ){
+            setPasswordNull(true);
+            setIsLoading(false);
+            return
+        }
         if(!isValidEmail){
             setPasswordValidation(false);
         }
@@ -58,7 +65,7 @@ const Register = () =>{
         <Helmet>
             <title>{TITLE}</title>
         </Helmet>
-        <section className="register-container">
+        <section className="login-container">
             <div>
                 <h1>Create account</h1>
                 <div className={isSubmit && (!isValidEmail || !isValidPhoneNumber) ? `validation` : `d-none`}>
@@ -77,8 +84,11 @@ const Register = () =>{
                     <input type="email" placeholder="Email" value={email} onChange={(e) => validateEmail(e.target.value) }/>
                 </div>
                 <div className="input-container">
-                    <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                    <input type={isShowPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                    <span><i className={isShowPassword === false ? "fa-solid fa-eye-slash": "fa-solid fa-eye"}
+                                onClick={()=>setShowPassword(!isShowPassword)}></i></span>
                 </div>
+                    {isPasswordNull && <div className="login-warning"><i class="fa-solid fa-circle-exclamation"></i>Password can't be blank.</div>}
                 {/* <div className="input-container">
                     <input type="phonenumber" placeholder="Phone number" value={phoneNumber} onChange={handleInputPhoneNumberChange}/>
                 </div> */}

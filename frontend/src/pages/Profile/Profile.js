@@ -5,6 +5,7 @@ import api from '../../services/api';
 import OrderHistory from "./OrderHistory";
 import AddressContainer from "../../components/ui/AddressContainer";
 import Loading from "../../components/ui/Loading";
+import Account from "./Account";
 
 const fetcher = (url) => api.get(url).then(res => res);
 const fetcherAddress = (url) => api.get(url).then(res => res.results);
@@ -51,6 +52,8 @@ const Profile = () =>{
                     </div>}
                     {tab === 1 &&
                     <OrderHistory/>}
+                    {tab === 2 &&
+                    <Account/>}
                 </div>
             </div>
         </>

@@ -6,9 +6,9 @@ import { Helmet } from "react-helmet";
 import Loading from "../ui/Loading";
 import {toast } from "react-hot-toast";
 
-const TITLE = 'Change Your Password Page';
+const TITLE = 'Reset Your Password Page';
 
-const ChangePassword = () =>{
+const ResetPassword = () =>{
     const {uid, token} = useParams();
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
@@ -38,7 +38,7 @@ const ChangePassword = () =>{
             console.log(token);
             setError({data: {}});
             try{
-                const res = await AuthService.changePassword(password2);
+                const res = await AuthService.confirmPassword(password2, uid, token);
                 if (res){
                     toast.success("Success!");
                     setIsError(false);
@@ -64,7 +64,7 @@ const ChangePassword = () =>{
         </Helmet>
             <section className="login-container">
                 <div>
-                    <h2>Change password</h2>
+                    <h2>Reset password</h2>
                     <div className={isError ? `validation` : `d-none`}>
                         <ul><h4><i class="fa-solid fa-circle-exclamation"></i>Please adjust the following:</h4>
                         {error && error.data && Object.values(error.data).map(messages => (
@@ -93,4 +93,4 @@ const ChangePassword = () =>{
     )
 }
 
-export default ChangePassword;
+export default ResetPassword;

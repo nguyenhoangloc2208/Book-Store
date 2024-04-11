@@ -19,7 +19,7 @@
             ul{
                 margin-left: 5%;
                 h4{
-                    font-size: 25px;
+                    font-size: 20px;
                     color:#3f3f3f;
                     font-weight: 550;
                     i{
@@ -48,20 +48,34 @@
                 color: #000;
                 border: 1px #ccc solid;
             }
+            span{
+                position: absolute;
+                right: 15%;
+                border-radius: 50%;
+                text-align: center;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                padding: 4px 2px;
+                cursor: pointer;
+                &:hover{
+                    background-color: rgba(0, 0, 0, 0.1);
+                }
+            }
             .passwordValidation, .emailValidation{
                 border: 1px red solid !important;
                 border-radius: 3px;
                 box-shadow: 0 5px 10px rgba($color: pink, $alpha: 1);
             }
-            .login-warning{
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-start;
-                width: 80%;
-                i{
-                    margin-right: 5px;
-                    color:red;
-                }
+        }
+        .login-warning{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            width: 80%;
+            i{
+                margin-right: 5px;
+                color:red;
             }
         }
         .forgot-password{

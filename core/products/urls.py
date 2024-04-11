@@ -14,7 +14,8 @@ from .views import (ProductCategoryViewSet,
                     AuthorByAuthorNameListView,
                     ProductByCategoryNameListView,
                     ProductCategorySlugListView,
-                    AuthorSlugListView)
+                    AuthorSlugListView,
+                    BestSellerProductListView)
 
 app_name = 'products'
 
@@ -39,4 +40,5 @@ urlpatterns += [
     path('products/all_products/', AllProductsListView.as_view(), name='all-products'),
     path('products/all_authors/', AllAuthorsListView.as_view(), name='all-authors'),
     path('products/all_categories/', AllCategoriesListView.as_view(), name='all-categories'),
+    path('products/best-sellers/', BestSellerProductListView.as_view(), name='best-sellers'),
 ]
