@@ -1,7 +1,9 @@
 import api from './api';
 
 const productsList = () => {
-    return api.get("/api/products/")
+    return api.get("/api/products/",{
+        requiresAuth: false,
+    })
     .then((response) => {
         return response.results
     })
@@ -11,7 +13,9 @@ const productsList = () => {
 }
 
 const categoryList = () => {
-    return api.get(`/api/products/categories`)
+    return api.get(`/api/products/categories`,{
+        requiresAuth: false,
+    })
     .then((response)=>{
         return response.results;
     })
@@ -21,11 +25,18 @@ const categoryList = () => {
 }
 
 const productsRead = (id) => {
-    return api.get(`/api/products/${id}/`)
+    return api.get(`/api/products/${id}/`,{
+        requiresAuth: false,
+    })
+    .catch((error)=>{
+        throw error;
+    })
 }
 
 const categoryRead = (id) => {
-    return api.get(`/api/products/categories/${id}/`)
+    return api.get(`/api/products/categories/${id}/`,{
+        requiresAuth: false,
+    })
 }
 
 const ProductService = {

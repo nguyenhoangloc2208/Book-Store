@@ -24,6 +24,11 @@ section{
 }
 .table-row {
     background-color: #ffffff;
+    border: 1px solid rgba(#000, 0.08);
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
 }
 .col-1 {
     flex-basis: 65%;
@@ -38,22 +43,51 @@ section{
     display: flex;
     width: 100%;
     .product-image{
-        overflow: hidden;
+        // overflow: hidden;
         width: 20%;
         aspect-ratio: 1;
         border: 1px solid rgba(#000, 0.08);
         display: flex;
         justify-content: center;
+        position: relative;
         img{
             width: 80%;
             object-position: center center;
             object-fit: cover;
         }
+        .discount{
+            position:absolute;
+            font-size: 12px;
+            z-index: 2;
+            border-radius: 50%;
+            background-color: rgba(#D51C24, 0.8);
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            top: -10%;
+            right: -5%;
+        }
     }
     .product-content{
         width: 80%;
         padding: 20px;
-        margin-right: 30%;
+        margin-right: 20%;
+        .product-price{
+            font-size: 20px;
+            display: flex;
+            font-weight: 600;
+            color: $price;
+            .vnd{
+                text-decoration: underline;
+            }
+            .price{
+                color: #757575;
+                text-decoration: line-through;
+                margin-left: 20px;
+            }
+        }
     }
 }
 .quantity{

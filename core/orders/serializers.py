@@ -3,6 +3,8 @@ from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
 from orders.models import Order, OrderItem
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from products.serializers import ProductReadSerializer
+from rest_framework.pagination import PageNumberPagination
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -130,3 +132,21 @@ class OrderWriteSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         pass
+    
+class CartItemSerializer(serializers.ModelSerializer):
+    """
+    Serializer class for serializing product information in a cart
+    """
+
+    product = ProductReadSerializer() 
+
+    class Meta:
+        model = OrderItem
+        fields = (
+            "id",
+            "quantity",
+            "product",
+        )
+        
+class MyPagination(PageNumberPagination):
+    page_size = 100

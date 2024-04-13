@@ -17,7 +17,12 @@ const AllProduct = () => {
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
     const currentPage  = params.get('page') || '1';
-    const {data, error, isLoading} = useSWR(currentPage  ? `/api/products?page=${currentPage}`: `/api/products/`, fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+    const [type, setType] = useState(null);
+    const {data, error, isLoading} = useSWR(
+        type ? 
+        (currentPage  ? `/api/products/products/${type}?page=${currentPage}`: `/api/products/products/${type}`) :
+        (currentPage  ? `/api/products/?page=${currentPage}`: `/api/products/`)
+        , fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
     const [filteredProducts, setFilteredProducts] = useState();
     const orderId = useSelector(state => state.order.idPending);
     const {updateData} = useDataMutation();
@@ -60,7 +65,7 @@ const AllProduct = () => {
 
     return(
         <section>
-            <SortSelect value={arrangeType} setValue={setArrangeType} data={filteredProducts} setData={setFilteredProducts} _data={data.results}/>
+            <SortSelect value={arrangeType} setValue={setArrangeType} data={filteredProducts} setData={setFilteredProducts} _data={data.results} setType={setType}/>
             <div className="product-card-container">
                 {filteredProducts && filteredProducts.length > 0 && filteredProducts.map((item, index)=>(
                     <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null} updateData={updateData}/>

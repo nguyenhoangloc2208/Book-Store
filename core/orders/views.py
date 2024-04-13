@@ -1,12 +1,12 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.decorators import action
 from orders.models import Order, OrderItem
 from orders.permissions import (IsOrderByBuyerOrAdmin,
                                 IsOrderItemByBuyerOrAdmin, IsOrderItemPending,
                                 IsOrderPending)
 from orders.serializers import (OrderItemSerializer, OrderReadSerializer,
-                                OrderWriteSerializer)
+                                OrderWriteSerializer, CartItemSerializer, MyPagination)
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 
@@ -19,6 +19,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
     permission_classes = [IsOrderItemByBuyerOrAdmin]
+    pagination_class = MyPagination
 
     def get_queryset(self):
         res = super().get_queryset()
@@ -86,3 +87,21 @@ class OrderViewSet(viewsets.ModelViewSet):
         #     raise NotFound("No pending orders found.")
 
         return Response(serializer.data)
+    
+class CartAPIView(generics.ListAPIView):
+    """
+    API endpoint to retrieve cart information
+    """
+
+    serializer_class = CartItemSerializer
+    pagination_class = MyPagination
+
+    def get_queryset(self):
+        order_id = self.kwargs.get('order_id')
+
+        try:
+            order = Order.objects.get(pk=order_id)
+        except Order.DoesNotExist:
+            return OrderItem.objects.none()
+
+        return order.order_items.all()

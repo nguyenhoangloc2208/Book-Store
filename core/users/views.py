@@ -16,6 +16,8 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from .models import Profile, Address
 
+from django.contrib.auth.models import AnonymousUser
+
 User = get_user_model()
 
 class UserRegisterationAPIView(RegisterView):
@@ -110,10 +112,16 @@ class AddressViewSet(viewsets.ModelViewSet):
     serializer_class = AddressSerializer
     permission_classes = (IsUserAddressOwner,)
 
+    # def get_queryset(self):
+    #     res = super().get_queryset()
+    #     user = self.request.user
+    #     return res.filter(user=user)
+    
     def get_queryset(self):
-        res = super().get_queryset()
         user = self.request.user
-        return res.filter(user=user)
+        if isinstance(user, AnonymousUser):
+            return Address.objects.none()
+        return Address.objects.filter(user=user)
 
     
 def email_confirm_redirect(request, key):

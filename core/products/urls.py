@@ -15,7 +15,27 @@ from .views import (ProductCategoryViewSet,
                     ProductByCategoryNameListView,
                     ProductCategorySlugListView,
                     AuthorSlugListView,
-                    BestSellerProductListView)
+                    SortBestSellingProductListView,
+                    SortDateAscProductListView,
+                    SortDateDescProductListView,
+                    SortNameAscProductListView,
+                    SortNameDescProductListView,
+                    SortPriceAscProductListView,
+                    SortPriceDescProductListView,
+                    SortBestSellingProductByAuthorListView,
+                    SortDateAscProductByAuthorListView,
+                    SortDateDescProductByAuthorListView,
+                    SortNameAscProductByAuthorListView,
+                    SortNameDescProductByAuthorListView,
+                    SortPriceAscProductByAuthorListView,
+                    SortPriceDescProductByAuthorListView,
+                    SortBestSellingProductByCategoryListView,
+                    SortDateAscProductByCategoryListView,
+                    SortDateDescProductByCategoryListView,
+                    SortNameAscProductByCategoryListView,
+                    SortNameDescProductByCategoryListView,
+                    SortPriceAscProductByCategoryListView,
+                    SortPriceDescProductByCategoryListView)
 
 app_name = 'products'
 
@@ -40,5 +60,34 @@ urlpatterns += [
     path('products/all_products/', AllProductsListView.as_view(), name='all-products'),
     path('products/all_authors/', AllAuthorsListView.as_view(), name='all-authors'),
     path('products/all_categories/', AllCategoriesListView.as_view(), name='all-categories'),
-    path('products/best-sellers/', BestSellerProductListView.as_view(), name='best-sellers'),
+]
+
+urlpatterns += [
+    path('products/sort-by-best-selling/', SortBestSellingProductListView.as_view(), name='sort_by_best-selling'),
+    path('products/sort-by-name-asc/', SortNameAscProductListView.as_view(), name='sort_by_name_asc'),
+    path('products/sort-by-name-desc/', SortNameDescProductListView.as_view(), name='sort_by_name_desc'),
+    path('products/sort-by-price-asc/', SortPriceAscProductListView.as_view(), name='sort_by_price_asc'),
+    path('products/sort-by-price-desc/', SortPriceDescProductListView.as_view(), name='sort_by_price_desc'),
+    path('products/sort-by-date-asc/', SortDateAscProductListView.as_view(), name='sort_by_date_asc'),
+    path('products/sort-by-date-desc/', SortDateDescProductListView.as_view(), name='sort_by_date_desc'),
+]
+
+urlpatterns += [
+    path('products_by_author_slug/sort-by-best-selling/<str:author_slug>/', SortBestSellingProductByAuthorListView.as_view(), name='sort_by_best-selling'),
+    path('products_by_author_slug/sort-by-name-asc/<str:author_slug>/', SortNameAscProductByAuthorListView.as_view(), name='sort_by_name_asc'),
+    path('products_by_author_slug/sort-by-name-desc/<str:author_slug>/', SortNameDescProductByAuthorListView.as_view(), name='sort_by_name_desc'),
+    path('products_by_author_slug/sort-by-price-asc/<str:author_slug>/', SortPriceAscProductByAuthorListView.as_view(), name='sort_by_price_asc'),
+    path('products_by_author_slug/sort-by-price-desc/<str:author_slug>/', SortPriceDescProductByAuthorListView.as_view(), name='sort_by_price_desc'),
+    path('products_by_author_slug/sort-by-date-asc/<str:author_slug>/', SortDateAscProductByAuthorListView.as_view(), name='sort_by_date_asc'),
+    path('products_by_author_slug/sort-by-date-desc/<str:author_slug>/', SortDateDescProductByAuthorListView.as_view(), name='sort_by_date_desc'),
+]
+
+urlpatterns += [
+    path('products_by_category_slug/sort-by-best-selling/<str:category_slug>/', SortBestSellingProductByCategoryListView.as_view(), name='sort_by_best-selling_category'),
+    path('products_by_category_slug/sort-by-name-asc/<str:category_slug>/', SortNameAscProductByCategoryListView.as_view(), name='sort_by_name_asc_category'),
+    path('products_by_category_slug/sort-by-name-desc/<str:category_slug>/', SortNameDescProductByCategoryListView.as_view(), name='sort_by_name_desc_category'),
+    path('products_by_category_slug/sort-by-price-asc/<str:category_slug>/', SortPriceAscProductByCategoryListView.as_view(), name='sort_by_price_asc_category'),
+    path('products_by_category_slug/sort-by-price-desc/<str:category_slug>/', SortPriceDescProductByCategoryListView.as_view(), name='sort_by_price_desc_category'),
+    path('products_by_category_slug/sort-by-date-asc/<str:category_slug>/', SortDateAscProductByCategoryListView.as_view(), name='sort_by_date_asc_category'),
+    path('products_by_category_slug/sort-by-date-desc/<str:category_slug>/', SortDateDescProductByCategoryListView.as_view(), name='sort_by_date_desc_category'),
 ]

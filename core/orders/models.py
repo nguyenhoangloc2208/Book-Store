@@ -80,4 +80,4 @@ class OrderItem(models.Model):
         """
         Total cost of the ordered item
         """
-        return round(self.quantity * self.product.price, 2)
+        return round(self.quantity * self.product.final_price, 2)

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EmptyCart from "../../components/ui/EmptyCart";
-import { useSelector } from "react-redux";
 import '../../assets/styles/Cart.scss';
-import { selectProductById } from "../../store/slice/ProductSlice";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import api from '../../services/api';
 import CartService from "../../services/cart.service";
@@ -14,15 +12,20 @@ import Loading from "../../components/ui/Loading";
 import { toast } from "react-hot-toast";
 import useDataMutation from "../../hooks/useDataMutation";
 import Cookies from "js-cookie";
+import useSWR from 'swr';
+import { capitalizeFirstLetter, numberWithCommas } from "../../utils/utils";
+
 const TITLE = 'Your Shopping Cart';
 
 const ExchangeRate = 0.000040;
+
+const fetcher = (url) => api.get(url).then(res => res.results);
 
 
 const Cart = () =>{
     const {data, error, isLoading, updateData} = useDataMutation();
     const [totalCostUSD, setTotalCostUSD] = useState();
-    const cartItems = useSelector(state => selectProductById(state, data?.order_items));
+    const { data:cartItems, error: cartItemsError, isLoading: isCartItemsLoading } = useSWR(`/api/user/orders/orders/cart/${data?.id}`, fetcher, { refreshInterval: null, revalidateOnFocus: false });
     const [isEmpty, setIsEmpty] = useState(true);
     const isLoggedInStr = Cookies.get('isLoggedIn');
     
@@ -104,6 +107,9 @@ const Cart = () =>{
           }
     }
 
+    if (error || cartItemsError) return <div>failed to load</div>
+    if (isLoading || isCartItemsLoading) return <div><Loading/></div>
+
     return(
         <>
             <Helmet>
@@ -113,22 +119,28 @@ const Cart = () =>{
                 <EmptyCart/>
                 : 
                 <section>
-                    {console.log(data)}
+                    {console.log('>>>',data)}
+                    {console.log(`product`, cartItems)}
                     <ul class="responsive-table">
                         <li class="table-header">
                         <div class="col col-1">Product</div>
                         <div class="col col-2">Quantity</div>
                         <div class="col col-3">Total</div>
                         </li>
-                        {cartItems && Object.keys(cartItems).length > 0 && cartItems.map((item, index) =>(
+                        {cartItems && cartItems.map((item, index) =>(
                             <li class="table-row" key={index}>
+                                {console.log('item', item)}
                                 <div class="col col-1 product" data-label="Product">
                                     <div className="product-image">
-                                        <img alt="" src={item?.image[0]?.image ? item.image[0].image : 'https://fakeimg.pl/300/'} />
+                                        <img alt="" src={item?.product.image[0]?.image ? item.product.image[0]?.image : 'https://fakeimg.pl/300/'} />
+                                        <div className="discount">-{item.product.discount_percentage}%</div>
                                     </div>
                                     <div className="product-content">
-                                        <div>{item?.name}</div>
-                                        <div>{item?.price}</div>
+                                        <div>{capitalizeFirstLetter(item?.product.name)}</div>
+                                        <div className="product-price">
+                                            <div className="final_price">{numberWithCommas(item?.product.final_price)}<span className="vnd">đ</span></div>    
+                                            <div className="price">{numberWithCommas(item?.product.price)}<span className="vnd">đ</span></div>    
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col col-2 quantity" data-label="Quantity">
@@ -141,15 +153,15 @@ const Cart = () =>{
                                         <i onClick={() => handleDelete(index)} class="fa-regular fa-trash-can delete"></i>
                                     </div>
                                 </div>
-                                <div class="col col-3 total" data-label="Total">{data.order_items[index]?.cost}</div>
+                                <div class="col col-3 total" data-label="Total">{numberWithCommas(data.order_items[index]?.cost)}&nbsp;đ</div>
                             </li>
                             ))}
                             <hr/>
                     </ul>
                     <div className="payment">
                         <div>
-                            <div>Subtotal {data?.total_cost}</div>
-                            <div>Subtotal {totalCostUSD}</div>
+                            <div>Subtotal: {numberWithCommas(data?.total_cost)}&nbsp;đ</div>
+                            <div>Subtotal: {numberWithCommas(totalCostUSD)}&nbsp;$</div>
                         </div>
                         <div className="checkout">
                             <button onClick={() => navigate(`/checkouts/${data.buyer}`)}>Check out</button>
@@ -199,7 +211,6 @@ const Cart = () =>{
                                                     console.error('Error:', error);
                                                 }
                                                 toast.dismiss(toastId);
-
                                             })
                                     }}
                                 />

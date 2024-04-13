@@ -1,35 +1,44 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../assets/styles/SortSelect.scss';
 import Sort from './Sort';
 
-const SortSelect = ({ value, setValue, data, setData, _data }) => {
+const SortSelect = ({ value, setValue, data, setData, _data, setType }) => {
     const [selectedCount, setSelectedCount] = useState(0);
     const [minPrice, setMinPrice] = useState();
     const [maxPrice, setMaxPrice] = useState();
-    const available = _data.filter(_data => _data.count_in_stock > 0);
-    const unAvailable = _data.filter(_data => _data.count_in_stock === 0);
+    // const available = _data.filter(_data => _data.count_in_stock > 0);
+    // const unAvailable = _data.filter(_data => _data.count_in_stock === 0);
     const [isInStock, setIsInStock] = useState(false);
     const [isOutOfStock, setIsOutOfStock] = useState(false);
     const [isPriceFilter, setIsPriceFilter] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
 
     useEffect(() => {
-        if (value === '1'){
-            setData(Sort.bestSelling(_data));
-        }else if(value === '2'){
-            setData(Sort.sortAZ(_data));
-        }else if(value === '3'){
-            setData(Sort.sortZA(_data));
-        }else if(value === '4'){
-            setData(Sort.sortPriceMinToMax(_data));
-        }else if(value === '5'){
-            setData(Sort.sortPriceMaxToMin(_data));
-        }else if(value === '6'){
-            setData(Sort.sortCreatedAtNew(_data));
-        }else if(value === '7'){
-            setData(Sort.sortCreatedAtOld(_data));
+        if (value === 'sort-by-best-selling/'){
+            setType(value);
+            // setData(Sort.bestSelling(-data));
+        }else if(value === 'sort-by-name-asc/'){
+            setType(value);
+            // setData(Sort.sortAZ(-data));
+        }else if(value === 'sort-by-name-desc/'){
+            setType(value);
+            // setData(Sort.sortZA(-data));
+        }else if(value === 'sort-by-price-asc/'){
+            setType(value);
+            // setData(Sort.sortPriceMinToMax(-data));
+        }else if(value === 'sort-by-price-desc/'){
+            setType(value);
+            // setData(Sort.sortPriceMaxToMin(-data));
+        }else if(value === 'sort-by-date-asc/'){
+            setType(value);
+            // setData(Sort.sortCreatedAtNew(-data));
+        }else if(value === 'sort-by-date-desc/'){
+            setType(value);
+            // setData(Sort.sortCreatedAtOld(_data));
+        }else if(value === null){
+            setType(value);
         }
-    }, [value])
+    }, [value, setType])
 
     const handleSortChange = (e) => {
         setValue(e.target.value);
@@ -45,33 +54,33 @@ const SortSelect = ({ value, setValue, data, setData, _data }) => {
         if (outOfStockCheckbox) outOfStockCheckbox.checked = false;
     };
 
-    const handleCheckboxChange = (e) => {
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        let count = 0;
-        checkboxes.forEach((checkbox) => {
-            if (checkbox.checked) {
-                count++;
-            }
-        });
-        setSelectedCount(count);
-        if (document.getElementById('inStockCheckbox').checked && document.getElementById('outOfStockCheckbox').checked) {
-            setData(_data);
-            setIsInStock(true);
-            setIsOutOfStock(true);
-        } else if (document.getElementById('inStockCheckbox').checked) {
-            setData(available);
-            setIsInStock(true);
-            setIsOutOfStock(false);
-        } else if (document.getElementById('outOfStockCheckbox').checked) {
-            setData(unAvailable);
-            setIsInStock(false);
-            setIsOutOfStock(true);
-        } else{            
-            setIsInStock(false);
-            setIsOutOfStock(false);
-            setData(_data);
-        }
-    };
+    // const handleCheckboxChange = (e) => {
+    //     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    //     let count = 0;
+    //     checkboxes.forEach((checkbox) => {
+    //         if (checkbox.checked) {
+    //             count++;
+    //         }
+    //     });
+    //     setSelectedCount(count);
+    //     if (document.getElementById('inStockCheckbox').checked && document.getElementById('outOfStockCheckbox').checked) {
+    //         setData(_data);
+    //         setIsInStock(true);
+    //         setIsOutOfStock(true);
+    //     } else if (document.getElementById('inStockCheckbox').checked) {
+    //         setData(available);
+    //         setIsInStock(true);
+    //         setIsOutOfStock(false);
+    //     } else if (document.getElementById('outOfStockCheckbox').checked) {
+    //         setData(unAvailable);
+    //         setIsInStock(false);
+    //         setIsOutOfStock(true);
+    //     } else{            
+    //         setIsInStock(false);
+    //         setIsOutOfStock(false);
+    //         setData(_data);
+    //     }
+    // };
     
     const handleMaxPriceChange = (e) => {
             setMaxPrice(e.target.value);
@@ -117,7 +126,7 @@ const SortSelect = ({ value, setValue, data, setData, _data }) => {
                                 </facet-remove>
                             </div>
                             <div>
-                                <fieldset>
+                                {/* <fieldset>
                                     <ul>
                                         <li>
                                             <label className='checkbox-label'>
@@ -132,7 +141,7 @@ const SortSelect = ({ value, setValue, data, setData, _data }) => {
                                             </label>
                                         </li>
                                     </ul>
-                                </fieldset>
+                                </fieldset> */}
                             </div>
                         </div>
                     </details>
@@ -170,14 +179,14 @@ const SortSelect = ({ value, setValue, data, setData, _data }) => {
                 <div className='sort'>
                     <span>Sort by: </span>
                     <select className="form-select" id="floatingSelect" aria-label="Floating label select example" value={value} onChange={handleSortChange}>
-                        <option defaultValue>Featured</option>
-                        <option value="1">Best Selling</option>
-                        <option value="2">Alphabetically, A-Z</option>
-                        <option value="3">Alphabetically, Z-A</option>
-                        <option value="4">Price, low to high</option>
-                        <option value="5">Price, high to low</option>
-                        <option value="6">Date, new to old</option>
-                        <option value="7">Date, old to new</option>
+                        <option defaultValue={null}>Featured</option>
+                        <option value="sort-by-best-selling/">Best Selling</option>
+                        <option value="sort-by-name-asc/">Alphabetically, A-Z</option>
+                        <option value="sort-by-name-desc/">Alphabetically, Z-A</option>
+                        <option value="sort-by-price-asc/">Price, low to high</option>
+                        <option value="sort-by-price-desc/">Price, high to low</option>
+                        <option value="sort-by-date-asc/">Date, new to old</option>
+                        <option value="sort-by-date-desc/">Date, old to new</option>
                     </select>
                     <div className='value'>
                         {data && data.length &&
