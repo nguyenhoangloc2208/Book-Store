@@ -1,0 +1,29 @@
+{
+    "name": "hoangloc-book-store",
+    "version": 2,
+    "builds": [
+      {
+        "src": "frontend",
+        "use": "@vercel/static-build",
+        "config": { "distDir": "build" }
+      },
+      {
+        "src": "backend",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "backend/api/:1"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "frontend/:1"
+      }
+    ],
+    "env": {
+      "API_URL": "@backend"
+    }
+  }
+  
