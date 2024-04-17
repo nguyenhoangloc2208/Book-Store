@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -219,7 +221,7 @@ BACKEND_DOMAIN = 'http://127.0.0.1:8000'
 FRONTEND_DOMAIN = 'http://localhost:3000'
 
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51OBJ1aJbhG9XeLpgozBoW7WSsFdRLOa9oIs16k9sxDypcYCpKkV2bJm4H7DlvJFphgMAKsb1ZVyNQmRfuz9eS9ur00OcprV9xJ'
-STRIPE_SECRET_KEY = 'sk_test_51OBJ1aJbhG9XeLpggbO4SCa7KFCufD8sU5SBsNABXzj6NbFFp6s3KDX3mpDHAZX8wg8z7nLLhg1ZDl7UbQH6hWqr00vvSpnCWY'
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = 'whsec_055694a377e3617438e3c91c1146850411b8bda341c4e2cd36c3597d37b36f40'
 
 PAYMENT_SUCCESS_URL = 'http://localhost:3000/checkout/success/'
