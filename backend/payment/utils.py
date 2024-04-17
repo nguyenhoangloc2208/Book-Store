@@ -1,5 +1,4 @@
-import requests, json, base64
-from decouple import config
+import requests, base64
 from django.conf import settings
     
 def paypal_token():
