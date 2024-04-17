@@ -25,8 +25,8 @@ const fetcher = (url) => api.get(url).then(res => res.results);
 const Cart = () =>{
     const {data, error, isLoading, updateData} = useDataMutation();
     const [totalCostUSD, setTotalCostUSD] = useState();
-    const { data:cartItems, error: cartItemsError, isLoading: isCartItemsLoading } = useSWR(`/api/user/orders/orders/cart/${data?.id}`, fetcher, { refreshInterval: null, revalidateOnFocus: false });
-    const [isEmpty, setIsEmpty] = useState(true);
+    const [isEmpty, setIsEmpty] = useState(false);
+    const { data:cartItems, error: cartItemsError, isLoading: isCartItemsLoading } = useSWR(data?.id ? `/api/user/orders/orders/cart/${data?.id}` : null, fetcher, { refreshInterval: null, revalidateOnFocus: false });
     const isLoggedInStr = Cookies.get('isLoggedIn');
     
     const navigate = useNavigate();
@@ -34,6 +34,9 @@ const Cart = () =>{
     useEffect(() => {
         if(error){
             setIsEmpty(true);
+        }
+        if(data){
+            setIsEmpty(false);
         }
         if(data && data.total_cost){
             setTotalCostUSD((parseFloat(data.total_cost) * ExchangeRate).toFixed(2));
@@ -46,7 +49,7 @@ const Cart = () =>{
         else {
             setIsEmpty(false);
         }
-    }, [isLoading, error])
+    }, [data, isLoading, error, cartItemsError])
 
     if (isLoading) return <div><Loading/></div>
 
@@ -115,6 +118,7 @@ const Cart = () =>{
             <Helmet>
                 <title>{TITLE}</title>
             </Helmet>
+            {console.log('isEmpty', isEmpty)}
             {isEmpty? 
                 <EmptyCart/>
                 : 

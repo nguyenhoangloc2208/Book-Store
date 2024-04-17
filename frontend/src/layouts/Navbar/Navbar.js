@@ -17,7 +17,6 @@ const Navbar = () =>{
     const location = useLocation();
     const [isShowSearchBar, setIsShowSearchBar] = useState(false);
     const dispatch = useDispatch();
-    // const {data, error, isLoading} = useSWR(isLogin ? '/api/user/orders/pending_order/' : null, fetcher, {refreshInterval: null});
     const {data, updateData} = useDataMutation();
     const isLoggedInStr = Cookies.get('isLoggedIn');
 

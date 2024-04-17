@@ -1,40 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import '../assets/styles/SortSelect.scss';
-import Sort from './Sort';
 
-const SortSelect = ({ value, setValue, data, setData, _data, setType }) => {
+const SortSelect = ({ value, setValue, data, setType, available, unAvailable, setIsInStock, setIsOutOfStock, isInStock, isOutOfStock }) => {
     const [selectedCount, setSelectedCount] = useState(0);
     const [minPrice, setMinPrice] = useState();
     const [maxPrice, setMaxPrice] = useState();
-    // const available = _data.filter(_data => _data.count_in_stock > 0);
-    // const unAvailable = _data.filter(_data => _data.count_in_stock === 0);
-    const [isInStock, setIsInStock] = useState(false);
-    const [isOutOfStock, setIsOutOfStock] = useState(false);
     const [isPriceFilter, setIsPriceFilter] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
 
     useEffect(() => {
-        if (value === 'sort-by-best-selling/'){
+        if (value === '-sold_count'){
             setType(value);
-            // setData(Sort.bestSelling(-data));
-        }else if(value === 'sort-by-name-asc/'){
+        }else if(value === 'name'){
             setType(value);
-            // setData(Sort.sortAZ(-data));
-        }else if(value === 'sort-by-name-desc/'){
+        }else if(value === '-name'){
             setType(value);
-            // setData(Sort.sortZA(-data));
-        }else if(value === 'sort-by-price-asc/'){
+        }else if(value === 'final_price'){
             setType(value);
-            // setData(Sort.sortPriceMinToMax(-data));
-        }else if(value === 'sort-by-price-desc/'){
+        }else if(value === '-final_price'){
             setType(value);
-            // setData(Sort.sortPriceMaxToMin(-data));
-        }else if(value === 'sort-by-date-asc/'){
+        }else if(value === 'created_at'){
             setType(value);
-            // setData(Sort.sortCreatedAtNew(-data));
-        }else if(value === 'sort-by-date-desc/'){
+        }else if(value === '-created_at'){
             setType(value);
-            // setData(Sort.sortCreatedAtOld(_data));
         }else if(value === null){
             setType(value);
         }
@@ -43,44 +31,48 @@ const SortSelect = ({ value, setValue, data, setData, _data, setType }) => {
     const handleSortChange = (e) => {
         setValue(e.target.value);
     };
+    useEffect(() => {
+        const inStockCheckbox = document.getElementById('inStockCheckbox');
+        const outOfStockCheckbox = document.getElementById('outOfStockCheckbox');
+        if(isInStock){
+            inStockCheckbox.checked = true;
+        }
+        if(isOutOfStock){
+            outOfStockCheckbox.checked = true;
+        }
+    }, [])
 
     const handleReset = () => {
-        // Get checkboxes for "In stock" and "Out of stock"
         const inStockCheckbox = document.getElementById('inStockCheckbox');
         const outOfStockCheckbox = document.getElementById('outOfStockCheckbox');
         setSelectedCount(0);
-        // Reset checkboxes to their initial state (unchecked)
         if (inStockCheckbox) inStockCheckbox.checked = false;
         if (outOfStockCheckbox) outOfStockCheckbox.checked = false;
     };
 
-    // const handleCheckboxChange = (e) => {
-    //     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    //     let count = 0;
-    //     checkboxes.forEach((checkbox) => {
-    //         if (checkbox.checked) {
-    //             count++;
-    //         }
-    //     });
-    //     setSelectedCount(count);
-    //     if (document.getElementById('inStockCheckbox').checked && document.getElementById('outOfStockCheckbox').checked) {
-    //         setData(_data);
-    //         setIsInStock(true);
-    //         setIsOutOfStock(true);
-    //     } else if (document.getElementById('inStockCheckbox').checked) {
-    //         setData(available);
-    //         setIsInStock(true);
-    //         setIsOutOfStock(false);
-    //     } else if (document.getElementById('outOfStockCheckbox').checked) {
-    //         setData(unAvailable);
-    //         setIsInStock(false);
-    //         setIsOutOfStock(true);
-    //     } else{            
-    //         setIsInStock(false);
-    //         setIsOutOfStock(false);
-    //         setData(_data);
-    //     }
-    // };
+    const handleCheckboxChange = (e) => {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        let count = 0;
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                count++;
+            }
+        });
+        setSelectedCount(count);
+        if (document.getElementById('inStockCheckbox').checked && document.getElementById('outOfStockCheckbox').checked) {
+            setIsInStock(true);
+            setIsOutOfStock(true);
+        } else if (document.getElementById('inStockCheckbox').checked) {
+            setIsInStock(true);
+            setIsOutOfStock(false);
+        } else if (document.getElementById('outOfStockCheckbox').checked) {
+            setIsInStock(false);
+            setIsOutOfStock(true);
+        } else{            
+            setIsInStock(false);
+            setIsOutOfStock(false);
+        }
+    };
     
     const handleMaxPriceChange = (e) => {
             setMaxPrice(e.target.value);
@@ -91,7 +83,6 @@ const SortSelect = ({ value, setValue, data, setData, _data, setType }) => {
     };
 
     const handleResetMinMax = () => {
-        // Đặt lại giá trị của các trường "From" và "To" về giá trị mặc định
         setMinPrice('');
         setMaxPrice('');
     };
@@ -100,12 +91,12 @@ const SortSelect = ({ value, setValue, data, setData, _data, setType }) => {
         setIsTyping(true);
         const timer = setTimeout(() => {
             if (!minPrice || !maxPrice) {
-                setIsPriceFilter(false); // Nếu một trong hai là undefined, không set isPriceFilter
+                setIsPriceFilter(false);
             } else {
-                setIsPriceFilter(true); // Nếu cả hai đều có giá trị, set isPriceFilter
+                setIsPriceFilter(true);
             }
             setIsTyping(false);
-        }, 2000); // 2 giây
+        }, 2000);
         return () => clearTimeout(timer);
     }, [minPrice, maxPrice]);
 
@@ -126,22 +117,22 @@ const SortSelect = ({ value, setValue, data, setData, _data, setType }) => {
                                 </facet-remove>
                             </div>
                             <div>
-                                {/* <fieldset>
+                                <fieldset>
                                     <ul>
                                         <li>
                                             <label className='checkbox-label'>
-                                                <input type='checkbox' id='inStockCheckbox' onChange={handleCheckboxChange}/>
-                                                <span>In stock ({available.length})</span>
+                                                <input type='checkbox' value={isInStock} id='inStockCheckbox' onChange={handleCheckboxChange}/>
+                                                <span>In stock ({available})</span>
                                             </label>
                                         </li>
                                         <li>
                                             <label className='checkbox-label'>
-                                                <input type='checkbox' id='outOfStockCheckbox' onChange={handleCheckboxChange}/>
-                                                <span>Out of stock ({unAvailable.length})</span>
+                                                <input type='checkbox' value={isOutOfStock} id='outOfStockCheckbox' onChange={handleCheckboxChange}/>
+                                                <span>Out of stock ({unAvailable})</span>
                                             </label>
                                         </li>
                                     </ul>
-                                </fieldset> */}
+                                </fieldset>
                             </div>
                         </div>
                     </details>
@@ -179,18 +170,18 @@ const SortSelect = ({ value, setValue, data, setData, _data, setType }) => {
                 <div className='sort'>
                     <span>Sort by: </span>
                     <select className="form-select" id="floatingSelect" aria-label="Floating label select example" value={value} onChange={handleSortChange}>
-                        <option defaultValue={null}>Featured</option>
-                        <option value="sort-by-best-selling/">Best Selling</option>
-                        <option value="sort-by-name-asc/">Alphabetically, A-Z</option>
-                        <option value="sort-by-name-desc/">Alphabetically, Z-A</option>
-                        <option value="sort-by-price-asc/">Price, low to high</option>
-                        <option value="sort-by-price-desc/">Price, high to low</option>
-                        <option value="sort-by-date-asc/">Date, new to old</option>
-                        <option value="sort-by-date-desc/">Date, old to new</option>
+                        <option defaultValue={null} value={null}>Featured</option>
+                        <option value="-sold_count">Best Selling</option>
+                        <option value="name">Alphabetically, A-Z</option>
+                        <option value="-name">Alphabetically, Z-A</option>
+                        <option value="final_price">Price, low to high</option>
+                        <option value="-final_price">Price, high to low</option>
+                        <option value="created_at">Date, new to old</option>
+                        <option value="-created_at">Date, old to new</option>
                     </select>
                     <div className='value'>
-                        {data && data.length &&
-                            <span>{data.length} products</span>
+                        {data && data.count &&
+                            <span>{data.count} products</span>
                         }
                     </div>
                 </div>

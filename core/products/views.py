@@ -5,11 +5,11 @@ from .serializers import (ProductCategoryReadSerializer,
                           ProductReadSerializer, 
                           ProductWriteSerializer)
 from .models import Product, ProductCategory, ProductImage, Author
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets, permissions, generics
 from django.shortcuts import get_object_or_404
+from django_filters import rest_framework as filters
+from .filters import ProductFilter
+
 
 class ProductCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ProductCategory.objects.all().order_by('name')
@@ -26,7 +26,8 @@ class ProductViewSet(viewsets.ModelViewSet):
     CRUD products
     """
     queryset = Product.objects.all()
-    pagination_class = PageNumberPagination
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ProductFilter
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -49,6 +50,8 @@ class ProductViewSet(viewsets.ModelViewSet):
 class ProductByAuthorListView(generics.ListAPIView):
     serializer_class = ProductReadSerializer
     permission_classes = (permissions.AllowAny, )
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ProductFilter
 
     def get_queryset(self):
         author_slug = self.kwargs['author_slug']
@@ -85,45 +88,15 @@ class AuthorSlugListView(generics.ListAPIView):
 class ProductByCategoryListView(generics.ListAPIView):
     serializer_class = ProductReadSerializer
     permission_classes = (permissions.AllowAny, )
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ProductFilter
 
     def get_queryset(self):
         category_slug = self.kwargs['category_slug']
         category = get_object_or_404(ProductCategory, slug=category_slug)
         return Product.objects.filter(category=category)
     
-class ProductByCategoryNameListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
 
-    def get_queryset(self):
-        category_name = self.kwargs['category_name']
-        category = get_object_or_404(ProductCategory, name=category_name)
-        return Product.objects.filter(category=category)
-    
-class AllProductsListView(generics.ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-    
-class AllCategoriesListView(generics.ListAPIView):
-    queryset = ProductCategory.objects.all()
-    serializer_class = ProductCategoryReadSerializer
-    permission_classes = (permissions.AllowAny, )
-    
-class AllAuthorsListView(generics.ListAPIView):
-    queryset = Author.objects.all()
-    serializer_class = AuthorReadSerializer
-    permission_classes = (permissions.AllowAny, )
-    
-class AuthorByProductSlugListView(generics.ListAPIView):
-    serializer_class = AuthorReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        product_slug = self.kwargs['product_slug']
-        product = get_object_or_404(Product, slug=product_slug)
-        return Author.objects.filter(name=product.author)
-    
 class AuthorByAuthorNameListView(generics.ListAPIView):
     serializer_class = AuthorReadSerializer
     permission_classes = (permissions.AllowAny, )
@@ -133,157 +106,11 @@ class AuthorByAuthorNameListView(generics.ListAPIView):
         author = get_object_or_404(Author, name=author_name)
         return [author]
     
-class SortBestSellingProductListView(generics.ListAPIView):
-    queryset = Product.objects.filter(available=True).order_by('-sold_count')
-    serializer_class = ProductReadSerializer
-    
-class SortNameAscProductListView(generics.ListAPIView):
-    queryset = Product.objects.filter(available=True).order_by('name')
-    serializer_class = ProductReadSerializer
-    
-class SortNameDescProductListView(generics.ListAPIView):
-    queryset = Product.objects.filter(available=True).order_by('-name')
-    serializer_class = ProductReadSerializer
-    
-class SortPriceAscProductListView(generics.ListAPIView):
-    queryset = Product.objects.filter(available=True).order_by('price')
-    serializer_class = ProductReadSerializer
-    
-class SortPriceDescProductListView(generics.ListAPIView):
-    queryset = Product.objects.filter(available=True).order_by('-price')
-    serializer_class = ProductReadSerializer
-    
-class SortDateAscProductListView(generics.ListAPIView):
-    queryset = Product.objects.filter(available=True).order_by('-created_at')
-    serializer_class = ProductReadSerializer
-    
-class SortDateDescProductListView(generics.ListAPIView):
-    queryset = Product.objects.filter(available=True).order_by('created_at')
-    serializer_class = ProductReadSerializer
-    
-
-class SortBestSellingProductByAuthorListView(generics.ListAPIView):
+class ProductByCategoryNameListView(generics.ListAPIView):
     serializer_class = ProductReadSerializer
     permission_classes = (permissions.AllowAny, )
 
     def get_queryset(self):
-        author_slug = self.kwargs['author_slug']
-        author = get_object_or_404(Author, slug=author_slug)
-        return Product.objects.filter(author=author, available=True).order_by('-sold_count')
-
-class SortNameAscProductByAuthorListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        author_slug = self.kwargs['author_slug']
-        author = get_object_or_404(Author, slug=author_slug)
-        return Product.objects.filter(author=author, available=True).order_by('name')
-
-class SortNameDescProductByAuthorListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        author_slug = self.kwargs['author_slug']
-        author = get_object_or_404(Author, slug=author_slug)
-        return Product.objects.filter(author=author, available=True).order_by('-name')
-
-class SortPriceAscProductByAuthorListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        author_slug = self.kwargs['author_slug']
-        author = get_object_or_404(Author, slug=author_slug)
-        return Product.objects.filter(author=author, available=True).order_by('price')
-
-class SortPriceDescProductByAuthorListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        author_slug = self.kwargs['author_slug']
-        author = get_object_or_404(Author, slug=author_slug)
-        return Product.objects.filter(author=author, available=True).order_by('-price')
-
-class SortDateAscProductByAuthorListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        author_slug = self.kwargs['author_slug']
-        author = get_object_or_404(Author, slug=author_slug)
-        return Product.objects.filter(author=author, available=True).order_by('created_at')
-
-class SortDateDescProductByAuthorListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        author_slug = self.kwargs['author_slug']
-        author = get_object_or_404(Author, slug=author_slug)
-        return Product.objects.filter(author=author, available=True).order_by('-created_at')
-
-class SortBestSellingProductByCategoryListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        category_slug = self.kwargs['category_slug']
-        category = get_object_or_404(ProductCategory, slug=category_slug)
-        return Product.objects.filter(category=category, available=True).order_by('-sold_count')
-
-class SortNameAscProductByCategoryListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        category_slug = self.kwargs['category_slug']
-        category = get_object_or_404(ProductCategory, slug=category_slug)
-        return Product.objects.filter(category=category, available=True).order_by('name')
-
-class SortNameDescProductByCategoryListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        category_slug = self.kwargs['category_slug']
-        category = get_object_or_404(ProductCategory, slug=category_slug)
-        return Product.objects.filter(category=category, available=True).order_by('-name')
-
-class SortPriceAscProductByCategoryListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        category_slug = self.kwargs['category_slug']
-        category = get_object_or_404(ProductCategory, slug=category_slug)
-        return Product.objects.filter(category=category, available=True).order_by('price')
-
-class SortPriceDescProductByCategoryListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        category_slug = self.kwargs['category_slug']
-        category = get_object_or_404(ProductCategory, slug=category_slug)
-        return Product.objects.filter(category=category, available=True).order_by('-price')
-
-class SortDateAscProductByCategoryListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        category_slug = self.kwargs['category_slug']
-        category = get_object_or_404(ProductCategory, slug=category_slug)
-        return Product.objects.filter(category=category, available=True).order_by('created_at')
-
-class SortDateDescProductByCategoryListView(generics.ListAPIView):
-    serializer_class = ProductReadSerializer
-    permission_classes = (permissions.AllowAny, )
-
-    def get_queryset(self):
-        category_slug = self.kwargs['category_slug']
-        category = get_object_or_404(ProductCategory, slug=category_slug)
-        return Product.objects.filter(category=category, available=True).order_by('-created_at')
+        category_name = self.kwargs['category_name']
+        category = get_object_or_404(ProductCategory, name=category_name)
+        return Product.objects.filter(category=category)

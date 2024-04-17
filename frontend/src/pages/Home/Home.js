@@ -17,7 +17,7 @@ const TITLE = 'Home'
 
 const Home = () =>{
     const navigate = useNavigate();
-    const {data, error, isLoading} = useSWR(`/api/products/products/best-sellers/`, _fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+    const {data, error, isLoading} = useSWR(`/api/products/?ordering=-sold_count`, _fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
     const orderId = useSelector(state => state.order.idPending);
     const {updateData} = useDataMutation();
 
@@ -25,7 +25,6 @@ const Home = () =>{
         navigate('/collections/all');
     }
 
-    if (error) return <div>failed to load</div>
     if (isLoading) return <div><Loading/></div>
 
     return(
@@ -59,13 +58,15 @@ const Home = () =>{
                     <button onClick={()=>handleShopNow()} className="shop-now-button">Shop now</button>
                 </div>
             </section>
-            <section className="section-two">
-                {data &&
-                    data.map((item, index) => (
-                    <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null} updateData={updateData}/>
-                    ))
+            {!error &&
+                <section className="section-two">
+                    {data &&
+                        data.map((item, index) => (
+                            <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null} updateData={updateData}/>
+                        ))
+                    }
+                </section>
                 }
-        </section>
         </>
     );
 }

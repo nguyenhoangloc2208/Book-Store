@@ -20,31 +20,64 @@ const Author = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
+    const _isInStock  = params.get('in_stock');
+    const _isOutOfStock  = params.get('out_of_stock');
     const currentPage  = params.get('page') || '1';
-    const {data, error, isLoading} = useSWR(currentPage ? `/api/products/product_by_author_slug/${slug}?page=${currentPage}` : `/api/products/product_by_author_slug/${slug}/`, _fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
+    const [type, setType] = useState(null);
+    const url = `/api/products/product_by_author_slug/${slug}` + 
+    (currentPage ? `?page=${currentPage}` : '') +
+    (type ? `&sort_by=${type}` : '') +
+    ((_isInStock === 'true' && _isOutOfStock !== 'true') ? `&available=1` : '') +
+    ((_isInStock !== 'true' && _isOutOfStock === 'true') ? `&available=0` : '');
+    const {data, error, isLoading} = useSWR(url, _fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
     const {data:author, error: authorError, isLoading: isLoadingAuthor} = useSWR(`/api/products/author_slug/${slug}/`, fetcher, {refreshInterval: 300000, revalidateOnFocus: false});
-    const [filteredAuthorBook, setFilteredAuthorBook] = useState();
     const orderId = useSelector(state => state.order.idPending);
     const {updateData} = useDataMutation();
     const [arrangeType, setArrangeType] = useState();
+    const [available, setAvailable] = useState(0);
+    const [unAvailable, setUnavailable] = useState(0);
+    const [isInStock, setIsInStock] = useState(_isInStock === 'true' ? true : false);
+    const [isOutOfStock, setIsOutOfStock] = useState(_isOutOfStock === 'true' ? true : false);
 
     const totalPages = Math.ceil(data?.count / 16);
 
     useEffect(() => {
-        if(data){
-            setFilteredAuthorBook(data.results)
+        if(available == 0 && data){
+            const fetchApi = async () => {
+                const res = await api.get(`/api/products/product_by_author_slug/${slug}/?available=0`);
+                setUnavailable(res.count);
+                setAvailable(data.count - res.count);
+            }
+            fetchApi();
         }
     }, [data])
 
+    useEffect(() => {
+        handlePaginationClick(currentPage);
+    }, [type, isInStock, isOutOfStock])
+
     const handlePaginationClick = (page) => {
-        // Chuyển đến trang được nhấp
-        if(page === 1){
-            window.scrollTo(0, 0);
-            navigate(`/collections/${slug}`);
-        }else{
-            window.scrollTo(0, 0);
-            navigate(`/collections/${slug}?page=${page}`);
+        window.scrollTo(0, 0);
+        const baseUrl = `/collections/author/${slug}`;
+        const queryParams = [];
+        if (parseInt(page) !== 1) {
+            queryParams.push(`page=${page}`);
         }
+        if (isInStock && isOutOfStock) {
+            queryParams.push(`in_stock=true`, `out_of_stock=true`);
+        } else {
+            if (isInStock) {
+                queryParams.push(`in_stock=true`);
+            }
+            if (isOutOfStock) {
+                queryParams.push(`out_of_stock=true`);
+            }
+        }
+        if (type) {
+            queryParams.push(`sort_by=${type}`);
+        }
+        const url = `${baseUrl}${queryParams.length > 0 ? `?${queryParams.join('&')}` : ''}`;
+        navigate(url);
     };
 
     const renderPagination = () => {
@@ -58,7 +91,7 @@ const Author = () => {
         }
         return pages;
     };
-    if(error && error.response.status === 404) return <div><NotFoundProduct/></div>
+    if((error && error.response.status === 404) || data?.count === 0) return <div><NotFoundProduct/></div>
     if (error || authorError) return <div>failed to load</div>
     if (isLoading || isLoadingAuthor) return <div><Loading/></div>
 
@@ -72,10 +105,13 @@ const Author = () => {
                 <hr/>
                 <div>
                     <div>Tác phẩm của {author.name}</div>
-                    <SortSelect value={arrangeType} setValue={setArrangeType} data={filteredAuthorBook} setData={setFilteredAuthorBook} _data={data?.results}/>   
+                    <SortSelect value={arrangeType} setValue={setArrangeType} data={data} setType={setType} 
+                        unAvailable={unAvailable} available={available}
+                        setIsInStock={setIsInStock} setIsOutOfStock={setIsOutOfStock}
+                        isInStock={isInStock} isOutOfStock={isOutOfStock}
+                    />
                 </div>
-                {filteredAuthorBook &&
-                    filteredAuthorBook.map((item, index) => (
+                {data  && data.results && data.results.length > 0 && data.results.map((item, index) => (
                     <ProductCard item={item} index={index} key={index} isBtn={true} orderId={orderId ? orderId : null} updateData={updateData}/>
                     ))
                 }
@@ -89,7 +125,7 @@ const Author = () => {
                             <button className="page-link" onClick={() => handlePaginationClick((totalPages - currentPage < 10) ? totalPages : (currentPage + 1))}>&raquo;</button>
                         </li>
                     </ul>
-                </nav>
+                </nav> 
             </section>
         </>
     )

@@ -16,7 +16,7 @@ const ProductCard = ({item, index, isBtn, orderId, updateData}) =>{
 
     const handleAddtocart = async () => {
         await AddToCartBtn(item, orderId, dispatch);
-        updateData();
+        await updateData();
     }
 
 

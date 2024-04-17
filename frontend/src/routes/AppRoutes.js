@@ -38,7 +38,18 @@ const createDynamicPage = (Component, baseUrl) => {
     return () => {
         const params = new URLSearchParams(window.location.search);
         const page = params.get('page') || '1';
-        const path = page === '1' ? baseUrl : `${baseUrl}?page=${page}`;
+        const inStock = params.get('in_stock');
+        const outOfStock = params.get('out_of_stock');
+        
+        let queryParams = '';
+        if (inStock === 'true') {
+            queryParams += 'in_stock=true&';
+        }
+        if (outOfStock === 'true') {
+            queryParams += 'out_of_stock=true&';
+        }
+        // const path = page === '1' ? baseUrl : `${baseUrl}?page=${page}`;
+        const path = page === '1' ? `${baseUrl}?${queryParams}` : `${baseUrl}?page=${page}&${queryParams}`;
         return <Component currentPage={page} path={path} />;
     }
 }

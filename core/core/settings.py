@@ -36,13 +36,13 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'dj_rest_auth.registration',
     'dj_rest_auth',
+    'django_filters',
     #apps 
     'users',
     'products',
     'orders',
     'payment',
     'import_export',
-    # 'ckeditor',
     'blogs',
     
     #payment
@@ -59,6 +59,9 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 16,
