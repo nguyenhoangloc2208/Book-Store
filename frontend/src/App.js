@@ -25,7 +25,7 @@ function App() {
 
   return (
     <>
-    <PayPalScriptProvider options={{clientId: process.env.CLIENT_ID}}>
+    <PayPalScriptProvider options={{clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID}}>
       <div className='App'>
         <ScrollToTop/>
         <Header/>
