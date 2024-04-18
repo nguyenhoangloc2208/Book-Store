@@ -38,7 +38,7 @@ const ChangePassword = () =>{
             console.log(token);
             setError({data: {}});
             try{
-                const res = await AuthService.changePassword(password2);
+                const res = await AuthService.changePassword(password2, uid, token);
                 if (res){
                     toast.success("Success!");
                     setIsError(false);
