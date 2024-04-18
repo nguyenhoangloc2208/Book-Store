@@ -201,18 +201,17 @@ const Cart = () =>{
                                     onApprove={ (data, actions) => {
                                             actions.order.capture().then(async (details) => {
                                                 const toastId = toast.loading("Running...", { duration: 0 });
-                                                const name = details.payer.name.given_name;
                                                 const id = details.id;
                                                 try {
                                                     await api.post(`/api/user/payments/paypal/checkout/order/${data.id}/`, {
                                                         id: id,
                                                         orderId: data.id,
                                                     });
-                                                    toast.success(`Transaction completed by ${name}`);
+                                                    toast.success(`Transaction completed`);
                                                     navigate(`/payment/success/`);
 
                                                 } catch (error) {
-                                                    console.error('Error:', error);
+                                                    console.error('Paypal Error:', error);
                                                 }
                                                 toast.dismiss(toastId);
                                             })
