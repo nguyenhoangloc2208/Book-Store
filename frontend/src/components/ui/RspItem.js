@@ -1,10 +1,10 @@
-import React from "react";
 import '../../assets/styles/RspItem.scss';
 import { numberWithCommas } from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 
-const RspItem = ({item, index}) =>{
+const RspItem = ({item}) =>{
     const navigate = useNavigate();
     
     const handleClick = () => {
@@ -26,5 +26,17 @@ const RspItem = ({item, index}) =>{
         </div>
     )
 }
+
+RspItem.propTypes = {
+    item: PropTypes.shape({
+        slug: PropTypes.string.isRequired,
+        image: PropTypes.arrayOf(PropTypes.shape({
+            image: PropTypes.string.isRequired
+        })).isRequired,
+        name: PropTypes.string.isRequired,
+        final_price: PropTypes.number.isRequired,
+        price: PropTypes.number.isRequired
+    }).isRequired
+};
 
 export default RspItem;

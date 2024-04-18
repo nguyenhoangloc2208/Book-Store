@@ -1,6 +1,6 @@
-import React from "react";
 import '../../assets/styles/CollectionsCard.scss';
 import { useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 const CollectionsCard = ({item, index}) =>{
     const navigate = useNavigate();
@@ -18,5 +18,14 @@ const CollectionsCard = ({item, index}) =>{
         </div>
     )
 }
+
+CollectionsCard.propTypes = {
+    item: PropTypes.shape({
+        slug: PropTypes.string.isRequired,
+        image: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired
+    }).isRequired,
+    index: PropTypes.number.isRequired
+};
 
 export default CollectionsCard;

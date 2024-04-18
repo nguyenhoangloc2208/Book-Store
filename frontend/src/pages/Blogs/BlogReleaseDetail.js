@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {Link, useParams} from 'react-router-dom';
 import api from '../../services/api';
 import useSWR from 'swr';
@@ -22,7 +22,7 @@ const BlogReleaseDetail = () => {
                 <h2 className="blog-title">{data.title}</h2>
                 <div className="blog-date">{formatDateTime(data.created_at)}</div>
                 {data && data.content && data.content.map((item, index) => (
-                    <div className="blog-content">
+                    <div className="blog-content" key={index}>
                         {item.content_title && 
                         <h2 className="blog-content-title">
                             {replaceLinksAndSplitLines(item.content_title).map((part, index) => (

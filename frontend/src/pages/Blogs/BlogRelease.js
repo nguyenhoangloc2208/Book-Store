@@ -1,4 +1,3 @@
-import React from "react";
 import api from '../../services/api';
 import useSWR from 'swr';
 import Loading from "../../components/ui/Loading";

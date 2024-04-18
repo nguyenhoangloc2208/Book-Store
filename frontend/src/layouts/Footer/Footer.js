@@ -1,4 +1,3 @@
-import React from "react";
 import "../../assets/styles/Footer.scss"
 import { Link } from "react-router-dom";
 

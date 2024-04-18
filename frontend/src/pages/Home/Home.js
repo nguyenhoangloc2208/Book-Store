@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import Helmet from 'react-helmet';
 import images from "../../assets/images/image";
 import '../../assets/styles/Home.scss';

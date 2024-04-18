@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import '../../assets/styles/Profile.scss';
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import api from '../../services/api';
 import OrderHistory from "./OrderHistory";
 import AddressContainer from "../../components/ui/AddressContainer";

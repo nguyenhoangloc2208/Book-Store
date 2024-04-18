@@ -1,9 +1,9 @@
-import React from "react";
 import '../../assets/styles/SliderCard.scss';
 import { numberWithCommas } from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types';
 
-const SliderCard = ({item, index}) => {
+const SliderCard = ({item}) => {
     const navigate = useNavigate();
     const handleClickCard = () =>{
         navigate(`/products/${item.slug}`);
@@ -28,5 +28,9 @@ const SliderCard = ({item, index}) => {
         </>
     )
 }
+
+SliderCard.propTypes = {
+    item: PropTypes.object.isRequired
+};
 
 export default SliderCard;

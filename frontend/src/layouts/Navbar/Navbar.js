@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import '../../assets/styles/Navbar.scss';
 import images from "../../assets/images/image";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -58,8 +58,7 @@ const Navbar = () =>{
     }
 
     const handleAccount = () =>{
-        if(isLoggedInStr === 'true'){
-        }else{
+        if(isLoggedInStr !== 'true'){
             navigate("/account/login");
         }
     }

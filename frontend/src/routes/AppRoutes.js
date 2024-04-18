@@ -35,7 +35,7 @@ const stripePromise = loadStripe(stripe_key)
 
 
 const createDynamicPage = (Component, baseUrl) => {
-    return () => {
+    const DynamicPage = () => {
         const params = new URLSearchParams(window.location.search);
         const page = params.get('page') || '1';
         const inStock = params.get('in_stock');
@@ -48,10 +48,14 @@ const createDynamicPage = (Component, baseUrl) => {
         if (outOfStock === 'true') {
             queryParams += 'out_of_stock=true&';
         }
-        // const path = page === '1' ? baseUrl : `${baseUrl}?page=${page}`;
         const path = page === '1' ? `${baseUrl}?${queryParams}` : `${baseUrl}?page=${page}&${queryParams}`;
         return <Component currentPage={page} path={path} />;
     }
+
+    // Đặt tên hiển thị cho component DynamicPage
+    DynamicPage.displayName = `DynamicPage(${Component.displayName || Component.name || 'Component'})`;
+
+    return DynamicPage;
 }
 
 const AllProductPage = createDynamicPage(AllProduct, '/collections/all');

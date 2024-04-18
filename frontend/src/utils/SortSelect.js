@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../assets/styles/SortSelect.scss';
+import PropTypes from 'prop-types';
 
 const SortSelect = ({ value, setValue, data, setType, available, unAvailable, setIsInStock, setIsOutOfStock, isInStock, isOutOfStock }) => {
     const [selectedCount, setSelectedCount] = useState(0);
@@ -40,7 +41,7 @@ const SortSelect = ({ value, setValue, data, setType, available, unAvailable, se
         if(isOutOfStock){
             outOfStockCheckbox.checked = true;
         }
-    }, [])
+    }, [isInStock, isOutOfStock])
 
     const handleReset = () => {
         const inStockCheckbox = document.getElementById('inStockCheckbox');
@@ -50,7 +51,7 @@ const SortSelect = ({ value, setValue, data, setType, available, unAvailable, se
         if (outOfStockCheckbox) outOfStockCheckbox.checked = false;
     };
 
-    const handleCheckboxChange = (e) => {
+    const handleCheckboxChange = () => {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
         let count = 0;
         checkboxes.forEach((checkbox) => {
@@ -199,6 +200,19 @@ const SortSelect = ({ value, setValue, data, setType, available, unAvailable, se
             </div>
         </div>
     );
+};
+
+SortSelect.propTypes = {
+    value: PropTypes.string.isRequired,
+    setValue: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired,
+    setType: PropTypes.func.isRequired,
+    available: PropTypes.number.isRequired,
+    unAvailable: PropTypes.number.isRequired,
+    setIsInStock: PropTypes.func.isRequired,
+    setIsOutOfStock: PropTypes.func.isRequired,
+    isInStock: PropTypes.bool.isRequired,
+    isOutOfStock: PropTypes.bool.isRequired,
 };
 
 export default SortSelect;

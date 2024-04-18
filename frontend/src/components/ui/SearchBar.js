@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types';
 import '../../assets/styles/SearchBar.scss';
 
 const SearchBar = ({query}) => {
@@ -108,7 +109,7 @@ const SearchBar = ({query}) => {
                     ))}
                 </ul>
                 <div onClick={() => handleSearchClick()} className="search-for">
-                    <div>Search for <span>"{inputText}"</span></div>
+                    <div>Search for <span>&quot;{inputText}&quot;</span></div>
                     <i className="fa-solid fa-arrow-right-long"></i>
                 </div>
             </div>
@@ -117,5 +118,9 @@ const SearchBar = ({query}) => {
         </>
     )
 }
+
+SearchBar.propTypes = {
+    query: PropTypes.string
+};
 
 export default SearchBar;

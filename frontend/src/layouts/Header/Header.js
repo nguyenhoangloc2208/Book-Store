@@ -1,4 +1,3 @@
-import React from "react";
 import '../../assets/styles/Header.scss'
 import toast from "react-hot-toast";
 

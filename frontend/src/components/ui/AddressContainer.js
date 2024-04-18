@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AddressModal from '../../components/ui/AddressModal';
 import AddressService from '../../services/address.service';
 import { mutate } from 'swr';
 import useModal from '../../hooks/useModal';
+import PropTypes from 'prop-types';
 
 import '../../assets/styles/AddressContainer.scss';
 
@@ -77,6 +78,13 @@ const AddressContainer = ({ address, checkout,selectedAddress,  setSelectedAddre
             <hr/>
         </div>
     );
+};
+
+AddressContainer.propTypes = {
+    address: PropTypes.array.isRequired,
+    checkout: PropTypes.bool.isRequired,
+    selectedAddress: PropTypes.number.isRequired,
+    setSelectedAddress: PropTypes.func.isRequired
 };
 
 export default AddressContainer;

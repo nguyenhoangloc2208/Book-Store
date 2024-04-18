@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../assets/styles/SearchBarOverlay.scss"
+import PropTypes from 'prop-types';
 import { useSelector } from "react-redux";
 
 const SearchBar = ({isOpen, setIsOpen}) =>{
@@ -95,7 +96,7 @@ const SearchBar = ({isOpen, setIsOpen}) =>{
                             ))}
                         </ul>
                         <div onClick={() => handleSearchClick()} className="search-for">
-                            <div>Search for <span>"{inputText}"</span></div>
+                            <div>Search for <span>&quot;{inputText}&quot;</span></div>
                             <i className="fa-solid fa-arrow-right-long"></i>
                         </div>
                     </div>
@@ -112,5 +113,10 @@ const SearchBar = ({isOpen, setIsOpen}) =>{
         </>
     )
 }
+
+SearchBar.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    setIsOpen: PropTypes.func.isRequired
+};
 
 export default SearchBar;

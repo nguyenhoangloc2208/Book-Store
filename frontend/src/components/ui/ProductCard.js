@@ -1,11 +1,11 @@
-import React, { useState } from "react";
 import '../../assets/styles/ProductCard.scss';
 import { useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types';
 import { useDispatch } from "react-redux";
 import { AddToCartBtn } from "../../utils/AddToCartBtn";
 import { numberWithCommas } from "../../utils/utils";
 
-const ProductCard = ({item, index, isBtn, orderId, updateData}) =>{
+const ProductCard = ({item, isBtn, orderId, updateData}) =>{
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -38,5 +38,13 @@ const ProductCard = ({item, index, isBtn, orderId, updateData}) =>{
         </>
     )
 }
+
+ProductCard.propTypes = {
+    item: PropTypes.object.isRequired,
+    index: PropTypes.number.isRequired,
+    isBtn: PropTypes.bool,
+    orderId: PropTypes.string,
+    updateData: PropTypes.func
+};
 
 export default ProductCard;

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import '../../assets/styles/Checkouts.scss';
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import { selectProductById } from "../../store/slice/ProductSlice";
 import { useSelector } from "react-redux";
 import api from '../../services/api';

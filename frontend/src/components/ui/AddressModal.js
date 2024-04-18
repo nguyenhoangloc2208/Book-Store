@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import '../../assets/styles/AddressModal.scss';
 import AddressService from '../../services/address.service';
 import { mutate } from 'swr';
 import {toast} from 'react-hot-toast';
+import PropTypes from 'prop-types';
 
 const AddressModal = ({ isShowing, hide, create, item }) => {
     const [country, setCountry] = useState('');
@@ -99,6 +100,13 @@ const AddressModal = ({ isShowing, hide, create, item }) => {
             </div>
         </section>
     ) : null;
+};
+
+AddressModal.propTypes = {
+    isShowing: PropTypes.bool.isRequired,
+    hide: PropTypes.func.isRequired,
+    create: PropTypes.bool.isRequired,
+    item: PropTypes.object
 };
 
 export default AddressModal;

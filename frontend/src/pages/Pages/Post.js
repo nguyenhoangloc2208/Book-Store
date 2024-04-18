@@ -19,7 +19,7 @@ const Post = () => {
     return (
     <section className="pages-container">
         <h2>{data.title}</h2>
-        {data.content.map((item, index) => (
+        {data.content.map((item) => (
             <>
                 <p className="blog-content-paragraph">
                     {replaceLinksAndSplitLines(item.paragraph).map((part, index) => (

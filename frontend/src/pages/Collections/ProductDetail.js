@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import '../../assets/styles/ProductDetail.scss';
@@ -45,8 +45,6 @@ const ProductDetail = () =>{
     const handleMinusClick = () =>{
         if (quantity>1){
             setQuantity(quantity-1);
-        } else{
-            
         }
     }
     const handleAddClick = () =>{
@@ -70,8 +68,8 @@ const ProductDetail = () =>{
 
     if (itemError) return <div>Failed to load product data</div>;
     if (authorError) return <div>Failed to load author data</div>;
-    if (authorBookError) return <div>Failed to load author's books data</div>;
-    if (categoryBookError) return <div>Failed to load category's books data</div>;
+    if (authorBookError) return <div>Failed to load author&apos;s books data</div>;
+    if (categoryBookError) return <div>Failed to load category&apos;s books data</div>;
 
     if (itemLoading || authorLoading || authorBookLoading || categoryBookLoading) return <div><Loading/></div>;
 

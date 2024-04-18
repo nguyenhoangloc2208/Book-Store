@@ -1,4 +1,3 @@
-import React from "react";
 import '../../assets/styles/Collections.scss';
 import CollectionsCard from "../../components/ui/CollectionsCard";
 

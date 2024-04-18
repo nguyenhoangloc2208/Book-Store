@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import EmptyCart from "../../components/ui/EmptyCart";
 import '../../assets/styles/Cart.scss';
 import { PayPalButtons } from "@paypal/react-paypal-js";
@@ -186,7 +186,7 @@ const Cart = () =>{
                                 <PayPalButtons 
                                 // fundingSource="paypal"
                                     // style={{ layout: "horizontal" }}
-                                    createOrder={async (e, actions) => {
+                                    createOrder={async () => {
                                             const toastId = toast.loading("Running...", { duration: 0 });
                                             await handleCreatePayment("P", data.id);
                                             try {
@@ -198,7 +198,7 @@ const Cart = () =>{
                                             }
                                             toast.dismiss(toastId);
                                     }}
-                                    onApprove={ (event, actions) => {
+                                    onApprove={ (actions) => {
                                             actions.order.capture().then(async (details) => {
                                                 const toastId = toast.loading("Running...", { duration: 0 });
                                                 const name = details.payer.name.given_name;

@@ -1,5 +1,5 @@
-import React from 'react';
 import { isURL } from '../../utils/utils'; 
+import PropTypes from 'prop-types';
 
 function renderParagraph(paragraph) {
     console.log(paragraph);
@@ -22,5 +22,11 @@ function RenderParagraph({ item }) {
         </div>
     );
 }
+
+RenderParagraph.propTypes = {
+    item: PropTypes.shape({
+        paragraph: PropTypes.string.isRequired
+    }).isRequired
+};
 
 export default RenderParagraph;

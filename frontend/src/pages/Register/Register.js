@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import '../../assets/styles/Login.scss';
 import useEmailValidation from "../../hooks/useEmailValidation";
 import { Helmet } from "react-helmet";
@@ -14,7 +14,6 @@ const Register = () =>{
     const [lastName, setLastName] = useState();
     const [password, setPassword] = useState();
     const { email, isValidEmail, validateEmail } = useEmailValidation();
-    const [passwordValidation, setPasswordValidation] = useState(true);
     const { phoneNumber, isValidPhoneNumber, validateAndFormatPhoneNumber } = usePhoneNumberValidation();
     const [isSubmit, setIsSubmit] = useState(false);
     const navigate = useNavigate();
@@ -30,9 +29,6 @@ const Register = () =>{
             setPasswordNull(true);
             setIsLoading(false);
             return
-        }
-        if(!isValidEmail){
-            setPasswordValidation(false);
         }
         else{
             try{
@@ -55,10 +51,10 @@ const Register = () =>{
         setIsLoading(false);
     }
 
-    const handleInputPhoneNumberChange = (event) => {
-        const input = event.target.value;
-        validateAndFormatPhoneNumber(input);
-      };
+    // const handleInputPhoneNumberChange = (event) => {
+    //     const input = event.target.value;
+    //     validateAndFormatPhoneNumber(input);
+    //   };
 
     return(
         <>
@@ -88,7 +84,7 @@ const Register = () =>{
                     <span><i className={isShowPassword === false ? "fa-solid fa-eye-slash": "fa-solid fa-eye"}
                                 onClick={()=>setShowPassword(!isShowPassword)}></i></span>
                 </div>
-                    {isPasswordNull && <div className="login-warning"><i className="fa-solid fa-circle-exclamation"></i>Password can't be blank.</div>}
+                    {isPasswordNull && <div className="login-warning"><i className="fa-solid fa-circle-exclamation"></i>Password can&apos;t be blank.</div>}
                 {/* <div className="input-container">
                     <input type="phonenumber" placeholder="Phone number" value={phoneNumber} onChange={handleInputPhoneNumberChange}/>
                 </div> */}

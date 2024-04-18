@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import '../../assets/styles/Login.scss';
 import { Link } from "react-router-dom";
 import AuthService from "../../services/auth.service";
@@ -47,7 +47,7 @@ const ForgotPassword = () =>{
                     <h2>Find your account</h2>
                     <div className="input-container">
                         <input className={(isEmailNull) && `emailValidation`} type="email" placeholder="Email" id="email" name="email" value={email} onChange={(e) => validateEmail(e.target.value) }/>
-                        {isEmailNull && <div className="login-warning"><i className="fa-solid fa-circle-exclamation"></i>Email can't be blank.</div>}
+                        {isEmailNull && <div className="login-warning"><i className="fa-solid fa-circle-exclamation"></i>Email can&apos;t be blank.</div>}
                     </div>
                     <Link to="/account/forgot-password" className="forgot-password">Login</Link>
                     <button onClick={() => handleCLick()}>Send</button>

@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import '../../assets/styles/Profile.scss';
 import useSWR from "swr";
 import api from '../../services/api';
-import { useSelector } from "react-redux";
-import { selectProductByProductId } from "../../store/slice/ProductSlice";
 import Loading from "../../components/ui/Loading";
 
 const fetcher = (url) => api.get(url).then(res => res.results);
@@ -40,6 +38,7 @@ const OrderHistory = () =>{
 
     return(
         <>
+        {console.log(data)}
             {currentOrders && currentOrders.length > 0 ? <ul className="order-history-container">
                 <li className="table-header">
                     <div className="col col-1">Order ID</div>

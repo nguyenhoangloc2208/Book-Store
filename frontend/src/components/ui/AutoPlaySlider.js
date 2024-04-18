@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import Slider from "react-slick";
 import SliderCard from "./SliderCard";
 import '../../assets/styles/SliderCard.scss';
-
+import PropTypes from 'prop-types';
 
 const AutoPlaySlider = ({item}) => {
     let sliderRef = useRef(null);
@@ -46,5 +46,9 @@ const AutoPlaySlider = ({item}) => {
         </div>
     );
 }
+
+AutoPlaySlider.propTypes = {
+    item: PropTypes.array.isRequired
+};
 
 export default AutoPlaySlider;
