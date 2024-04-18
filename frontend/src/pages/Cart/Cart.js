@@ -198,7 +198,7 @@ const Cart = () =>{
                                             }
                                             toast.dismiss(toastId);
                                     }}
-                                    onApprove={ (actions) => {
+                                    onApprove={ (event, actions) => {
                                             actions.order.capture().then(async (details) => {
                                                 const toastId = toast.loading("Running...", { duration: 0 });
                                                 const name = details.payer.name.given_name;

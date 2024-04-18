@@ -186,8 +186,8 @@ USE_TZ = True
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME' : 'drrvltkaz',
-    'API_KEY' : '715925811393814',
+    'CLOUD_NAME' : os.getenv("CLOUD_NAME"),
+    'API_KEY' : os.getenv("API_KEY"),
     'API_SECRET' : os.getenv("API_SECRET"),
 }
 
@@ -211,10 +211,10 @@ PHONENUMBER_DEFAULT_REGION = "VN"
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_FROM = 'locphonevnn@gmail.com'
-EMAIL_HOST_USER = 'locphonevnn@gmail.com'
-EMAIL_HOST_PASSWORD = 'nbga bxxq joac bnhh'
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_FROM = os.getenv("EMAIL_FROM")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -225,8 +225,8 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
-BACKEND_DOMAIN = 'http://127.0.0.1:8000'
-FRONTEND_DOMAIN = 'http://localhost:3000'
+BACKEND_DOMAIN = os.getenv("BACKEND_DOMAIN")
+FRONTEND_DOMAIN = os.getenv("FRONTEND_DOMAIN")
 
 # <EMAIL_CONFIRM_REDIRECT_BASE_URL>/<key>
 EMAIL_CONFIRM_REDIRECT_BASE_URL = \
@@ -241,18 +241,18 @@ AUTHENTICATION_BACKENDS = [
     'users.backends.email_backend.EmailAuthBackend',
 ]
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51OBJ1aJbhG9XeLpgozBoW7WSsFdRLOa9oIs16k9sxDypcYCpKkV2bJm4H7DlvJFphgMAKsb1ZVyNQmRfuz9eS9ur00OcprV9xJ'
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET = 'whsec_055694a377e3617438e3c91c1146850411b8bda341c4e2cd36c3597d37b36f40'
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 PAYMENT_SUCCESS_URL = FRONTEND_DOMAIN + '/checkout/success/'
 PAYMENT_CANCEL_URL = FRONTEND_DOMAIN + '/checkout/failed/'
 
-PAYPAL_RECEIVER_EMAIL = 'sb-itf8e30048587@personal.example.com'
 PAYPAL_TEST = True
-PAYPAL_CLIENT_ID = 'AZnHMZthBRZSkFK03p6XrOBrMxCUVUUuDlJbjJ-TShQ2SeXkQrW7BhfONP6aSIH3OgK1KwGj0vNNEE2n'
-PAYPAL_SECRET = 'ECkf6qoABxs0XyzDFlKBGoVgoilOmrYPRj_AeVis3nL-TwfdVziA_qXqeTLrB2MFnXL7CXSlTbKgfyDU'
-PAYPAL_ACCESS_TOKEN = 'access_token$sandbox$ctqsx48wwzy6qv3r$bbf2d42ce1f6303f70d39392e8871c9d'
+PAYPAL_RECEIVER_EMAIL = os.getenv("PAYPAL_RECEIVER_EMAIL")
+PAYPAL_CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID")
+PAYPAL_SECRET = os.getenv("PAYPAL_SECRET")
+PAYPAL_ACCESS_TOKEN = os.getenv("PAYPAL_ACCESS_TOKEN")
 PAYPAL_BASE_URL = "https://api.sandbox.paypal.com"
 
 

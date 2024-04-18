@@ -25,7 +25,7 @@ function App() {
 
   return (
     <>
-    <PayPalScriptProvider options={{clientId: "AZnHMZthBRZSkFK03p6XrOBrMxCUVUUuDlJbjJ-TShQ2SeXkQrW7BhfONP6aSIH3OgK1KwGj0vNNEE2n"}}>
+    <PayPalScriptProvider options={{clientId: process.env.CLIENT_ID}}>
       <div className='App'>
         <ScrollToTop/>
         <Header/>
