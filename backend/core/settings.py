@@ -121,14 +121,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PWD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     },
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": os.getenv("DB_NAME"),
+    #     "USER": os.getenv("DB_USER"),
+    #     "PASSWORD": os.getenv("DB_PWD"),
+    #     "HOST": os.getenv("DB_HOST"),
+    #     "PORT": os.getenv("DB_PORT"),
+    # },
     'backup': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'backup.sqlite3',
@@ -208,28 +212,28 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
+BACKEND_DOMAIN = 'http://127.0.0.1:8000'
+FRONTEND_DOMAIN = 'http://localhost:3000'
+
 # <EMAIL_CONFIRM_REDIRECT_BASE_URL>/<key>
 EMAIL_CONFIRM_REDIRECT_BASE_URL = \
-    'https://45967ce0-0bd5-4bbf-8a00-c3ec8aa38f7e.e1-us-east-azure.choreoapps.dev/account/email/confirm/'
+    FRONTEND_DOMAIN + '/account/email/confirm/'
 
 # <PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL>/<uidb64>/<token>/
 PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = \
-    'https://45967ce0-0bd5-4bbf-8a00-c3ec8aa38f7e.e1-us-east-azure.choreoapps.dev/account/password-reset/confirm/'
+    FRONTEND_DOMAIN + '/account/password-reset/confirm/'
 
 # Authentication
 AUTHENTICATION_BACKENDS = [
     'users.backends.email_backend.EmailAuthBackend',
 ]
 
-BACKEND_DOMAIN = 'http://127.0.0.1:8000'
-FRONTEND_DOMAIN = 'https://45967ce0-0bd5-4bbf-8a00-c3ec8aa38f7e.e1-us-east-azure.choreoapps.dev'
-
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51OBJ1aJbhG9XeLpgozBoW7WSsFdRLOa9oIs16k9sxDypcYCpKkV2bJm4H7DlvJFphgMAKsb1ZVyNQmRfuz9eS9ur00OcprV9xJ'
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = 'whsec_055694a377e3617438e3c91c1146850411b8bda341c4e2cd36c3597d37b36f40'
 
-PAYMENT_SUCCESS_URL = 'https://45967ce0-0bd5-4bbf-8a00-c3ec8aa38f7e.e1-us-east-azure.choreoapps.dev/checkout/success/'
-PAYMENT_CANCEL_URL = 'https://45967ce0-0bd5-4bbf-8a00-c3ec8aa38f7e.e1-us-east-azure.choreoapps.dev/checkout/failed/'
+PAYMENT_SUCCESS_URL = FRONTEND_DOMAIN + '/checkout/success/'
+PAYMENT_CANCEL_URL = FRONTEND_DOMAIN + '/checkout/failed/'
 
 PAYPAL_RECEIVER_EMAIL = 'sb-itf8e30048587@personal.example.com'
 PAYPAL_TEST = True
