@@ -9,7 +9,7 @@ const usePhoneNumberValidation = () => {
     if (!input.trim()) {
         setIsValidPhoneNumber(true);
     } else{
-        const phoneRegex = /^(\+[0-9]{1,3})?[\s\-]?([0-9]{3})[\s\-]?([0-9]{3,4})[\s\-]?([0-9]{3,4})$/;
+        const phoneRegex = /^(\+[0-9]{1,3})?[\s-]?([0-9]{3})[\s-]?([0-9]{3,4})[\s-]?([0-9]{3,4})$/;
         setIsValidPhoneNumber(phoneRegex.test(input));
     }
         setPhoneNumber(input);

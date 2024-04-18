@@ -3,7 +3,6 @@ import AppRouter from './routes/AppRoutes';
 import Header from './layouts/Header/Header';
 import Navbar from './layouts/Navbar/Navbar';
 import Footer from './layouts/Footer/Footer';
-import React from 'react';
 
 // Third party
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
