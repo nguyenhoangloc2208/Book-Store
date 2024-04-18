@@ -1,8 +1,8 @@
 import { useState } from "react";
 import '../../assets/styles/Profile.scss';
 import useSWR from "swr";
-import api from '../../services/api';
-import Loading from "../../components/ui/Loading";
+import api from '../../services/api.js';
+import Loading from "../../components/ui/Loading.js";
 
 const fetcher = (url) => api.get(url).then(res => res.results);
 

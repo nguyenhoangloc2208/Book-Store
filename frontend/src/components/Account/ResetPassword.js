@@ -1,9 +1,9 @@
 import { useState } from "react";
 import '../../assets/styles/Login.scss';
 import { useNavigate, useParams } from "react-router-dom";
-import AuthService from "../../services/auth.service";
+import AuthService from "../../services/auth.service.js";
 import { Helmet } from "react-helmet";
-import Loading from "../ui/Loading";
+import Loading from "../ui/Loading.js";
 import {toast } from "react-hot-toast";
 
 const TITLE = 'Reset Your Password Page';

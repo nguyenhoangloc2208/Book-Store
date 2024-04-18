@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useDataMutation from "../../hooks/useDataMutation";
+import useDataMutation from "../../hooks/useDataMutation.js";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 

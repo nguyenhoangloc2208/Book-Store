@@ -1,11 +1,11 @@
 import { useState } from "react";
 import '../../assets/styles/Profile.scss';
 import useSWR from "swr";
-import api from '../../services/api';
-import OrderHistory from "./OrderHistory";
-import AddressContainer from "../../components/ui/AddressContainer";
-import Loading from "../../components/ui/Loading";
-import Account from "./Account";
+import api from '../../services/api.js';
+import OrderHistory from "./OrderHistory.js";
+import AddressContainer from "../../components/ui/AddressContainer.js";
+import Loading from "../../components/ui/Loading.js";
+import Account from "./Account.js";
 
 const fetcher = (url) => api.get(url).then(res => res);
 const fetcherAddress = (url) => api.get(url).then(res => res.results);

@@ -1,4 +1,4 @@
-import { isURL } from '../../utils/utils'; 
+import { isURL } from '../../utils/utils.js'; 
 import PropTypes from 'prop-types';
 
 function renderParagraph(paragraph) {

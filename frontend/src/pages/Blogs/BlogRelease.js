@@ -1,7 +1,7 @@
-import api from '../../services/api';
+import api from '../../services/api.js';
 import useSWR from 'swr';
-import Loading from "../../components/ui/Loading";
-import { formatDateTime } from "../../utils/utils";
+import Loading from "../../components/ui/Loading.js";
+import { formatDateTime } from "../../utils/utils.js";
 import '../../assets/styles/BlogRelease.scss';
 import {useNavigate, useLocation} from 'react-router-dom';
 

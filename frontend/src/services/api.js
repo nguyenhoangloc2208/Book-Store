@@ -1,6 +1,6 @@
 import axios from "axios";
-import TokenService from "./token.service";
-import AuthService from "./auth.service";
+import TokenService from "./token.service.js";
+import AuthService from "./auth.service.js";
 
 const instance = axios.create({
     baseURL: "http://127.0.0.1:8000",

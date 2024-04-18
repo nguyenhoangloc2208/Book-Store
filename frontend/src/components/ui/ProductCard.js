@@ -2,8 +2,8 @@ import '../../assets/styles/ProductCard.scss';
 import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { useDispatch } from "react-redux";
-import { AddToCartBtn } from "../../utils/AddToCartBtn";
-import { numberWithCommas } from "../../utils/utils";
+import { AddToCartBtn } from "../../utils/AddToCartBtn.js";
+import { numberWithCommas } from "../../utils/utils.js";
 
 const ProductCard = ({item, isBtn, orderId, updateData}) =>{
     const navigate = useNavigate();

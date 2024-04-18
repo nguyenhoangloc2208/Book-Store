@@ -1,13 +1,13 @@
 import Helmet from 'react-helmet';
-import images from "../../assets/images/image";
+import images from "../../assets/images/image.js";
 import '../../assets/styles/Home.scss';
 import { Link, useNavigate } from "react-router-dom";
-import api from '../../services/api';
-import Loading from "../../components/ui/Loading";
+import api from '../../services/api.js';
+import Loading from "../../components/ui/Loading.js";
 import useSWR from 'swr';
-import ProductCard from "../../components/ui/ProductCard";
+import ProductCard from "../../components/ui/ProductCard.js";
 import {useSelector} from 'react-redux';
-import useDataMutation from "../../hooks/useDataMutation";
+import useDataMutation from "../../hooks/useDataMutation.js";
 
 const _fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results);
 

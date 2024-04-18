@@ -1,10 +1,10 @@
 import React  from "react";
 import useSWR from 'swr';
 import '../../assets/styles/Pages.scss';
-import api from '../../services/api';
-import Loading from "../../components/ui/Loading";
+import api from '../../services/api.js';
+import Loading from "../../components/ui/Loading.js";
 import {useParams} from "react-router-dom";
-import { replaceLinksAndSplitLines } from "../../utils/utils";
+import { replaceLinksAndSplitLines } from "../../utils/utils.js";
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res);
 

@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import '../../assets/styles/Navbar.scss';
-import images from "../../assets/images/image";
+import images from "../../assets/images/image.js";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import AuthService from "../../services/auth.service";
-import { setOrderPending } from "../../store/slice/OrderSlice";
-import useDataMutation from "../../hooks/useDataMutation";
+import AuthService from "../../services/auth.service.js";
+import { setOrderPending } from "../../store/slice/OrderSlice.js";
+import useDataMutation from "../../hooks/useDataMutation.js";
 import {toast} from 'react-hot-toast';
 import Cookies from "js-cookie";
-import SearchBarOverlay from "../../components/ui/SearchBarOverlay";
+import SearchBarOverlay from "../../components/ui/SearchBarOverlay.js";
 
 
 

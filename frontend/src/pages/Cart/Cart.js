@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import EmptyCart from "../../components/ui/EmptyCart";
+import EmptyCart from "../../components/ui/EmptyCart.js";
 import '../../assets/styles/Cart.scss';
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import api from '../../services/api';
-import CartService from "../../services/cart.service";
-import images from "../../assets/images/image";
+import api from '../../services/api.js';
+import CartService from "../../services/cart.service.js";
+import images from "../../assets/images/image.js";
 import {Helmet} from 'react-helmet';
-import PaymentService from "../../services/payment.service";
+import PaymentService from "../../services/payment.service.js";
 import { useNavigate } from "react-router-dom";
-import Loading from "../../components/ui/Loading";
+import Loading from "../../components/ui/Loading.js";
 import { toast } from "react-hot-toast";
-import useDataMutation from "../../hooks/useDataMutation";
+import useDataMutation from "../../hooks/useDataMutation.js";
 import Cookies from "js-cookie";
 import useSWR from 'swr';
-import { capitalizeFirstLetter, numberWithCommas } from "../../utils/utils";
+import { capitalizeFirstLetter, numberWithCommas } from "../../utils/utils.js";
 
 const TITLE = 'Your Shopping Cart';
 

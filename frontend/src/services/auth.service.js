@@ -1,7 +1,7 @@
-import api from "./api";
-import TokenService from "./token.service";
-import {store} from '../store/store'
-import { setIsLogin } from "../store/slice/AuthSlice";
+import api from "./api.js";
+import TokenService from "./token.service.js";
+import {store} from '../store/store.js'
+import { setIsLogin } from "../store/slice/AuthSlice.js";
 import Cookies from 'js-cookie';
 
 const addCountryCode = (phoneNumber) => {

@@ -1,9 +1,9 @@
 import '../../assets/styles/Collections.scss';
-import CollectionsCard from "../../components/ui/CollectionsCard";
+import CollectionsCard from "../../components/ui/CollectionsCard.js";
 
 import useSWR from 'swr';
-import api from '../../services/api';
-import Loading from "../../components/ui/Loading";
+import api from '../../services/api.js';
+import Loading from "../../components/ui/Loading.js";
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results);
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import '../../assets/styles/AddressModal.scss';
-import AddressService from '../../services/address.service';
+import AddressService from '../../services/address.service.js';
 import { mutate } from 'swr';
 import {toast} from 'react-hot-toast';
 import PropTypes from 'prop-types';

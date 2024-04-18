@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from './App.js';
+import reportWebVitals from './reportWebVitals.js';
 import { BrowserRouter } from 'react-router-dom';
 
 //css
@@ -13,7 +13,7 @@ import "slick-carousel/slick/slick-theme.css";
 import 'swiper/css';
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 //redux
-import { store } from './store/store';
+import { store } from './store/store.js';
 import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

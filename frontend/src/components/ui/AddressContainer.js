@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import AddressModal from '../../components/ui/AddressModal';
-import AddressService from '../../services/address.service';
+import AddressModal from '../../components/ui/AddressModal.js';
+import AddressService from '../../services/address.service.js';
 import { mutate } from 'swr';
-import useModal from '../../hooks/useModal';
+import useModal from '../../hooks/useModal.js';
 import PropTypes from 'prop-types';
 
 import '../../assets/styles/AddressContainer.scss';

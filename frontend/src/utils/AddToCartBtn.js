@@ -1,5 +1,5 @@
-import { setOrderPending } from '../store/slice/OrderSlice';
-import CartService from '../services/cart.service';
+import { setOrderPending } from '../store/slice/OrderSlice.js';
+import CartService from '../services/cart.service.js';
 import { toast } from "react-hot-toast";
 
 

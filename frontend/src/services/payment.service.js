@@ -1,4 +1,4 @@
-import api from './api';
+import api from './api.js';
 
 const PaymentList = () => {
     return api.get("/api/user/payments/")

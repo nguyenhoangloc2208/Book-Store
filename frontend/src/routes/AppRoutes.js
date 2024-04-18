@@ -1,35 +1,33 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "../pages/Home/Home";
-import NotFound from "../components/NotFound";
-import Login from "../pages/Login/Login";
-import Cart from "../pages/Cart/Cart";
-import Register from "../pages/Register/Register";
-// import Page from "../pages/Pages/Pages";
-import Collections from "../pages/Collections/Collections";
-import CategoryDetail from "../pages/Collections/CategoryDetail";
-import ProductDetail from "../pages/Collections/ProductDetail";
-import Profile from "../pages/Profile/Profile";
-import Checkout from "../pages/Cart/Checkout";
-// import Payment from "../components/Payment";
-import { REACT_APP_STRIPE_KEY } from "../config/config";
+import Home from "../pages/Home/Home.js";
+import NotFound from "../components/NotFound.js";
+import Login from "../pages/Login/Login.js";
+import Cart from "../pages/Cart/Cart.js";
+import Register from "../pages/Register/Register.js";
+import Collections from "../pages/Collections/Collections.js";
+import CategoryDetail from "../pages/Collections/CategoryDetail.js";
+import ProductDetail from "../pages/Collections/ProductDetail.js";
+import Profile from "../pages/Profile/Profile.js";
+import Checkout from "../pages/Cart/Checkout.js";
+import { REACT_APP_STRIPE_KEY } from "../config/config.js";
 import { Elements } from '@stripe/react-stripe-js'
-import { loadStripe } from "@stripe/stripe-js/pure"
-import CardSwiper from "../components/ui/AutoPlaySlider";
-import Loading from "../components/ui/Loading";
-import PaymentSuccess from "../components/ui/Success";
-import Author from "../pages/Collections/Author";
-import AllProduct from "../pages/Collections/AllProduct";
-import SearchResult from "../pages/Search/SearchResult";
-import VerificationEmail from "../pages/Register/VerificationEmail";
-import ConfirmEmail from "../pages/Register/ConfirmEmail";
-import Post from "../pages/Pages/Post";
-import BlogRelease from "../pages/Blogs/BlogRelease";
-import BlogReleaseDetail from "../pages/Blogs/BlogReleaseDetail";
-import BlogReviewDetail from "../pages/Blogs/BlogReviewDetail";
-import BlogReview from "../pages/Blogs/BlogReviews";
-import ForgotPassWord from "../components/Account/ForgotPassword";
-import ResetPassword from "../components/Account/ResetPassword";
-import ChangePassword from "../components/Account/ChangePassword";
+import { loadStripe } from "@stripe/stripe-js/pure.js"
+import CardSwiper from "../components/ui/AutoPlaySlider.js";
+import Loading from "../components/ui/Loading.js";
+import PaymentSuccess from "../components/ui/Success.js";
+import Author from "../pages/Collections/Author.js";
+import AllProduct from "../pages/Collections/AllProduct.js";
+import SearchResult from "../pages/Search/SearchResult.js";
+import VerificationEmail from "../pages/Register/VerificationEmail.js";
+import ConfirmEmail from "../pages/Register/ConfirmEmail.js";
+import Post from "../pages/Pages/Post.js";
+import BlogRelease from "../pages/Blogs/BlogRelease.js";
+import BlogReleaseDetail from "../pages/Blogs/BlogReleaseDetail.js";
+import BlogReviewDetail from "../pages/Blogs/BlogReviewDetail.js";
+import BlogReview from "../pages/Blogs/BlogReviews.js";
+import ForgotPassWord from "../components/Account/ForgotPassword.js";
+import ResetPassword from "../components/Account/ResetPassword.js";
+import ChangePassword from "../components/Account/ChangePassword.js";
 const stripe_key = REACT_APP_STRIPE_KEY
 const stripePromise = loadStripe(stripe_key)
 
@@ -86,7 +84,6 @@ const AppRouter = () =>{
                 <Route path='/pages/:slug' element={<Post/>}/>
                 <Route path='/cart' element={<Cart/>}/>
                 <Route path='/checkouts/:buyer' element={<Checkout/>}/>
-                {/* <Route path='/account/payment/paypal' element={<Payment/>}/> */}
                 <Route path='*' element={<NotFound />} />
                 <Route path='/test' element={<CardSwiper />} />
                 <Route path='/loading' element={<Loading />} />

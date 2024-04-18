@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import '../../assets/styles/Login.scss';
 import { Link, useNavigate } from "react-router-dom";
-import AuthService from "../../services/auth.service";
+import AuthService from "../../services/auth.service.js";
 import { Helmet } from "react-helmet";
-import useDataMutation from "../../hooks/useDataMutation";
-import useEmailValidation from "../../hooks/useEmailValidation";
+import useDataMutation from "../../hooks/useDataMutation.js";
+import useEmailValidation from "../../hooks/useEmailValidation.js";
 import {toast} from 'react-hot-toast';
 import Cookies from "js-cookie";
 

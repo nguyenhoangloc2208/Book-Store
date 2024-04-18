@@ -1,13 +1,13 @@
 import './App.scss';
-import AppRouter from './routes/AppRoutes';
-import Header from './layouts/Header/Header';
-import Navbar from './layouts/Navbar/Navbar';
-import Footer from './layouts/Footer/Footer';
+import AppRouter from './routes/AppRoutes.js';
+import Header from './layouts/Header/Header.js';
+import Navbar from './layouts/Navbar/Navbar.js';
+import Footer from './layouts/Footer/Footer.js';
 
 // Third party
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import ScrollToTopButton from './utils/ScrollToTopButton';
-import ScrollToTop from './utils/ScrollToTop';
+import ScrollToTopButton from './utils/ScrollToTopButton.js';
+import ScrollToTop from './utils/ScrollToTop.js';
 import Cookies from "js-cookie";
 
 import { Toaster } from 'react-hot-toast';

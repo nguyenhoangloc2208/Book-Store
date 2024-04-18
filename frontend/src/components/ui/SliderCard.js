@@ -1,5 +1,5 @@
 import '../../assets/styles/SliderCard.scss';
-import { numberWithCommas } from "../../utils/utils";
+import { numberWithCommas } from "../../utils/utils.js";
 import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 

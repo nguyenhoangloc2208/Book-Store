@@ -1,9 +1,9 @@
 import { useState } from "react";
 import '../../assets/styles/Login.scss';
-import useEmailValidation from "../../hooks/useEmailValidation";
+import useEmailValidation from "../../hooks/useEmailValidation.js";
 import { Helmet } from "react-helmet";
-import usePhoneNumberValidation from "../../hooks/usePhoneNumberValidation";
-import AuthService from "../../services/auth.service";
+import usePhoneNumberValidation from "../../hooks/usePhoneNumberValidation.js";
+import AuthService from "../../services/auth.service.js";
 import { useNavigate } from "react-router-dom";
 import {toast} from 'react-hot-toast';
 

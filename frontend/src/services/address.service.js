@@ -1,4 +1,4 @@
-import api from './api';
+import api from './api.js';
 
 const AddressList = () => {
     return api.get("/api/user/profile/address/")

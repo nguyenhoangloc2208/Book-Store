@@ -2,15 +2,15 @@ import {useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import '../../assets/styles/CategoryDetail.scss';
-import ProductCard from "../../components/ui/ProductCard";
-import useDataMutation from "../../hooks/useDataMutation";
-import SortSelect from "../../utils/SortSelect";
+import ProductCard from "../../components/ui/ProductCard.js";
+import useDataMutation from "../../hooks/useDataMutation.js";
+import SortSelect from "../../utils/SortSelect.js";
 import {useLocation, useNavigate} from 'react-router-dom';
 
 import useSWR from 'swr';
-import api from '../../services/api';
-import Loading from "../../components/ui/Loading";
-import NotFoundProduct from "../../components/NotFoundProduct";
+import api from '../../services/api.js';
+import Loading from "../../components/ui/Loading.js";
+import NotFoundProduct from "../../components/NotFoundProduct.js";
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results[0]);
 const _fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res);

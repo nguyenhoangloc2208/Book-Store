@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import {useSearchParams } from "react-router-dom";
-import SearchBar from "../../components/ui/SearchBar";
+import SearchBar from "../../components/ui/SearchBar.js";
 import { useSelector } from "react-redux";
-import ProductCard from "../../components/ui/ProductCard";
-import useDataMutation from "../../hooks/useDataMutation";
-import SortSelect from "../../utils/SortSelect";
+import ProductCard from "../../components/ui/ProductCard.js";
+import useDataMutation from "../../hooks/useDataMutation.js";
+import SortSelect from "../../utils/SortSelect.js";
 import { Helmet } from "react-helmet";
 
 

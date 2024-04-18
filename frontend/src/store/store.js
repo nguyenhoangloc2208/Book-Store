@@ -2,10 +2,10 @@ import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // Sử dụng Local Storage
 import { combineReducers } from 'redux';
-import ProductSlice from './slice/ProductSlice';
-import AuthSlice from './slice/AuthSlice';
-import OrderSlice from './slice/OrderSlice';
-import ViewedProductsSlice from './slice/ViewedProductsSlice';
+import ProductSlice from './slice/ProductSlice.js';
+import AuthSlice from './slice/AuthSlice.js';
+import OrderSlice from './slice/OrderSlice.js';
+import ViewedProductsSlice from './slice/ViewedProductsSlice.js';
 
 const persistConfig = {
   key: 'root', // Khóa cho Local Storage

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
-import AuthService from "../../services/auth.service";
+import AuthService from "../../services/auth.service.js";
 import { toast }  from 'react-hot-toast';
 
 const ConfirmEmail = () => {

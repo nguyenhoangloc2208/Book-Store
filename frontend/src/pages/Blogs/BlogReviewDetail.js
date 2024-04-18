@@ -1,9 +1,9 @@
 import React from "react";
 import {useParams} from 'react-router-dom';
-import api from '../../services/api';
+import api from '../../services/api.js';
 import useSWR from 'swr';
-import Loading from "../../components/ui/Loading";
-import { formatDateTime, replaceLinksAndSplitLines } from "../../utils/utils";
+import Loading from "../../components/ui/Loading.js";
+import { formatDateTime, replaceLinksAndSplitLines } from "../../utils/utils.js";
 import '../../assets/styles/BlogReviewDetail.scss';
 
 const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res);

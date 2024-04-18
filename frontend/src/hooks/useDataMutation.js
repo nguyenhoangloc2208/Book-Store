@@ -1,5 +1,5 @@
 import useSWR, { mutate } from 'swr';
-import api from '../services/api';
+import api from '../services/api.js';
 import Cookies from 'js-cookie';
 
 const url = '/api/user/orders/pending_order';

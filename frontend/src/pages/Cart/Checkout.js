@@ -1,14 +1,14 @@
 import { useState } from "react";
 import '../../assets/styles/Checkouts.scss';
 import useSWR from "swr";
-import { selectProductById } from "../../store/slice/ProductSlice";
+import { selectProductById } from "../../store/slice/ProductSlice.js";
 import { useSelector } from "react-redux";
-import api from '../../services/api';
-import AddressContainer from "../../components/ui/AddressContainer";
-import PaymentService from "../../services/payment.service";
+import api from '../../services/api.js';
+import AddressContainer from "../../components/ui/AddressContainer.js";
+import PaymentService from "../../services/payment.service.js";
 import { useNavigate } from "react-router-dom";
-import Loading from "../../components/ui/Loading";
-import useDataMutation from "../../hooks/useDataMutation";
+import Loading from "../../components/ui/Loading.js";
+import useDataMutation from "../../hooks/useDataMutation.js";
 import {toast} from 'react-hot-toast';
 import { Helmet } from "react-helmet";
 

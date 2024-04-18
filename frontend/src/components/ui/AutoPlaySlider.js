@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import Slider from "react-slick";
-import SliderCard from "./SliderCard";
+import SliderCard from "./SliderCard.js";
 import '../../assets/styles/SliderCard.scss';
 import PropTypes from 'prop-types';
 
