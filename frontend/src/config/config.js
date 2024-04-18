@@ -1,2 +1,2 @@
-export const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/'
+export const API_URL = process.env.REACT_APP_API_URL || '/choreo-apis/hoang-loc-book-store/backend/rest-api-be2/v1.0'
 export const REACT_APP_STRIPE_KEY = process.env.REACT_APP_STRIPE_KEY || 'pk_test_51OBJ1aJbhG9XeLpgozBoW7WSsFdRLOa9oIs16k9sxDypcYCpKkV2bJm4H7DlvJFphgMAKsb1ZVyNQmRfuz9eS9ur00OcprV9xJ'

@@ -3,7 +3,7 @@ import TokenService from "./token.service.js";
 import AuthService from "./auth.service.js";
 
 const instance = axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: "/choreo-apis/hoang-loc-book-store/backend/rest-api-be2/v1.0",
     headers: {
         "Content-Type":"application/json"
     },
