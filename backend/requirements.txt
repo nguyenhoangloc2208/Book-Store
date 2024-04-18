@@ -8,3 +8,14 @@ stripe
 celery
 python-decouple
 python-dotenv
+django-rest-auth
+django-cors-headers
+django-allauth
+django-phonenumber-field
+django_filter
+django-import-export
+django-paypal
+django-countries
+stripe-django
+djangorestframework-simplejwt
+Pillow
