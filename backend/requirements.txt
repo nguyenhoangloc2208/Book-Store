@@ -16,6 +16,6 @@ django_filter
 django-import-export
 django-paypal
 django-countries
-stripe-django
 djangorestframework-simplejwt
 Pillow
+django_cloudinary_storage

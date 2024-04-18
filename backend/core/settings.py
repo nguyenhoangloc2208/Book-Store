@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
+import cloudinary_storage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +51,10 @@ INSTALLED_APPS = [
     #payment
     'paypal.standard.ipn',
     'paypalrestsdk',
+    
+    #storage
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 REST_FRAMEWORK = {
@@ -177,8 +182,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME' : 'drrvltkaz',
+    'API_KEY' : '715925811393814',
+    'API_SECRET' : os.getenv("API_SECRET"),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 STATIC_URL = 'static/'
@@ -245,3 +258,5 @@ PAYPAL_BASE_URL = "https://api.sandbox.paypal.com"
 
 
 EXCHANGE_RATE = 0.000040
+
+
