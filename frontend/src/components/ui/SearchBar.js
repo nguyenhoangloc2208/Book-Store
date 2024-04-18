@@ -86,7 +86,7 @@ const SearchBar = ({query}) => {
                     onBlur={handleInputBlur}/>
                     <label htmlFor="search">Search</label>
                     <button type="button" onClick={() => handleSearchClick()} >
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <i className="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
             {/* Sử dụng isSearching để kiểm tra và hiển thị ul */}
@@ -109,7 +109,7 @@ const SearchBar = ({query}) => {
                 </ul>
                 <div onClick={() => handleSearchClick()} className="search-for">
                     <div>Search for <span>"{inputText}"</span></div>
-                    <i class="fa-solid fa-arrow-right-long"></i>
+                    <i className="fa-solid fa-arrow-right-long"></i>
                 </div>
             </div>
             }

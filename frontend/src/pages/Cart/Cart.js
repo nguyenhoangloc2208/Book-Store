@@ -125,16 +125,16 @@ const Cart = () =>{
                 <section>
                     {console.log('>>>',data)}
                     {console.log(`product`, cartItems)}
-                    <ul class="responsive-table">
-                        <li class="table-header">
-                        <div class="col col-1">Product</div>
-                        <div class="col col-2">Quantity</div>
-                        <div class="col col-3">Total</div>
+                    <ul className="responsive-table">
+                        <li className="table-header">
+                        <div className="col col-1">Product</div>
+                        <div className="col col-2">Quantity</div>
+                        <div className="col col-3">Total</div>
                         </li>
                         {cartItems && cartItems.map((item, index) =>(
-                            <li class="table-row" key={index}>
+                            <li className="table-row" key={index}>
                                 {console.log('item', item)}
-                                <div class="col col-1 product" data-label="Product">
+                                <div className="col col-1 product" data-label="Product">
                                     <div className="product-image">
                                         <img alt="" src={item?.product.image[0]?.image ? item.product.image[0]?.image : 'https://fakeimg.pl/300/'} />
                                         <div className="discount">-{item.product.discount_percentage}%</div>
@@ -147,17 +147,17 @@ const Cart = () =>{
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col col-2 quantity" data-label="Quantity">
+                                <div className="col col-2 quantity" data-label="Quantity">
                                     <div className="qty">
-                                        <div class="qty-input">
-                                            <button onClick={()=>handleMinusClick(index)} class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
-                                            <input class="product-qty" type="number" name="product-qty" min="0" max="10" value={data.order_items[index]?.quantity}/>
-                                            <button onClick={()=>handleAddClick(index)} class="qty-count qty-count--add" data-action="add" type="button">+</button>
+                                        <div className="qty-input">
+                                            <button onClick={()=>handleMinusClick(index)} className="qty-count qty-count--minus" data-action="minus" type="button">-</button>
+                                            <input className="product-qty" type="number" name="product-qty" min="0" max="10" value={data.order_items[index]?.quantity}/>
+                                            <button onClick={()=>handleAddClick(index)} className="qty-count qty-count--add" data-action="add" type="button">+</button>
                                         </div>
-                                        <i onClick={() => handleDelete(index)} class="fa-regular fa-trash-can delete"></i>
+                                        <i onClick={() => handleDelete(index)} className="fa-regular fa-trash-can delete"></i>
                                     </div>
                                 </div>
-                                <div class="col col-3 total" data-label="Total">{numberWithCommas(data.order_items[index]?.cost)}&nbsp;đ</div>
+                                <div className="col col-3 total" data-label="Total">{numberWithCommas(data.order_items[index]?.cost)}&nbsp;đ</div>
                             </li>
                             ))}
                             <hr/>

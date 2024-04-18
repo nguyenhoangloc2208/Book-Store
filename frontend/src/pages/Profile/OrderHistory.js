@@ -62,7 +62,7 @@ const OrderHistory = () =>{
                             </div>
                             <div className="col col-5 " data-label="Total">{item.total_cost}</div>
                             <div className="col col-6 " data-label="Date Added">{handleFormatDate(item.created_at)}</div>
-                            <div className="col col-7 " data-label="Action"><i class="fa-regular fa-eye"></i></div>
+                            <div className="col col-7 " data-label="Action"><i className="fa-regular fa-eye"></i></div>
                         </li>
                 ))}
             </ul> 

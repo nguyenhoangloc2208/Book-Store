@@ -28,7 +28,7 @@ const ProductCard = ({item, index, isBtn, orderId, updateData}) =>{
                     <img className="card-image" src={item.image[0].image} alt="none"/>
                     <div className="discount">-{item.discount_percentage}%</div>
                 </div>
-                <h5 onClick={handleClickCard} className="card-name">{item.name} <i class="fa-solid fa-arrow-right-long"></i></h5>
+                <h5 onClick={handleClickCard} className="card-name">{item.name} <i className="fa-solid fa-arrow-right-long"></i></h5>
                 <div onClick={handleClickCard} className="card-price">
                     <div className="final_price">{numberWithCommas(item.final_price)}<span className="vnd">đ</span></div>    
                     <div className="price">{numberWithCommas(item.price)}<span className="vnd">đ</span></div>    

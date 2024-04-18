@@ -107,7 +107,7 @@ const SortSelect = ({ value, setValue, data, setType, available, unAvailable, se
                     <div className='filter-option'>Filter:</div>
                     <details className='availability disclosure-has-popup'>
                         <summary>
-                            Availability <i class="fa-solid fa-chevron-down"></i>
+                            Availability <i className="fa-solid fa-chevron-down"></i>
                         </summary>
                         <div className='filter-menu'>
                             <div className='filter-menu-title'>
@@ -138,7 +138,7 @@ const SortSelect = ({ value, setValue, data, setType, available, unAvailable, se
                     </details>
                     <details className='price disclosure-has-popup'>
                         <summary> 
-                            Price <i class="fa-solid fa-chevron-down"></i>
+                            Price <i className="fa-solid fa-chevron-down"></i>
                         </summary>
                             <div className='filter-menu'>
                                 <div className='filter-menu-title'>

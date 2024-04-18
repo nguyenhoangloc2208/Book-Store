@@ -37,10 +37,10 @@ const AutoPlaySlider = ({item}) => {
             </Slider>
             <div style={{ textAlign: "center" }}>
                 <div className="next-prev-slider-btn prev-slider-btn" onClick={previous}>
-                    <i class="fa-solid fa-chevron-left"></i>
+                    <i className="fa-solid fa-chevron-left"></i>
             </div>
                 <div className="next-prev-slider-btn next-slider-btn" onClick={next}>
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <i className="fa-solid fa-chevron-right"></i>
             </div>
         </div>
         </div>

@@ -12,6 +12,7 @@ lerna-debug.log*
 # dependencies
 /node_modules
 dist
+dist/
 dist-ssr
 *.local
 /.pnp

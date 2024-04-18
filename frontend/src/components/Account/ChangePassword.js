@@ -66,7 +66,7 @@ const ChangePassword = () =>{
                 <div>
                     <h2>Change password</h2>
                     <div className={isError ? `validation` : `d-none`}>
-                        <ul><h4><i class="fa-solid fa-circle-exclamation"></i>Please adjust the following:</h4>
+                        <ul><h4><i className="fa-solid fa-circle-exclamation"></i>Please adjust the following:</h4>
                         {error && error.data && Object.values(error.data).map(messages => (
                             messages.map(message => (
                                 <li key={message}><h5>{message.includes("Invalid value") ? "Token expired" : message}</h5></li>
@@ -79,13 +79,13 @@ const ChangePassword = () =>{
                         <span><i className={isShowPassword1 === false ? "fa-solid fa-eye-slash": "fa-solid fa-eye"}
                                 onClick={()=>setShowPassword1(!isShowPassword1)}></i></span>
                     </div>
-                                {isPassword1Null && <div className="login-warning"><i class="fa-solid fa-circle-exclamation"></i>Password can't be blank.</div>}
+                                {isPassword1Null && <div className="login-warning"><i className="fa-solid fa-circle-exclamation"></i>Password can't be blank.</div>}
                     <div className="input-container">
                         <input className={(isPassword2Null) && `emailValidation`} type={isShowPassword2 ? "text" : "password"} placeholder="Re Enter PassWord" id="email" name="email" value={password2} onChange={(e) => setPassword2(e.target.value) }/>
                         <span><i className={isShowPassword2 === false ? "fa-solid fa-eye-slash": "fa-solid fa-eye"}
                                 onClick={()=>setShowPassword2(!isShowPassword2)}></i></span>
                     </div>
-                                {isPassword2Null && <div className="login-warning"><i class="fa-solid fa-circle-exclamation"></i>This field can't be blank.</div>}
+                                {isPassword2Null && <div className="login-warning"><i className="fa-solid fa-circle-exclamation"></i>This field can't be blank.</div>}
                     <button onClick={() => handleCLick()}>Send</button>
                 </div>
             </section>

@@ -153,10 +153,10 @@ const ProductDetail = () =>{
                     <hr/>
                     <div className="quantity">
                         <div>Quantity:</div>
-                        <div class="qty-input">
-                            <button onClick={()=>handleMinusClick()} class="qty-count qty-count--minus" data-action="minus" type="button">-</button>
-                            <input class="product-qty" type="number" name="product-qty" min="0" max="10" value={quantity}/>
-                            <button onClick={()=>handleAddClick()} class="qty-count qty-count--add" data-action="add" type="button">+</button>
+                        <div className="qty-input">
+                            <button onClick={()=>handleMinusClick()} className="qty-count qty-count--minus" data-action="minus" type="button">-</button>
+                            <input className="product-qty" type="number" name="product-qty" min="0" max="10" value={quantity}/>
+                            <button onClick={()=>handleAddClick()} className="qty-count qty-count--add" data-action="add" type="button">+</button>
                         </div>
                     </div>
                     <div className="payment-btn">

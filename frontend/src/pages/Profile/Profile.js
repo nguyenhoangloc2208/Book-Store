@@ -22,15 +22,15 @@ const Profile = () =>{
 
     return(
         <>
-            <div class="parent">
-                <div class="div1">
+            <div className="parent">
+                <div className="div1">
                     <ul className="canvas">
-                        <li onClick={() => setTab(0)} className={tab === 0 && 'tab'}><i class="fa-solid fa-user"></i> Profile</li>
-                        <li onClick={() => setTab(1)} className={tab === 1 && 'tab'}><i class="fa-solid fa-receipt"></i> History</li>
-                        <li onClick={() => setTab(2)} className={tab === 2 && 'tab'}><i class="fa-solid fa-gear"></i> Account</li>
+                        <li onClick={() => setTab(0)} className={tab === 0 && 'tab'}><i className="fa-solid fa-user"></i> Profile</li>
+                        <li onClick={() => setTab(1)} className={tab === 1 && 'tab'}><i className="fa-solid fa-receipt"></i> History</li>
+                        <li onClick={() => setTab(2)} className={tab === 2 && 'tab'}><i className="fa-solid fa-gear"></i> Account</li>
                     </ul>
                 </div>
-                <div class="div2">
+                <div className="div2">
                     {tab === 0 &&  <div className="profile">
                         <div className="avatar-container">
                             <div className="circle">

@@ -69,7 +69,7 @@ const Register = () =>{
             <div>
                 <h1>Create account</h1>
                 <div className={isSubmit && (!isValidEmail || !isValidPhoneNumber) ? `validation` : `d-none`}>
-                    <ul><h4><i class="fa-solid fa-circle-exclamation"></i>Please adjust the following:</h4>
+                    <ul><h4><i className="fa-solid fa-circle-exclamation"></i>Please adjust the following:</h4>
                         {!isValidEmail && <li><h5>Incorrect email or password.</h5></li>}
                         {!isValidPhoneNumber && <li><h5>Incorrect phone number.</h5></li>}
                     </ul>
@@ -88,7 +88,7 @@ const Register = () =>{
                     <span><i className={isShowPassword === false ? "fa-solid fa-eye-slash": "fa-solid fa-eye"}
                                 onClick={()=>setShowPassword(!isShowPassword)}></i></span>
                 </div>
-                    {isPasswordNull && <div className="login-warning"><i class="fa-solid fa-circle-exclamation"></i>Password can't be blank.</div>}
+                    {isPasswordNull && <div className="login-warning"><i className="fa-solid fa-circle-exclamation"></i>Password can't be blank.</div>}
                 {/* <div className="input-container">
                     <input type="phonenumber" placeholder="Phone number" value={phoneNumber} onChange={handleInputPhoneNumberChange}/>
                 </div> */}

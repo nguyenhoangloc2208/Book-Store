@@ -14,7 +14,7 @@ const CollectionsCard = ({item, index}) =>{
             <div className="card-image-container">
                 <img className="card-image" src={item.image} alt={item.name}/>
             </div>
-                <h2 className="card-name">{item.name} <i class="fa-solid fa-arrow-right-long"></i></h2>
+                <h2 className="card-name">{item.name} <i className="fa-solid fa-arrow-right-long"></i></h2>
         </div>
     )
 }
