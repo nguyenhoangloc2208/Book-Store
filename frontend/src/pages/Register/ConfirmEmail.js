@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthService from "../../services/auth.service.js";
 import { toast }  from 'react-hot-toast';
+import Loading from "../../components/ui/Loading.js";
 
 const ConfirmEmail = () => {
     const navigate = useNavigate();
     const { key } = useParams();
-    const [isConfirm, setConfirm] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,16 +19,15 @@ const ConfirmEmail = () => {
                 console.error('Error confirming email:', error);
             }
         };
-        if(isConfirm === false){
-            fetchData();
-            setConfirm(true);
-        }
-    }, [key, navigate, isConfirm]);
+        fetchData();
+    }, []);
 
-    // return (
-    //     <>
-    //     </>
-    // )
+    return (
+        <>
+            <Loading/>
+            {console.log(key)}
+        </>
+    )
 }
 
 export default ConfirmEmail;
