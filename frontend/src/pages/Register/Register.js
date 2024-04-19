@@ -6,7 +6,6 @@ import usePhoneNumberValidation from "../../hooks/usePhoneNumberValidation.js";
 import AuthService from "../../services/auth.service.js";
 import { useNavigate } from "react-router-dom";
 import {toast} from 'react-hot-toast';
-import Loading from "../../components/ui/Loading.js";
 
 const TITLE = 'Register Page';
 
@@ -15,7 +14,7 @@ const Register = () =>{
     const [lastName, setLastName] = useState();
     const [password, setPassword] = useState();
     const { email, isValidEmail, validateEmail } = useEmailValidation();
-    const { phoneNumber, isValidPhoneNumber, validateAndFormatPhoneNumber } = usePhoneNumberValidation();
+    // const { phoneNumber, isValidPhoneNumber, validateAndFormatPhoneNumber } = usePhoneNumberValidation();
     const [isSubmit, setIsSubmit] = useState(false);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
@@ -33,8 +32,9 @@ const Register = () =>{
         }
         else{
             try{
-                const response = await AuthService.register(email, password, firstName, lastName, phoneNumber);  
+                const response = await AuthService.register(email, password, firstName, lastName);  
                 if (response && response.detail === "Verification e-mail sent.") {
+                    toast.success('Register success, Verification e-mail sent!')
                     navigate(`/account/register/verification/${email}`);
                 } 
             }
@@ -42,11 +42,14 @@ const Register = () =>{
                 if (error.response && error.response.data && error.response.data.email && error.response.data.email[0] === "A user is already registered with this e-mail address.") {
                     // Xử lý trường hợp email đã được đăng ký
                     toast('A user is already registered with this e-mail address.');
-                  } else {
+                  } else if (error && error.response && error.response.data){
+                    toast.error(Object.values(error.response.data));
+                } else{
+                    toast.error('Login failed, please try again!');
                     // Xử lý các lỗi khác
                     validateEmail(email);
-                    validateAndFormatPhoneNumber(phoneNumber);
-                  }
+                    // validateAndFormatPhoneNumber(phoneNumber);
+                }
             }
         }
         setIsLoading(false);
@@ -67,10 +70,10 @@ const Register = () =>{
         <section className="login-container">
             <div>
                 <h1>Create account</h1>
-                <div className={isSubmit && (!isValidEmail || !isValidPhoneNumber) ? `validation` : `d-none`}>
+                <div className={isSubmit && (!isValidEmail) ? `validation` : `d-none`}>
                     <ul><h4><i className="fa-solid fa-circle-exclamation"></i>Please adjust the following:</h4>
                         {!isValidEmail && <li><h5>Incorrect email or password.</h5></li>}
-                        {!isValidPhoneNumber && <li><h5>Incorrect phone number.</h5></li>}
+                        {/* {!isValidPhoneNumber && <li><h5>Incorrect phone number.</h5></li>} */}
                     </ul>
                 </div>
                 <div className="input-container">

@@ -11,8 +11,40 @@ const addCountryCode = (phoneNumber) => {
   return phoneNumber;
 };
 
-const register = (email, password, first_name, last_name, phone_number) => {
-  if(phone_number === ''){
+// const register = (email, password, first_name, last_name, phone_number) => {
+//   if(phone_number === ''){
+//     return api.post("/api/user/register/", {
+//       "email": email,
+//       "password1": password,
+//       "password2": password,
+//       "first_name": first_name,
+//       "last_name": last_name,
+//     }, {
+//       requiredAuth: false
+//     })
+//     .catch((error)=>{
+//       throw error
+//   });
+//   } else{
+//     return api.post("/api/user/register/", {
+//       "email": email,
+//       "password1": password,
+//       "password2": password,
+//       "first_name": first_name,
+//       "last_name": last_name,
+//       "phone_number": addCountryCode(phone_number),
+//     }, {
+//       requiredAuth: false
+//     })
+//     .catch((error)=>{
+//       throw error
+//   });
+//   }
+  
+// };
+
+const register = (email, password, first_name, last_name) => {
+
     return api.post("/api/user/register/", {
       "email": email,
       "password1": password,
@@ -25,21 +57,6 @@ const register = (email, password, first_name, last_name, phone_number) => {
     .catch((error)=>{
       throw error
   });
-  } else{
-    return api.post("/api/user/register/", {
-      "email": email,
-      "password1": password,
-      "password2": password,
-      "first_name": first_name,
-      "last_name": last_name,
-      "phone_number": addCountryCode(phone_number),
-    }, {
-      requiredAuth: false
-    })
-    .catch((error)=>{
-      throw error
-  });
-  }
   
 };
 
