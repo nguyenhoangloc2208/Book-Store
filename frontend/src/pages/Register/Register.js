@@ -6,6 +6,7 @@ import usePhoneNumberValidation from "../../hooks/usePhoneNumberValidation.js";
 import AuthService from "../../services/auth.service.js";
 import { useNavigate } from "react-router-dom";
 import {toast} from 'react-hot-toast';
+import Loading from "../../components/ui/Loading.js";
 
 const TITLE = 'Register Page';
 
@@ -56,6 +57,8 @@ const Register = () =>{
     //     validateAndFormatPhoneNumber(input);
     //   };
 
+
+
     return(
         <>
         <Helmet>
@@ -90,7 +93,7 @@ const Register = () =>{
                 </div> */}
                 <button onClick={() => handleRegisterAccount()} disabled={isLoading}>
                     {isLoading ? 'Loading...' : 'Create'}
-                    </button>
+                </button>
             </div>
         </section>
         </>

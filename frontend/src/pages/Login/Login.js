@@ -19,6 +19,7 @@ const Login = () =>{
     const navigate = useNavigate();
     const {updateData} = useDataMutation();
     const [isShowPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const isLogin = Cookies.get("isLoggedIn");
@@ -28,7 +29,7 @@ const Login = () =>{
     }, [])
 
     const handleSignIn = async () =>{
-        console.log(isValidEmail);
+        setIsLoading(true);
         if(email==='' && password===''){
             setEmailNull(true);
             setPasswordNull(true);
@@ -49,8 +50,14 @@ const Login = () =>{
             navigate('/');
         }catch(err){
             console.error(err);
-            toast.error(Object.values(err.response.data));
+            if(err && err.response && err.response.data){
+                toast.error(Object.values(err.response.data));
+            } else{
+                toast.error('Login failed, please try again!');
+            }
         }
+        setIsLoading(false);
+
     }
 
     return(
@@ -72,7 +79,9 @@ const Login = () =>{
                     </div>
                         {isPasswordNull && <div className="login-warning"><i className="fa-solid fa-circle-exclamation"></i>Password can&apos;t be blank.</div>}
                     <Link to="/account/forgot-password" className="forgot-password">Forgoten your password?</Link>
-                    <button onClick={() => handleSignIn()}>Sign In</button>
+                    <button onClick={() => handleSignIn()} disabled={isLoading}>
+                    {isLoading ? 'Loading...' : 'Sign In'}
+                    </button>
                     <Link to="/account/register" className="register">Create account</Link>
                 </div>
             </section>
