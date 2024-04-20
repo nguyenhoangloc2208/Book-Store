@@ -59,7 +59,7 @@ const SearchResult = () => {
     const TITLE = `Search: ${filtered ? filtered.length : '0'} results found for "${query}"`;
 
     useEffect(() => {
-        if(available == 0 && data){
+        if(data){
             const fetchApi = async () => {
                 const res = await api.get(`/api/products/?name=${query}&available=0`);
                 setUnavailable(res.count);
