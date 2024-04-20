@@ -10,7 +10,7 @@ from .serializers import (UserRegistrationSerializer,
 from django.utils.translation import gettext as _
 from rest_framework.response import Response
 from rest_framework import status, viewsets, permissions
-from users.permissions import IsUserAddressOwner, IsUserProfileOwner, IsAdminUser
+from users.permissions import IsUserAddressOwner, IsUserProfileOwner, IsAdmin
 from rest_framework.generics import (GenericAPIView, RetrieveAPIView, RetrieveUpdateAPIView)
 from django.http import HttpResponseRedirect
 from django.conf import settings

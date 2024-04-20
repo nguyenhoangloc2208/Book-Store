@@ -2,23 +2,20 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../assets/styles/SearchBarOverlay.scss"
 import PropTypes from 'prop-types';
-import { useSelector } from "react-redux";
+import useSWR from 'swr';
+import api from '../../services/api.js';
+
+const fetcher = (url) => api.get(url, {requiresAuth: false}).then(res => res.results);
+
 
 const SearchBar = ({isOpen, setIsOpen}) =>{
     const [inputText, setInputText] = useState('');
     const [debouncedInputText, setDebouncedInputText] = useState('');
     const [isSearching, setIsSearching] = useState(false); // Khởi tạo isSearching với giá trị false
     const navigate = useNavigate();
-    const products = useSelector(state => state.products.books);
+    const {data:products} = useSWR(`/api/products/?name=${debouncedInputText}`, fetcher);
 
-    const filteredProducts = products.filter(item => {
-        const searchText = debouncedInputText.replace(/-/g, '–').toLowerCase();
-        const searchTerms = searchText.split(' ').filter(term => term.trim() !== '');
-        return searchTerms.every(term => item.name.toLowerCase().includes(term));
-    });
 
-    const randomProducts = filteredProducts.sort(() => Math.random() - 0.5).slice(0, 10);
-    
     const handleClick = (item)=>{
         setIsOpen(false);
         navigate(`/products/${item.slug}`)
@@ -78,13 +75,13 @@ const SearchBar = ({isOpen, setIsOpen}) =>{
                         </button>
                     </div>
                     {/* Sử dụng isSearching để kiểm tra và hiển thị ul */}
-                    {isSearching && filteredProducts && 
+                    {isSearching && products && 
                     <div className="search-list-container">
-                        {randomProducts && randomProducts.length > 0 &&
+                        {products && products.length > 0 &&
                             <div className="search-list-title">Products</div>
                         }
                         <ul className='search-list'>
-                            {randomProducts.map((item) => (
+                            {products.map((item) => (
                                 <>
                                     <li onClick={()=> handleClick(item)} key={item.id}>
                                         <div className="image-container">

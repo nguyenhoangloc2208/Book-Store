@@ -9,6 +9,7 @@ from orders.serializers import (OrderItemSerializer, OrderReadSerializer,
                                 OrderWriteSerializer, CartItemSerializer, MyPagination)
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
+from rest_framework import status
 
 
 class OrderItemViewSet(viewsets.ModelViewSet):
@@ -71,23 +72,21 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def pending_order(self, request):
         """
-        Retrieve orders with status 'P' (pending)
+        Retrieve orders with status 'P' (pending) for the current user
         """
-        pending_orders = self.queryset.filter(status='P')
+        # Filter orders queryset by current user and pending status
+        pending_orders = self.queryset.filter(buyer=request.user, status='P')
         serializer = self.get_serializer(pending_orders, many=True)
 
-        # Thay đổi trạng thái của đơn hàng nếu order_items rỗng
+        # Change the status of orders with empty order_items
         for order in serializer.data:
             if not order['order_items']:
                 order_instance = self.get_queryset().get(pk=order['id'])
                 order_instance.status = Order.DELETE
                 order_instance.save()
-                
-        # if not pending_orders.exists():
-        #     raise NotFound("No pending orders found.")
 
-        return Response(serializer.data)
-    
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
 class CartAPIView(generics.ListAPIView):
     """
     API endpoint to retrieve cart information
