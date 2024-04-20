@@ -67,7 +67,7 @@ const SearchResult = () => {
             }
             fetchApi();
         }
-    }, [data])
+    }, [data, query])
 
     useEffect(() => {
         handlePaginationClick(currentPage);
